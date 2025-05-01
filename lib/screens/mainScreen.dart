@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class MainScreen extends StatelessWidget {
   MainScreen({super.key});
+  final TextEditingController rawChat = TextEditingController();
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DarkAppBar(),
@@ -17,7 +18,9 @@ class MainScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomSheet: ChatTextField(),
+      bottomSheet: ChatTextField(
+        chatController: rawChat,
+      ),
     );
   }
 }

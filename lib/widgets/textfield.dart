@@ -1,13 +1,18 @@
+import 'package:echo_llm/state_management/textfieldState.dart';
 import 'package:echo_llm/widgets/buttons.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ChatTextField extends StatelessWidget {
-  const ChatTextField({super.key});
+  final TextEditingController chatController;
+  const ChatTextField({super.key, required this.chatController});
 
   @override
   Widget build(BuildContext context) {
+    final sizeProvider = Provider.of<Textfieldstate>(context);
+
     return Container(
-      height: 100,
+      height: sizeProvider.isExpanded ? 400 : 100,
       width: double.infinity * .75,
       decoration: BoxDecoration(
         color: Colors.black,
@@ -24,6 +29,9 @@ class ChatTextField extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextField(
+                  onChanged: (text) {
+                    if (text.length > 100) sizeProvider.expand();
+                  },
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.white),
                   decoration: InputDecoration(
