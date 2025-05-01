@@ -14,12 +14,6 @@ class MainScreen extends StatelessWidget {
             Container(
               color: Colors.black,
             ),
-            Center(
-                child: Icon(
-              Icons.bolt,
-              color: Colors.cyanAccent,
-              size: 60,
-            )),
           ],
         ),
       ),

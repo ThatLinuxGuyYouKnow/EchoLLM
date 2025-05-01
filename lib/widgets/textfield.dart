@@ -20,11 +20,12 @@ class ChatTextField extends StatelessWidget {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 117, 116, 116),
+                  color: Color(0xFF1E2733),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextField(
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Type a message',
