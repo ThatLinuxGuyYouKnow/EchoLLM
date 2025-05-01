@@ -20,18 +20,16 @@ class ChatTextField extends StatelessWidget {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 71, 70, 70),
+                  color: const Color.fromARGB(255, 117, 116, 116),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextField(
-                  // Make entered text bold
                   style: const TextStyle(fontWeight: FontWeight.bold),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Type a message',
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 12.0),
-                    // Optional: Keep hint text not bold
                     hintStyle: const TextStyle(fontWeight: FontWeight.normal),
                   ),
                 ),

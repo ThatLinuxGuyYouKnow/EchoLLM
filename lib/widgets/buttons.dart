@@ -15,11 +15,11 @@ class ChatButton extends StatelessWidget {
           backgroundColor: Colors.cyan,
           padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
+            borderRadius: BorderRadius.circular(10),
           ),
         ),
         child: Icon(
-          Icons.send_and_archive,
+          Icons.send,
           color: Colors.black,
           size: 20,
         ),
