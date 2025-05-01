@@ -4,13 +4,19 @@ class MainScreen extends StatelessWidget {
   MainScreen({super.key});
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: SafeArea(
           child: Stack(
         children: [
-          Center(child: Icon(Icons.bolt)),
           Container(
             color: Colors.black,
-          )
+          ),
+          Center(
+              child: Icon(
+            Icons.bolt,
+            color: Colors.cyanAccent,
+            size: 60,
+          )),
         ],
       )),
     );
