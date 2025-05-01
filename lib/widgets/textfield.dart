@@ -1,24 +1,46 @@
+import 'package:echo_llm/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 
 class ChatTextField extends StatelessWidget {
-  ChatTextField({super.key});
+  const ChatTextField({super.key});
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       height: 100,
-      width: 800,
+      width: double.infinity * .75,
       decoration: BoxDecoration(
-          color: Colors.black,
-          border: Border(top: BorderSide(color: Colors.cyan))),
-      child: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[50],
-              borderRadius: BorderRadius.circular(10),
+        color: Colors.black,
+        border: Border(top: BorderSide(color: Colors.cyan)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 71, 70, 70),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextField(
+                  // Make entered text bold
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Type a message',
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 12.0),
+                    // Optional: Keep hint text not bold
+                    hintStyle: const TextStyle(fontWeight: FontWeight.normal),
+                  ),
+                ),
+              ),
             ),
-            child: TextField(),
-          )
-        ],
+            const SizedBox(width: 12),
+            ChatButton(),
+          ],
+        ),
       ),
     );
   }
