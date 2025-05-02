@@ -22,11 +22,12 @@ class ChatTextField extends StatelessWidget {
           ),
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.black,
-            border: Border(
-                top: BorderSide(
-                    color: isExpanded ? Colors.transparent : Colors.cyan)),
-          ),
+              color: Colors.black,
+              border: Border(
+                  top: BorderSide(
+                      color: isExpanded
+                          ? Colors.transparent
+                          : Colors.cyan.withOpacity(0.6)))),
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
@@ -35,6 +36,8 @@ class ChatTextField extends StatelessWidget {
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
+                      border: Border.all(
+                          color: isExpanded ? Colors.cyan : Colors.transparent),
                       color: const Color(0xFF1E2733),
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -59,7 +62,7 @@ class ChatTextField extends StatelessWidget {
                           border: InputBorder.none,
                           hintText: 'Type a message',
                           contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 12.0, vertical: 5),
+                              horizontal: 12.0, vertical: 10),
                           hintStyle:
                               const TextStyle(fontWeight: FontWeight.normal),
                         ),
