@@ -22,7 +22,9 @@ class ChatTextField extends StatelessWidget {
         width: double.infinity * .75,
         decoration: BoxDecoration(
           color: Colors.black,
-          border: Border(top: BorderSide(color: Colors.cyan)),
+          border: Border(
+              top: BorderSide(
+                  color: isExpanded ? Colors.transparent : Colors.cyan)),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
@@ -38,7 +40,7 @@ class ChatTextField extends StatelessWidget {
                   child: TextField(
                     scrollPadding: EdgeInsets.only(top: isExpanded ? 20 : 0),
                     controller: chatController,
-                    maxLines: isExpanded ? 8 : 1,
+                    maxLines: isExpanded ? 8 : 3,
                     minLines: 1,
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.white),
@@ -50,7 +52,7 @@ class ChatTextField extends StatelessWidget {
                       hintStyle: const TextStyle(fontWeight: FontWeight.normal),
                     ),
                     onChanged: (text) {
-                      if (text.length > 100 && !isExpanded) {
+                      if (text.length > 200 && !isExpanded) {
                         textfieldState.expand();
                       } else if (text.length < 50 &&
                           textfieldState.isExpanded) {
