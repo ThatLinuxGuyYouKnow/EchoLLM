@@ -12,7 +12,7 @@ class ChatTextField extends StatelessWidget {
     final textfieldState = Provider.of<Textfieldstate>(context);
     bool isExpanded = textfieldState.isExpanded;
     return AnimatedSize(
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 400),
       curve: Curves.easeOut,
       child: Container(
         constraints: BoxConstraints(
@@ -30,35 +30,43 @@ class ChatTextField extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
           child: Column(
             children: [
-              // TextField
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color(0xFF1E2733),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: TextField(
-                    scrollPadding: EdgeInsets.only(top: isExpanded ? 20 : 0),
-                    controller: chatController,
-                    maxLines: isExpanded ? 8 : 3,
-                    minLines: 1,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Type a message',
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 12.0),
-                      hintStyle: const TextStyle(fontWeight: FontWeight.normal),
-                    ),
-                    onChanged: (text) {
-                      if (text.length > 200 && !isExpanded) {
-                        textfieldState.expand();
-                      } else if (text.length < 50 &&
-                          textfieldState.isExpanded) {
+                  child: Focus(
+                    onFocusChange: (isFocused) {
+                      if (textfieldState.isExpanded && !isFocused) {
                         textfieldState.minimize();
                       }
                     },
+                    autofocus: true,
+                    child: TextField(
+                      scrollPadding: EdgeInsets.only(top: isExpanded ? 20 : 0),
+                      controller: chatController,
+                      maxLines: isExpanded ? 8 : 3,
+                      minLines: 1,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Type a message',
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 12.0),
+                        hintStyle:
+                            const TextStyle(fontWeight: FontWeight.normal),
+                      ),
+                      onChanged: (text) {
+                        if (text.length > 200 && !isExpanded) {
+                          textfieldState.expand();
+                        } else if (text.length < 50 &&
+                            textfieldState.isExpanded) {
+                          textfieldState.minimize();
+                        }
+                      },
+                    ),
                   ),
                 ),
               ),

@@ -20,7 +20,7 @@ class _ModelselectorState extends State<Modelselector> {
       decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.cyan)),
+          border: Border.all(color: Colors.cyan, width: 2)),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: selectedValue,
