@@ -27,7 +27,7 @@ class ChatTextField extends StatelessWidget {
                   top: BorderSide(
                       color: isExpanded
                           ? Colors.transparent
-                          : Colors.cyan.withOpacity(0.6)))),
+                          : Colors.cyan.withOpacity(0.8)))),
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
@@ -57,7 +57,9 @@ class ChatTextField extends StatelessWidget {
                             EdgeInsets.only(top: isExpanded ? 20 : 0),
                         controller: chatController,
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.white),
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                            fontSize: 15),
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Type a message',
