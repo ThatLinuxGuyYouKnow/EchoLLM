@@ -47,11 +47,12 @@ class ChatTextField extends StatelessWidget {
                       },
                       autofocus: true,
                       child: TextField(
+                        maxLines: null,
+                        minLines: null,
+                        expands: isExpanded,
                         scrollPadding:
                             EdgeInsets.only(top: isExpanded ? 20 : 0),
                         controller: chatController,
-                        maxLines: isExpanded ? 8 : 3,
-                        minLines: 1,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.white),
                         decoration: InputDecoration(
