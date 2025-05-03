@@ -1,4 +1,5 @@
 import 'package:echo_llm/screens/mainScreen.dart';
+import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
 
 import 'package:flutter/material.dart';
@@ -6,8 +7,11 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => Textfieldstate(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => Textfieldstate()),
+        ChangeNotifierProvider(create: (_) => Messagestreamstate()),
+      ],
       child: const MyApp(),
     ),
   );
