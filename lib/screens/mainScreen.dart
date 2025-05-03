@@ -17,6 +17,9 @@ class MainScreen extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
+            Container(
+              color: Colors.black,
+            ),
             ListView.builder(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
@@ -36,9 +39,6 @@ class MainScreen extends StatelessWidget {
                     ),
                   );
                 }),
-            Container(
-              color: Colors.black,
-            ),
           ],
         ),
       ),
