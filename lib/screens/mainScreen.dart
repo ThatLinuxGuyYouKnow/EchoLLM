@@ -10,7 +10,8 @@ class MainScreen extends StatelessWidget {
   final TextEditingController rawChat = TextEditingController();
 
   Widget build(BuildContext context) {
-    final messageStream = Provider.of<Messagestreamstate>(context).messages;
+    final messageStream =
+        Provider.of<Messagestreamstate>(context, listen: true).messages;
     return Scaffold(
       appBar: DarkAppBar(),
       backgroundColor: Colors.black,
@@ -22,7 +23,7 @@ class MainScreen extends StatelessWidget {
             ),
             ListView.builder(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+                    const EdgeInsets.symmetric(horizontal: 600, vertical: 20),
                 itemCount: messageStream.length,
                 itemBuilder: (context, index) {
                   final messageMap = messageStream[index];

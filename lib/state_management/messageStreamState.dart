@@ -9,5 +9,6 @@ class Messagestreamstate extends ChangeNotifier {
         _messages.isNotEmpty ? _messages.last.keys.first + 1 : 1;
 
     _messages.add({message_index: message});
+    notifyListeners();
   }
 }
