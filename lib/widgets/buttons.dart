@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ChatButton extends StatelessWidget {
-  ChatButton({super.key});
+  final Function() whenPressed;
+  ChatButton({super.key, required this.whenPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +11,9 @@ class ChatButton extends StatelessWidget {
       width: 40,
       height: 40,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          whenPressed();
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.cyan,
           padding: EdgeInsets.zero,

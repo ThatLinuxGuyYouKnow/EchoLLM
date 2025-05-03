@@ -1,3 +1,4 @@
+import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
 import 'package:echo_llm/widgets/buttons.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ class ChatTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final messageState = Provider.of<Messagestreamstate>(context);
     final textfieldState = Provider.of<Textfieldstate>(context);
     bool isExpanded = textfieldState.isExpanded;
     return ColoredBox(
@@ -85,7 +87,12 @@ class ChatTextField extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    ChatButton(),
+                    ChatButton(
+                      whenPressed: () {
+                        messageState.addMessage(
+                            message: chatController.text.trim());
+                      },
+                    ),
                   ],
                 ),
               ],
