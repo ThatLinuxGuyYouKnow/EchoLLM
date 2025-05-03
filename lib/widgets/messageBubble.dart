@@ -6,12 +6,14 @@ class MessageBubble extends StatelessWidget {
   MessageBubble(
       {super.key, required this.messageText, required this.isModelResponse});
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.teal,
-        borderRadius: BorderRadius.circular(10),
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          color: isModelResponse ? Colors.tealAccent : Colors.teal,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Text(messageText),
       ),
-      child: Text(messageText),
     );
   }
 }
