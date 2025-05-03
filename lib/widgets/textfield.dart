@@ -91,6 +91,7 @@ class ChatTextField extends StatelessWidget {
                       whenPressed: () {
                         messageState.addMessage(
                             message: chatController.text.trim());
+                        chatController.clear();
                       },
                     ),
                   ],
