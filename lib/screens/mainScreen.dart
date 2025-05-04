@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/widgets/appBar.dart';
 import 'package:echo_llm/widgets/messageBubble.dart';
@@ -5,9 +7,17 @@ import 'package:echo_llm/widgets/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
   final TextEditingController rawChat = TextEditingController();
+
+  bool userIsInteractingWith = true;
 
   Widget build(BuildContext context) {
     final messageStream =
@@ -18,9 +28,6 @@ class MainScreen extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            Container(
-              color: Colors.black,
-            ),
             ListView.builder(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 600, vertical: 20),
@@ -40,11 +47,18 @@ class MainScreen extends StatelessWidget {
                     ),
                   );
                 }),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 600, vertical: 12),
+                child: ChatTextField(chatController: rawChat),
+              ),
+            )
           ],
         ),
-      ),
-      bottomSheet: ChatTextField(
-        chatController: rawChat,
       ),
     );
   }
