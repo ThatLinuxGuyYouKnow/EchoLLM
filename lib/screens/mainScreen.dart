@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:echo_llm/state_management/messageStreamState.dart';
+import 'package:echo_llm/state_management/textfieldState.dart';
 import 'package:echo_llm/widgets/appBar.dart';
 import 'package:echo_llm/widgets/messageBubble.dart';
 import 'package:echo_llm/widgets/textfield.dart';
@@ -22,31 +23,41 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final messageStream =
         Provider.of<Messagestreamstate>(context, listen: true).messages;
+    final textFieldVisibility = Provider.of<Textfieldstate>(context);
     return Scaffold(
       appBar: DarkAppBar(),
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Stack(
           children: [
-            ListView.builder(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 600, vertical: 20),
-                itemCount: messageStream.length,
-                itemBuilder: (context, index) {
-                  final messageMap = messageStream[index];
-                  final messageIndex = messageMap.keys.first;
-                  final messageText = messageMap[messageIndex]!;
+            NotificationListener<ScrollUpdateNotification>(
+              onNotification: (ScrollUpdateNotification notification) {
+                if (notification.scrollDelta != null &&
+                    notification.scrollDelta!.abs() > 6) {
+                  textFieldVisibility.makeInvisible();
+                }
+                return true;
+              },
+              child: ListView.builder(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 600, vertical: 20),
+                  itemCount: messageStream.length,
+                  itemBuilder: (context, index) {
+                    final messageMap = messageStream[index];
+                    final messageIndex = messageMap.keys.first;
+                    final messageText = messageMap[messageIndex]!;
 
-                  final isModel = messageIndex % 2 != 0;
+                    final isModel = messageIndex % 2 != 0;
 
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6.0),
-                    child: MessageBubble(
-                      messageText: messageText,
-                      isModelResponse: isModel,
-                    ),
-                  );
-                }),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6.0),
+                      child: MessageBubble(
+                        messageText: messageText,
+                        isModelResponse: isModel,
+                      ),
+                    );
+                  }),
+            ),
             Positioned(
               left: 0,
               right: 0,
@@ -54,7 +65,9 @@ class _MainScreenState extends State<MainScreen> {
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 600, vertical: 12),
-                child: ChatTextField(chatController: rawChat),
+                child: textFieldVisibility.isVisible
+                    ? ChatTextField(chatController: rawChat)
+                    : SizedBox.shrink(),
               ),
             )
           ],
