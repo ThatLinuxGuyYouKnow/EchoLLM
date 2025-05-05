@@ -10,26 +10,29 @@ class ChatTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final messageState = Provider.of<Messagestreamstate>(context);
+    final messageState = Provider.of<Messagestreamstate>(context, listen: true);
     final textfieldState = Provider.of<Textfieldstate>(context);
+    bool messageHasBeenEntered = messageState.messages.length > 1;
     final screenWidth = MediaQuery.of(context).size.width;
     final isPhoneScreen = screenWidth <= 900;
     bool isExpanded = textfieldState.isExpanded;
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
-          BoxShadow(
-            color: Colors.cyan.withOpacity(0.3),
-            blurRadius: 2,
-            spreadRadius: 0,
-            offset: Offset(0, 1),
-          ),
+          messageHasBeenEntered
+              ? BoxShadow(
+                  color: Colors.cyan.withOpacity(0.3),
+                  blurRadius: 2,
+                  spreadRadius: 0,
+                  offset: Offset(0, 1),
+                )
+              : BoxShadow()
         ],
         borderRadius: BorderRadius.circular(20),
       ),
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.95),
+            color: Colors.black.withOpacity(0.9),
             borderRadius: BorderRadius.circular(20)),
         child: AnimatedSize(
           duration: const Duration(milliseconds: 100),
