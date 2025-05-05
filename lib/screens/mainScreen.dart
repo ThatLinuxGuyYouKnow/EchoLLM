@@ -19,6 +19,7 @@ class _MainScreenState extends State<MainScreen> {
   final TextEditingController rawChat = TextEditingController();
 
   bool userIsInteractingWith = true;
+  final ScrollController _scrollController = ScrollController();
 
   Widget build(BuildContext context) {
     final messageStream =
@@ -35,10 +36,17 @@ class _MainScreenState extends State<MainScreen> {
                 if (notification.scrollDelta != null &&
                     notification.scrollDelta!.abs() > 6) {
                   textFieldVisibility.makeInvisible();
+
+                  Future.delayed(const Duration(milliseconds: 900), () {
+                    if (!_scrollController.position.isScrollingNotifier.value) {
+                      textFieldVisibility.makeVisible();
+                    }
+                  });
                 }
                 return true;
               },
               child: ListView.builder(
+                  controller: _scrollController,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 600, vertical: 20),
                   itemCount: messageStream.length,
@@ -63,12 +71,8 @@ class _MainScreenState extends State<MainScreen> {
               right: 0,
               bottom: 0,
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 600, vertical: 12),
-                child: textFieldVisibility.isVisible
-                    ? ChatTextField(chatController: rawChat)
-                    : SizedBox.shrink(),
-              ),
+                  padding: const EdgeInsets.symmetric(horizontal: 600),
+                  child: ChatTextField(chatController: rawChat)),
             )
           ],
         ),
