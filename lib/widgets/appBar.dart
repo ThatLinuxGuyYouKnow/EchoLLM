@@ -12,9 +12,17 @@ class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
         )
       ],
       backgroundColor: Colors.black,
-      title: Text(
-        'EchoLLM',
-        style: TextStyle(color: Colors.cyan),
+      title: Row(
+        children: [
+          Text(
+            'EchoLLM',
+            style: TextStyle(color: Colors.cyan),
+          ),
+          Image.asset(
+            'assets/logo.png',
+            height: 40,
+          )
+        ],
       ),
     );
   }
