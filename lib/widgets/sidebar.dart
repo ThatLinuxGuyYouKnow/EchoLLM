@@ -1,9 +1,12 @@
+import 'package:echo_llm/state_management/sidebarState.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class CustomSideBar extends StatelessWidget {
   CustomSideBar({super.key});
   Widget build(BuildContext context) {
+    final sidebar = Provider.of<Sidebarstate>(context);
     return Drawer(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       backgroundColor: const Color(0xFF1E2733),
@@ -18,7 +21,9 @@ class CustomSideBar extends StatelessWidget {
                 IconButton.filled(
                     style: IconButton.styleFrom(
                         backgroundColor: Colors.black.withOpacity(0.3)),
-                    onPressed: () {},
+                    onPressed: () {
+                      sidebar.collapse();
+                    },
                     icon: Icon(
                       Icons.hide_source,
                       color: Colors.white,

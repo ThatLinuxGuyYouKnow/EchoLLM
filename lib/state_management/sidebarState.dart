@@ -6,9 +6,11 @@ class Sidebarstate extends ChangeNotifier {
 
   collapse() {
     _isCollapsed = true;
+    notifyListeners();
   }
 
   expand() {
     _isCollapsed = false;
+    notifyListeners();
   }
 }

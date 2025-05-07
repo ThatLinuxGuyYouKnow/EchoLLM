@@ -1,5 +1,5 @@
-import 'dart:ui';
 import 'package:echo_llm/state_management/messageStreamState.dart';
+import 'package:echo_llm/state_management/sidebarState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
 import 'package:echo_llm/widgets/appBar.dart';
 import 'package:echo_llm/widgets/messageBubble.dart';
@@ -24,15 +24,19 @@ class _MainScreenState extends State<MainScreen> {
     final messageStream =
         Provider.of<Messagestreamstate>(context, listen: true).messages;
     final textFieldVisibility = Provider.of<Textfieldstate>(context);
+    final sidebarIsCollapsed =
+        Provider.of<Sidebarstate>(context, listen: true).isCollapsed;
     final screenWidth = MediaQuery.of(context).size.width;
     final isPhoneScreen = screenWidth <= 900;
 
     return Row(
       children: [
-        SizedBox(
-          width: 250,
-          child: CustomSideBar(),
-        ),
+        sidebarIsCollapsed
+            ? SizedBox.shrink()
+            : SizedBox(
+                width: 250,
+                child: CustomSideBar(),
+              ),
         Expanded(
           child: Scaffold(
             appBar: DarkAppBar(),
