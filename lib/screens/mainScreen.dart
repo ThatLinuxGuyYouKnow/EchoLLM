@@ -77,14 +77,16 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                   ),
 
-                  // Chat input at bottom
+                  // In MainScreen widget
                   Positioned(
+                    bottom: 0,
                     left: 0,
                     right: 0,
-                    bottom: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 60),
-                      child: ChatTextField(chatController: rawChat),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: ChatTextField(chatController: rawChat),
+                      ),
                     ),
                   ),
                 ],
