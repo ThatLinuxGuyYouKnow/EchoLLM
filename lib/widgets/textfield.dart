@@ -24,9 +24,7 @@ class ChatTextField extends StatelessWidget {
         duration: const Duration(milliseconds: 100),
         child: Container(
           constraints: BoxConstraints(
-            minHeight: 100,
-            maxHeight: isExpanded ? 400 : 150,
-          ),
+              minHeight: 100, maxHeight: isExpanded ? 400 : 150, maxWidth: 900),
           width: isPhoneScreen ? 800 : screenWidth / 3,
           child: Stack(
             children: [
