@@ -1,5 +1,6 @@
 import 'package:echo_llm/widgets/modelSelector.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
   DarkAppBar({super.key});
@@ -14,9 +15,12 @@ class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.black,
       title: Row(
         children: [
+          SizedBox(
+            width: 20,
+          ),
           Text(
             'EchoLLM',
-            style: TextStyle(color: Colors.cyan),
+            style: GoogleFonts.ubuntu(color: Colors.cyan),
           ),
           Image.asset(
             'assets/logo.png',

@@ -24,19 +24,17 @@ class _MainScreenState extends State<MainScreen> {
     final messageStream =
         Provider.of<Messagestreamstate>(context, listen: true).messages;
     final textFieldVisibility = Provider.of<Textfieldstate>(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isPhoneScreen = screenWidth <= 900;
 
     return Row(
       children: [
-        // 1) Permanent sidebar, fixed width
         SizedBox(
           width: 250,
           child: CustomSideBar(),
         ),
-
-        // 2) Main content fills the rest
         Expanded(
           child: Scaffold(
-            // no drawer here, we’ve “pulled it out” into the Row above
             appBar: DarkAppBar(),
             backgroundColor: Colors.black,
             body: SafeArea(
@@ -56,28 +54,36 @@ class _MainScreenState extends State<MainScreen> {
                       }
                       return true;
                     },
-                    child: ListView.builder(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 60, vertical: 20),
-                      itemCount: messageStream.length,
-                      itemBuilder: (context, index) {
-                        final messageMap = messageStream[index];
-                        final messageIndex = messageMap.keys.first;
-                        final messageText = messageMap[messageIndex]!;
-                        final isModel = messageIndex % 2 != 0;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6.0),
-                          child: MessageBubble(
-                            messageText: messageText,
-                            isModelResponse: isModel,
-                          ),
-                        );
-                      },
+                    child: Center(
+                      child: Container(
+                        constraints: BoxConstraints(
+                          maxWidth: isPhoneScreen ? 400 : screenWidth / 2.8,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0,
+                          vertical: 20,
+                        ),
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          itemCount: messageStream.length,
+                          itemBuilder: (context, index) {
+                            final messageMap = messageStream[index];
+                            final messageIndex = messageMap.keys.first;
+                            final messageText = messageMap[messageIndex]!;
+                            final isModel = messageIndex % 2 != 0;
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 6.0),
+                              child: MessageBubble(
+                                messageText: messageText,
+                                isModelResponse: isModel,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   ),
-
-                  // In MainScreen widget
                   Positioned(
                     bottom: 0,
                     left: 0,

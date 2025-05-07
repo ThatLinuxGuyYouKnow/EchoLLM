@@ -42,7 +42,7 @@ class DrawerTile extends StatelessWidget {
             children: [
               Text(
                 tileTitle,
-                style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 18),
+                style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 16),
               ),
               Icon(
                 tileIcon,

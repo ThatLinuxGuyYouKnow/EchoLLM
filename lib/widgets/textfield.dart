@@ -17,16 +17,16 @@ class ChatTextField extends StatelessWidget {
     bool isExpanded = textfieldState.isExpanded;
 
     return Container(
-      width: isPhoneScreen ? 400 : screenWidth / 2.8,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
       ),
       child: AnimatedSize(
         duration: const Duration(milliseconds: 100),
         child: Container(
+          height: textfieldState.isExpanded ? 400 : 150,
           constraints:
-              BoxConstraints(minHeight: 100, maxHeight: isExpanded ? 400 : 150),
-          width: isPhoneScreen ? 400 : screenWidth / 3,
+              BoxConstraints(minHeight: 150, maxHeight: isExpanded ? 400 : 200),
+          width: isPhoneScreen ? 800 : screenWidth / 2.5,
           child: Stack(
             children: [
               Padding(
