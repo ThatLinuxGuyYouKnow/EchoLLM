@@ -10,6 +10,21 @@ class CustomSideBar extends StatelessWidget {
       child: Padding(
         child: Column(
           children: [
+            Row(
+              children: [
+                SizedBox(
+                  width: 8,
+                ),
+                IconButton.filled(
+                    style: IconButton.styleFrom(
+                        backgroundColor: Colors.black.withOpacity(0.3)),
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.hide_source,
+                      color: Colors.white,
+                    ))
+              ],
+            ),
             DrawerTile(
               tileTitle: 'New Chat',
               tileIcon: Icons.add,

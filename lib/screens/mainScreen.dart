@@ -57,7 +57,7 @@ class _MainScreenState extends State<MainScreen> {
                     child: Center(
                       child: Container(
                         constraints: BoxConstraints(
-                          maxWidth: isPhoneScreen ? 400 : screenWidth / 2.8,
+                          maxWidth: isPhoneScreen ? 400 : screenWidth / 2.5,
                         ),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20.0,
