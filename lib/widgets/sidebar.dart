@@ -51,6 +51,11 @@ class CustomSideBar extends StatelessWidget {
                 tileTitle: 'Models',
                 tileIcon: Icons.smart_toy,
                 onTilePressed: () {},
+              ),
+              DrawerTile(
+                tileTitle: 'Keys',
+                tileIcon: Icons.key,
+                onTilePressed: () {},
               )
             ],
           ),
