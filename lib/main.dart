@@ -1,5 +1,6 @@
 import 'package:echo_llm/screens/mainScreen.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
+import 'package:echo_llm/state_management/screenState.dart';
 import 'package:echo_llm/state_management/sidebarState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
 
@@ -13,6 +14,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => Textfieldstate()),
         ChangeNotifierProvider(create: (_) => Messagestreamstate()),
         ChangeNotifierProvider(create: (_) => Sidebarstate()),
+        ChangeNotifierProvider(create: (_) => Screenstate()),
       ],
       child: const MyApp(),
     ),

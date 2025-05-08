@@ -1,5 +1,6 @@
 import 'package:echo_llm/screens/modelScreen.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
+import 'package:echo_llm/state_management/screenState.dart';
 import 'package:echo_llm/state_management/sidebarState.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,6 +11,7 @@ class CustomSideBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final sidebar = Provider.of<Sidebarstate>(context);
     final messageState = Provider.of<Messagestreamstate>(context);
+    final setScreenTo = Provider.of<Screenstate>(context);
     return Material(
       child: AnimatedContainer(
         color: Color(0xFF1E2733),
@@ -52,10 +54,7 @@ class CustomSideBar extends StatelessWidget {
                 tileTitle: 'Models',
                 tileIcon: Icons.smart_toy,
                 onTilePressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                    return ModelScreen();
-                  }));
+                  setScreenTo.modelScreen();
                 },
               ),
               DrawerTile(

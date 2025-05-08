@@ -1,4 +1,5 @@
 import 'package:echo_llm/state_management/messageStreamState.dart';
+import 'package:echo_llm/state_management/screenState.dart';
 import 'package:echo_llm/state_management/sidebarState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
 import 'package:echo_llm/widgets/appBar.dart';
@@ -28,6 +29,7 @@ class _MainScreenState extends State<MainScreen> {
         Provider.of<Sidebarstate>(context, listen: true).isCollapsed;
     final screenWidth = MediaQuery.of(context).size.width;
     final isPhoneScreen = screenWidth <= 900;
+    final currentScreen = Provider.of<Screenstate>(context).currentScreen;
 
     return Row(
       children: [
@@ -41,66 +43,7 @@ class _MainScreenState extends State<MainScreen> {
           child: Scaffold(
             appBar: DarkAppBar(),
             backgroundColor: Colors.black,
-            body: SafeArea(
-              child: Stack(
-                children: [
-                  NotificationListener<ScrollUpdateNotification>(
-                    onNotification: (notification) {
-                      if (notification.scrollDelta != null &&
-                          notification.scrollDelta!.abs() > 6) {
-                        textFieldVisibility.makeInvisible();
-                        Future.delayed(const Duration(milliseconds: 900), () {
-                          if (!_scrollController
-                              .position.isScrollingNotifier.value) {
-                            textFieldVisibility.makeVisible();
-                          }
-                        });
-                      }
-                      return true;
-                    },
-                    child: Center(
-                      child: Container(
-                        constraints: BoxConstraints(
-                          maxWidth: isPhoneScreen ? 400 : screenWidth / 2.5,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 20,
-                        ),
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          itemCount: messageStream.length,
-                          itemBuilder: (context, index) {
-                            final messageMap = messageStream[index];
-                            final messageIndex = messageMap.keys.first;
-                            final messageText = messageMap[messageIndex]!;
-                            final isModel = messageIndex % 2 != 0;
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 6.0),
-                              child: MessageBubble(
-                                messageText: messageText,
-                                isModelResponse: isModel,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: ChatTextField(chatController: rawChat),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            body: SafeArea(child: currentScreen),
           ),
         ),
       ],
