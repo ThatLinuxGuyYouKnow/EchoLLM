@@ -11,4 +11,8 @@ class Messagestreamstate extends ChangeNotifier {
     _messages.add({message_index: message});
     notifyListeners();
   }
+
+  clear() {
+    _messages.clear();
+  }
 }
