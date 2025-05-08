@@ -11,9 +11,9 @@ class ModelScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: GridView.builder(
-          itemCount: 1, // only one tile
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // or 1 if you want it to stretch full width
+          itemCount: 2,
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200,
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
             childAspectRatio: 1.2,
@@ -21,7 +21,7 @@ class ModelScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             return ModelTile(
               tileTitle: 'TinyLLM',
-              isAvailable: true,
+              isAvailable: false,
             );
           },
         ),
@@ -30,28 +30,55 @@ class ModelScreen extends StatelessWidget {
   }
 }
 
-class ModelTile extends StatelessWidget {
+class ModelTile extends StatefulWidget {
   final String tileTitle;
   final bool isAvailable;
 
   ModelTile({super.key, required this.tileTitle, required this.isAvailable});
+
+  @override
+  State<ModelTile> createState() => _ModelTileState();
+}
+
+class _ModelTileState extends State<ModelTile> {
+  bool isHovered = false;
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(minWidth: 80, minHeight: 80),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: Color(0xFF1E2733)),
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(tileTitle, style: GoogleFonts.ubuntu()),
-                Icon(isAvailable ? Icons.done : Icons.add)
-              ],
-            )
-          ],
+    return MouseRegion(
+      onHover: (event) {
+        isHovered = true;
+        setState(() {});
+      },
+      onExit: (event) {
+        isHovered = false;
+        setState(() {});
+      },
+      child: Container(
+        height: 100,
+        width: 100,
+        constraints: BoxConstraints(
+            minWidth: 80, minHeight: 80, maxHeight: 200, maxWidth: 200),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: isHovered
+                ? Color.fromARGB(255, 26, 31, 37)
+                : Color(0xFF1E2733)),
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(widget.tileTitle,
+                      style: GoogleFonts.ubuntu(color: Colors.white)),
+                  Icon(
+                    widget.isAvailable ? Icons.check_circle : Icons.add_circle,
+                    color: Colors.white,
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

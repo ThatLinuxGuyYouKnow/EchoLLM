@@ -1,3 +1,4 @@
+import 'package:echo_llm/screens/modelScreen.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/sidebarState.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,12 @@ class CustomSideBar extends StatelessWidget {
               DrawerTile(
                 tileTitle: 'Models',
                 tileIcon: Icons.smart_toy,
-                onTilePressed: () {},
+                onTilePressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                    return ModelScreen();
+                  }));
+                },
               ),
               DrawerTile(
                 tileTitle: 'Keys',
