@@ -14,5 +14,6 @@ class Messagestreamstate extends ChangeNotifier {
 
   clear() {
     _messages.clear();
+    notifyListeners();
   }
 }
