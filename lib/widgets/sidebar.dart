@@ -7,9 +7,9 @@ class CustomSideBar extends StatelessWidget {
   CustomSideBar({super.key});
   Widget build(BuildContext context) {
     final sidebar = Provider.of<Sidebarstate>(context);
-    return Drawer(
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-      backgroundColor: const Color(0xFF1E2733),
+    return AnimatedContainer(
+      color: Color(0xFF1E2733),
+      duration: Duration(milliseconds: 800),
       child: Padding(
         child: Column(
           children: [
@@ -19,6 +19,7 @@ class CustomSideBar extends StatelessWidget {
                   width: 8,
                 ),
                 IconButton.filled(
+                    tooltip: 'Collpse SideBar',
                     style: IconButton.styleFrom(
                         backgroundColor: Colors.black.withOpacity(0.3)),
                     onPressed: () {

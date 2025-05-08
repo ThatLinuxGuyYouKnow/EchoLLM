@@ -29,7 +29,7 @@ class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
                     sidebar.expand();
                   },
                   icon: Icon(
-                    Icons.hide_source,
+                    Icons.visibility,
                     color: Colors.white,
                   ))
               : SizedBox.shrink(),
