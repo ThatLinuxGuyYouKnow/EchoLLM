@@ -49,40 +49,57 @@ class CustomSideBar extends StatelessWidget {
   }
 }
 
-class DrawerTile extends StatelessWidget {
+class DrawerTile extends StatefulWidget {
   final String tileTitle;
   final IconData tileIcon;
 
   DrawerTile({super.key, required this.tileTitle, required this.tileIcon});
 
   @override
+  State<DrawerTile> createState() => _DrawerTileState();
+}
+
+class _DrawerTileState extends State<DrawerTile> {
+  bool isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Container(
-        height: 50,
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                tileTitle,
-                style: GoogleFonts.ubuntu(
-                  color: Colors.white,
-                  fontSize: 16,
+      child: MouseRegion(
+        onHover: (event) {
+          isHovered = true;
+          setState(() {});
+        },
+        onExit: (event) {
+          isHovered = false;
+          setState(() {});
+        },
+        child: Container(
+          height: 50,
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(isHovered ? 0.7 : 0.2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  widget.tileTitle,
+                  style: GoogleFonts.ubuntu(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-              Icon(
-                tileIcon,
-                color: Colors.white,
-              ),
-            ],
+                Icon(
+                  widget.tileIcon,
+                  color: Colors.white,
+                ),
+              ],
+            ),
           ),
         ),
       ),
