@@ -23,16 +23,20 @@ class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           sidebar.isCollapsed
               ? IconButton.filled(
-                  style: IconButton.styleFrom(
-                      backgroundColor: Colors.black.withOpacity(0.3)),
+                  style:
+                      IconButton.styleFrom(backgroundColor: Color(0xFF1E2733)),
                   onPressed: () {
                     sidebar.expand();
                   },
                   icon: Icon(
-                    Icons.visibility,
+                    Icons.trip_origin,
                     color: Colors.white,
+                    weight: 0.1,
                   ))
               : SizedBox.shrink(),
+          SizedBox(
+            width: 20,
+          ),
           Text(
             'EchoLLM',
             style: GoogleFonts.ubuntu(color: Colors.cyan),
