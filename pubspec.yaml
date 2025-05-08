@@ -37,6 +37,7 @@ dependencies:
   get: ^4.7.2
   provider: ^6.1.5
   google_fonts:
+  http: ^1.4.0
 
 dev_dependencies:
   flutter_test:
