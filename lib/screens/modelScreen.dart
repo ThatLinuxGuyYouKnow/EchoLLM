@@ -1,41 +1,55 @@
 import 'package:echo_llm/mappings/modelAvailabilityMapping.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
+import 'package:echo_llm/widgets/modals/enterApiKeyModal.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-// Assume onlineModels and onlineModelAvailability are declared globally or passed in
 
 class ModelScreen extends StatelessWidget {
   const ModelScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: GridView.builder(
-          itemCount: onlineModels.length,
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 200,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 1.2,
-          ),
-          itemBuilder: (context, index) {
-            final modelName = onlineModels.keys.elementAt(index) ?? "";
-            final slug = onlineModels[modelName] ?? '';
-            final isAvailable = onlineModelAvailability[slug] ?? false;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    bool openModal = false;
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: Colors.black,
+          body: Padding(
+            padding: const EdgeInsets.all(16),
+            child: GridView.builder(
+              itemCount: onlineModels.length,
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 1.2,
+              ),
+              itemBuilder: (context, index) {
+                final modelName = onlineModels.keys.elementAt(index);
+                final slug = onlineModels[modelName] ?? '';
+                final isAvailable = onlineModelAvailability[slug] ?? false;
 
-            return ModelTile(
-              tileTitle: modelName,
-              isAvailable: isAvailable,
-            );
-          },
+                return ModelTile(
+                  tileTitle: modelName,
+                  isAvailable: isAvailable,
+                );
+              },
+            ),
+          ),
         ),
-      ),
+        openModal
+            ? Container(
+                height: screenHeight,
+                width: screenWidth,
+                color: Colors.black,
+                child: Center(
+                  child: Enterapikeymodal(modelName: modelName),
+                ),
+              )
+            : SizedBox.shrink()
+      ],
     );
   }
 }
