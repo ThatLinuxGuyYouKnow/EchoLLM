@@ -1,14 +1,14 @@
+import 'package:echo_llm/mappings/modelAvailabilityMapping.dart';
+import 'package:echo_llm/mappings/modelSlugMappings.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ModelScreen extends StatelessWidget {
-  ModelScreen({super.key});
+// Assume onlineModels and onlineModelAvailability are declared globally or passed in
 
-  final Map<String, bool> models = {
-    'TinyLLM': true,
-    'BigBrain': false,
-    'ChatAssist': true,
-  };
+class ModelScreen extends StatelessWidget {
+  const ModelScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class ModelScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: GridView.builder(
-          itemCount: models.length,
+          itemCount: onlineModels.length,
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 200,
             crossAxisSpacing: 12,
@@ -25,10 +25,13 @@ class ModelScreen extends StatelessWidget {
             childAspectRatio: 1.2,
           ),
           itemBuilder: (context, index) {
-            final modelEntry = models.entries.elementAt(index);
+            final modelName = onlineModels.keys.elementAt(index) ?? "";
+            final slug = onlineModels[modelName] ?? '';
+            final isAvailable = onlineModelAvailability[slug] ?? false;
+
             return ModelTile(
-              tileTitle: modelEntry.key,
-              isAvailable: modelEntry.value,
+              tileTitle: modelName,
+              isAvailable: isAvailable,
             );
           },
         ),

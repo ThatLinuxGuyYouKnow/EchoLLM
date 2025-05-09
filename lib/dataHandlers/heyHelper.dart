@@ -9,6 +9,6 @@ class ApiKeyHelper {
   String readKey({required String modelSlugNotName}) {
     final box = GetStorage();
     final key = box.read(modelSlugNotName);
-    return key;
+    return key ?? '';
   }
 }
