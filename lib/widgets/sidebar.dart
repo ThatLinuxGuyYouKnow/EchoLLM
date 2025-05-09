@@ -39,13 +39,15 @@ class CustomSideBar extends StatelessWidget {
                       ))
                 ],
               ),
-              DrawerTile(
-                tileTitle: 'New Chat',
-                tileIcon: Icons.add,
-                onTilePressed: () {
-                  messageState.clear();
-                },
-              ),
+              isOnChatScreen
+                  ? DrawerTile(
+                      tileTitle: 'New Chat',
+                      tileIcon: Icons.add,
+                      onTilePressed: () {
+                        messageState.clear();
+                      },
+                    )
+                  : SizedBox.shrink(),
               DrawerTile(
                 tileTitle: 'Settings',
                 tileIcon: Icons.precision_manufacturing,

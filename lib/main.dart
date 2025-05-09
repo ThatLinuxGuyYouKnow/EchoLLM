@@ -5,9 +5,11 @@ import 'package:echo_llm/state_management/sidebarState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
 
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  await GetStorage.init('ApiKeys');
   runApp(
     MultiProvider(
       providers: [

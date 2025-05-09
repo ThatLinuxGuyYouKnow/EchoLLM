@@ -80,7 +80,9 @@ class _ModelTileState extends State<ModelTile> {
                       style: GoogleFonts.ubuntu(color: Colors.white)),
                   Icon(
                     widget.isAvailable ? Icons.check_circle : Icons.add_circle,
-                    color: Colors.white,
+                    color: widget.isAvailable
+                        ? Colors.cyan.withOpacity(0.9)
+                        : Colors.white,
                   )
                 ],
               )
