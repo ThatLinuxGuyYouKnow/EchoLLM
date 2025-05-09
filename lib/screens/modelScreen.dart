@@ -4,6 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 class ModelScreen extends StatelessWidget {
   ModelScreen({super.key});
 
+  final Map<String, bool> models = {
+    'TinyLLM': true,
+    'BigBrain': false,
+    'ChatAssist': true,
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,7 +17,7 @@ class ModelScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: GridView.builder(
-          itemCount: 2,
+          itemCount: models.length,
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 200,
             crossAxisSpacing: 12,
@@ -19,9 +25,10 @@ class ModelScreen extends StatelessWidget {
             childAspectRatio: 1.2,
           ),
           itemBuilder: (context, index) {
+            final modelEntry = models.entries.elementAt(index);
             return ModelTile(
-              tileTitle: 'TinyLLM',
-              isAvailable: false,
+              tileTitle: modelEntry.key,
+              isAvailable: modelEntry.value,
             );
           },
         ),
