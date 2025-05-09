@@ -6,8 +6,9 @@ class ApiKeyHelper {
     box.write(modelSlugNotName, apiKey);
   }
 
-  readKey({required String modelSlugNotName}) {
+  String readKey({required String modelSlugNotName}) {
     final box = GetStorage();
-    box.read(modelSlugNotName);
+    final key = box.read(modelSlugNotName);
+    return key;
   }
 }
