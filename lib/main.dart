@@ -1,4 +1,5 @@
 import 'package:echo_llm/screens/mainScreen.dart';
+import 'package:echo_llm/state_management/apikeyModalState.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/screenState.dart';
 import 'package:echo_llm/state_management/sidebarState.dart';
@@ -17,6 +18,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => Messagestreamstate()),
         ChangeNotifierProvider(create: (_) => Sidebarstate()),
         ChangeNotifierProvider(create: (_) => Screenstate()),
+        ChangeNotifierProvider(create: (_) => ApikeyModalState()),
       ],
       child: const MyApp(),
     ),

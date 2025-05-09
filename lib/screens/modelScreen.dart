@@ -1,8 +1,10 @@
 import 'package:echo_llm/mappings/modelAvailabilityMapping.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
+import 'package:echo_llm/state_management/apikeyModalState.dart';
 import 'package:echo_llm/widgets/modals/enterApiKeyModal.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ModelScreen extends StatelessWidget {
   const ModelScreen({super.key});
@@ -11,7 +13,8 @@ class ModelScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    bool openModal = false;
+    final modalState = Provider.of<ApikeyModalState>(context);
+
     return Stack(
       children: [
         Scaffold(
@@ -39,13 +42,13 @@ class ModelScreen extends StatelessWidget {
             ),
           ),
         ),
-        openModal
+        modalState.displayModal
             ? Container(
                 height: screenHeight,
                 width: screenWidth,
                 color: Colors.black,
                 child: Center(
-                  child: Enterapikeymodal(modelName: modelName),
+                  child: Enterapikeymodal(modelName: modalState.modelName),
                 ),
               )
             : SizedBox.shrink()
@@ -67,6 +70,7 @@ class ModelTile extends StatefulWidget {
 class _ModelTileState extends State<ModelTile> {
   bool isHovered = false;
   Widget build(BuildContext context) {
+    final modalState = Provider.of<ApikeyModalState>(context);
     return MouseRegion(
       onHover: (event) {
         isHovered = true;
@@ -95,11 +99,19 @@ class _ModelTileState extends State<ModelTile> {
                 children: [
                   Text(widget.tileTitle,
                       style: GoogleFonts.ubuntu(color: Colors.white)),
-                  Icon(
-                    widget.isAvailable ? Icons.check_circle : Icons.add_circle,
-                    color: widget.isAvailable
-                        ? Colors.cyan.withOpacity(0.9)
-                        : Colors.white,
+                  GestureDetector(
+                    onTap: () {
+                      modalState.setModelName(modelName: widget.tileTitle);
+                      modalState.setModalToVisible();
+                    },
+                    child: Icon(
+                      widget.isAvailable
+                          ? Icons.check_circle
+                          : Icons.add_circle,
+                      color: widget.isAvailable
+                          ? Colors.cyan.withOpacity(0.9)
+                          : Colors.white,
+                    ),
                   )
                 ],
               )
