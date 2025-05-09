@@ -71,7 +71,9 @@ class CustomSideBar extends StatelessWidget {
                   : SpecialDrawerTile(
                       tileTitle: 'Back to chat',
                       tileIcon: Icons.arrow_back_ios,
-                      onTilePressed: () {})
+                      onTilePressed: () {
+                        setScreenTo.chatScreen();
+                      })
             ],
           ),
         ),
