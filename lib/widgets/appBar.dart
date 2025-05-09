@@ -1,3 +1,4 @@
+import 'package:echo_llm/state_management/screenState.dart';
 import 'package:echo_llm/state_management/sidebarState.dart';
 import 'package:echo_llm/widgets/modelSelector.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +9,13 @@ class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
   DarkAppBar({super.key});
   Widget build(BuildContext context) {
     final sidebar = Provider.of<Sidebarstate>(context);
+    final bool isonMainScreen =
+        Provider.of<Screenstate>(context).isOnMainScreen;
     return AppBar(
       actions: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Modelselector(),
+          child: isonMainScreen ? Modelselector() : SizedBox.shrink(),
         )
       ],
       backgroundColor: Colors.black,

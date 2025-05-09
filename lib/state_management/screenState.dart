@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class Screenstate extends ChangeNotifier {
   Widget get currentScreen => _currentScreen;
   Widget _currentScreen = Messagelistwidget();
-
+  bool get isOnMainScreen => _currentScreen is Messagelistwidget;
   modelScreen() {
     _currentScreen = ModelScreen();
     notifyListeners();
