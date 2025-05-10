@@ -46,9 +46,9 @@ class ModelScreen extends StatelessWidget {
             ? Container(
                 height: screenHeight,
                 width: screenWidth,
-                color: Colors.black,
+                color: Colors.black.withOpacity(0.5),
                 child: Center(
-                  child: Enterapikeymodal(modelName: modalState.modelName),
+                  child: EnterApiKeyModal(modelName: modalState.modelName),
                 ),
               )
             : SizedBox.shrink()
