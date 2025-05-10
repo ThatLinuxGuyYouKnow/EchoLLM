@@ -9,11 +9,12 @@ class EnterApiKeyModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 480,
+      height: 200,
+      width: 600,
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 28),
       decoration: BoxDecoration(
         color: const Color(0xFF1E2733),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -29,48 +30,27 @@ class EnterApiKeyModal extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 30),
           Container(
+            height: 60,
             decoration: BoxDecoration(
-              color: Colors.black,
+              color: Color.fromARGB(255, 26, 31, 37),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const TextField(
-              style: TextStyle(color: Colors.white),
-              cursorColor: Colors.white70,
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                border: InputBorder.none,
-                hintText: 'Paste your API key here...',
-                hintStyle: TextStyle(color: Colors.white38),
+            child: Center(
+              child: TextField(
+                style: TextStyle(color: Colors.grey[50]),
+                cursorColor: Colors.white70,
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                  border: InputBorder.none,
+                  hintText: 'Paste your API key here...',
+                  hintStyle: TextStyle(color: Colors.white38),
+                ),
               ),
             ),
           ),
           const SizedBox(height: 20),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop(); // Placeholder action
-              },
-              child: Text(
-                'Save',
-                style: GoogleFonts.ubuntu(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          )
         ],
       ),
     );

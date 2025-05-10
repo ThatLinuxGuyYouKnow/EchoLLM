@@ -43,12 +43,17 @@ class ModelScreen extends StatelessWidget {
           ),
         ),
         modalState.displayModal
-            ? Container(
-                height: screenHeight,
-                width: screenWidth,
-                color: Colors.black.withOpacity(0.5),
-                child: Center(
-                  child: EnterApiKeyModal(modelName: modalState.modelName),
+            ? GestureDetector(
+                onTap: () {
+                  modalState.setModalToHidden();
+                },
+                child: Container(
+                  height: screenHeight,
+                  width: screenWidth,
+                  color: Colors.black.withOpacity(0.5),
+                  child: Center(
+                    child: EnterApiKeyModal(modelName: modalState.modelName),
+                  ),
                 ),
               )
             : SizedBox.shrink()
