@@ -1,3 +1,4 @@
+import 'package:echo_llm/dataHandlers/heyHelper.dart';
 import 'package:echo_llm/state_management/apikeyModalState.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +14,8 @@ class EnterApiKeyModal extends StatelessWidget {
   Widget build(BuildContext context) {
     final modalState = Provider.of<ApikeyModalState>(context);
     final focusNode = FocusNode();
+    final apikey = ApiKeyHelper();
+    final rawApiKey = TextEditingController();
 
     return Focus(
       autofocus: true,
@@ -68,7 +71,14 @@ class EnterApiKeyModal extends StatelessWidget {
             Row(
               children: [
                 Spacer(),
-                ModalButton(buttonText: 'Save'),
+                ModalButton(
+                  buttonText: 'Save',
+                  onPressed: () {
+                    apikey.storeKey(
+                        modelSlugNotName: modelName,
+                        apiKey: rawApiKey.text.trim());
+                  },
+                ),
               ],
             ),
           ],
@@ -80,7 +90,9 @@ class EnterApiKeyModal extends StatelessWidget {
 
 class ModalButton extends StatefulWidget {
   final String buttonText;
-  const ModalButton({required this.buttonText, super.key});
+  final Function() onPressed;
+  const ModalButton(
+      {required this.buttonText, super.key, required this.onPressed});
 
   @override
   State<ModalButton> createState() => _ModalButtonState();
