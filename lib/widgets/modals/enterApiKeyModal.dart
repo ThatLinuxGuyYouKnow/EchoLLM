@@ -73,10 +73,11 @@ class EnterApiKeyModal extends StatelessWidget {
                 Spacer(),
                 ModalButton(
                   buttonText: 'Save',
-                  onPressed: () {
-                    apikey.storeKey(
+                  onPressed: () async {
+                    final succesfulSave = await apikey.storeKey(
                         modelSlugNotName: modelName,
                         apiKey: rawApiKey.text.trim());
+                    print(succesfulSave);
                   },
                 ),
               ],
@@ -106,22 +107,26 @@ class _ModalButtonState extends State<ModalButton> {
     return MouseRegion(
       onEnter: (_) => setState(() => isHovered = true),
       onExit: (_) => setState(() => isHovered = false),
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 150),
-        height: 40,
-        width: 110,
-        decoration: BoxDecoration(
-          color: isHovered
-              ? const Color(0xFF4C83D1)
-              : const Color(0xFF3F72AF), // subtle hover shade
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Center(
-          child: Text(
-            widget.buttonText,
-            style: GoogleFonts.ubuntu(
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
+      child: GestureDetector(
+        onTap: () {
+          widget.onPressed();
+        },
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 150),
+          height: 40,
+          width: 110,
+          decoration: BoxDecoration(
+            color:
+                isHovered ? const Color(0xFF4C83D1) : const Color(0xFF3F72AF),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Center(
+            child: Text(
+              widget.buttonText,
+              style: GoogleFonts.ubuntu(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ),
