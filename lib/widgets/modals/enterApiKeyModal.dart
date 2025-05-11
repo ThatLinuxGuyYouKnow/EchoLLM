@@ -83,10 +83,13 @@ class _EnterApiKeyModalState extends State<EnterApiKeyModal> {
                   isEnabled: rawApiKey.text.length > 5,
                   buttonText: 'Save',
                   onPressed: () async {
-                    final succesfulSave = await apikey.storeKey(
+                    final successfulSave = await apikey.storeKey(
                         modelSlugNotName: widget.modelSlug,
                         apiKey: rawApiKey.text.trim());
-                    print(succesfulSave);
+                    if (successfulSave) {
+                      Provider.of<ApikeyModalState>(context, listen: false)
+                          .setModalToHidden();
+                    }
                   },
                 ),
               ],

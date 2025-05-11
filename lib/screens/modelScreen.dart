@@ -123,9 +123,8 @@ class _ModelTileState extends State<ModelTile> {
                       widget.isAvailable
                           ? Icons.check_circle
                           : Icons.add_circle,
-                      color: widget.isAvailable
-                          ? Colors.cyan.withOpacity(0.9)
-                          : Colors.white,
+                      color:
+                          widget.isAvailable ? Color(0xFF4C83D1) : Colors.white,
                     ),
                   )
                 ],
