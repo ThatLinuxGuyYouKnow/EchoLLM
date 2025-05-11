@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
   DarkAppBar({super.key});
 
-  // match this to your toolbarHeight below
   @override
   Size get preferredSize => const Size.fromHeight(80);
 
@@ -18,15 +17,12 @@ class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
     final isOnMainScreen = context.watch<Screenstate>().isOnMainScreen;
 
     return AppBar(
-      // give yourself a little more breathing room if you like
       toolbarHeight: 80,
       backgroundColor: Colors.black,
       titleSpacing: 0,
       title: Row(
         children: [
           const SizedBox(width: 16),
-
-          // collapse/expand button
           if (sidebar.isCollapsed) ...[
             IconButton.filled(
               style: IconButton.styleFrom(
@@ -41,12 +37,10 @@ class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             const SizedBox(width: 16),
           ],
-
-          // your logo, constrained vertically to fit
           ConstrainedBox(
             constraints: const BoxConstraints(
-              maxHeight: 150, // keeps it under your toolbar height
-              maxWidth: 200, // or whatever max width you want
+              maxHeight: 150,
+              maxWidth: 200,
             ),
             child: Image.asset(
               'assets/logo2.png',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MessageBubble extends StatelessWidget {
   final String messageText;
@@ -12,6 +13,11 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final modelBubbleColor = Color(0xFF2A3441); // Dark blue-grey
+    final userBubbleColor =
+        Color(0xFF3B4B59); // Slightly lighter/different dark blue-grey
+    final textColor = Colors.white.withOpacity(0.9);
+
     return Align(
       alignment: isModelResponse ? Alignment.centerLeft : Alignment.centerRight,
       child: Container(
@@ -21,9 +27,7 @@ class MessageBubble extends StatelessWidget {
           maxWidth: 700,
         ),
         decoration: BoxDecoration(
-          color: isModelResponse
-              ? Colors.tealAccent.shade100
-              : Colors.teal.shade400,
+          color: isModelResponse ? modelBubbleColor : userBubbleColor,
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(16),
             topRight: const Radius.circular(16),
@@ -34,18 +38,12 @@ class MessageBubble extends StatelessWidget {
                 ? const Radius.circular(16)
                 : const Radius.circular(0),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 6,
-              offset: const Offset(2, 2),
-            )
-          ],
         ),
         child: Text(
           messageText,
-          style: const TextStyle(
-            color: Colors.black87,
+          style: TextStyle(
+            fontFamily: GoogleFonts.ubuntu().fontFamily,
+            color: textColor,
             fontSize: 15,
             height: 1.4,
           ),
