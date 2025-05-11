@@ -20,14 +20,14 @@ class _ModelselectorState extends State<Modelselector> {
       decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.cyan, width: 2)),
+          border: Border.all(color: Color(0xFF4C83D1), width: 2)),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: selectedValue,
           isExpanded: true,
           icon: Icon(
             Icons.keyboard_arrow_down,
-            color: Colors.white70,
+            color: Colors.white,
           ),
           dropdownColor: Color(0xFF2A3441),
           style: TextStyle(

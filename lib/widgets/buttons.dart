@@ -15,7 +15,7 @@ class ChatButton extends StatelessWidget {
           whenPressed();
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.cyan,
+          backgroundColor: Color(0xFF4C83D1),
           padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -23,7 +23,7 @@ class ChatButton extends StatelessWidget {
         ),
         child: Icon(
           Icons.send,
-          color: Colors.black,
+          color: Colors.black54,
           size: 20,
         ),
       ),
