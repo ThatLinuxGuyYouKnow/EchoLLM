@@ -5,11 +5,18 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class EnterApiKeyModal extends StatelessWidget {
+class EnterApiKeyModal extends StatefulWidget {
   final String modelName;
+  final String modelSlug;
 
-  const EnterApiKeyModal({super.key, required this.modelName});
+  const EnterApiKeyModal(
+      {super.key, required this.modelName, required this.modelSlug});
 
+  @override
+  State<EnterApiKeyModal> createState() => _EnterApiKeyModalState();
+}
+
+class _EnterApiKeyModalState extends State<EnterApiKeyModal> {
   @override
   Widget build(BuildContext context) {
     final modalState = Provider.of<ApikeyModalState>(context);
@@ -22,7 +29,7 @@ class EnterApiKeyModal extends StatelessWidget {
       focusNode: focusNode,
       onKey: (node, event) {
         if (event.logicalKey == LogicalKeyboardKey.escape &&
-            event is RawKeyDownEvent) {
+            event is KeyDownEvent) {
           modalState.setModalToHidden();
           return KeyEventResult.handled;
         }
@@ -41,7 +48,7 @@ class EnterApiKeyModal extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Enter your API key for $modelName',
+                'Enter your API key for ${widget.modelName}',
                 style: GoogleFonts.ubuntu(
                   color: Colors.white,
                   fontSize: 17,
@@ -57,6 +64,7 @@ class EnterApiKeyModal extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: TextField(
+                controller: rawApiKey,
                 style: TextStyle(color: Colors.grey[50]),
                 cursorColor: Colors.white70,
                 decoration: InputDecoration(
@@ -72,10 +80,11 @@ class EnterApiKeyModal extends StatelessWidget {
               children: [
                 Spacer(),
                 ModalButton(
+                  isEnabled: rawApiKey.text.length > 5,
                   buttonText: 'Save',
                   onPressed: () async {
                     final succesfulSave = await apikey.storeKey(
-                        modelSlugNotName: modelName,
+                        modelSlugNotName: widget.modelSlug,
                         apiKey: rawApiKey.text.trim());
                     print(succesfulSave);
                   },
@@ -92,21 +101,21 @@ class EnterApiKeyModal extends StatelessWidget {
 class ModalButton extends StatefulWidget {
   final String buttonText;
   final Function() onPressed;
+  final bool isEnabled;
   const ModalButton(
-      {required this.buttonText, super.key, required this.onPressed});
+      {required this.buttonText,
+      super.key,
+      required this.onPressed,
+      required this.isEnabled});
 
   @override
   State<ModalButton> createState() => _ModalButtonState();
 }
 
 class _ModalButtonState extends State<ModalButton> {
-  bool isHovered = false;
-
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (_) => setState(() => isHovered = true),
-      onExit: (_) => setState(() => isHovered = false),
       child: GestureDetector(
         onTap: () {
           widget.onPressed();
@@ -116,8 +125,9 @@ class _ModalButtonState extends State<ModalButton> {
           height: 40,
           width: 110,
           decoration: BoxDecoration(
-            color:
-                isHovered ? const Color(0xFF4C83D1) : const Color(0xFF3F72AF),
+            color: widget.isEnabled
+                ? const Color(0xFF4C83D1)
+                : const Color.fromARGB(255, 15, 21, 29),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Center(

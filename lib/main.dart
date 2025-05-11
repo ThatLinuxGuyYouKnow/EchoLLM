@@ -10,7 +10,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
-  await GetStorage.init('ApiKeys');
+  await GetStorage.init('api-keys');
   runApp(
     MultiProvider(
       providers: [

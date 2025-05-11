@@ -35,6 +35,7 @@ class ModelScreen extends StatelessWidget {
                 final isAvailable = onlineModelAvailability[slug] ?? false;
 
                 return ModelTile(
+                  modelSlug: slug,
                   tileTitle: modelName,
                   isAvailable: isAvailable,
                 );
@@ -52,7 +53,10 @@ class ModelScreen extends StatelessWidget {
                   width: screenWidth,
                   color: Colors.black.withOpacity(0.5),
                   child: Center(
-                    child: EnterApiKeyModal(modelName: modalState.modelName),
+                    child: EnterApiKeyModal(
+                      modelName: modalState.modelName,
+                      modelSlug: modalState.modelSlug,
+                    ),
                   ),
                 ),
               )
@@ -65,8 +69,13 @@ class ModelScreen extends StatelessWidget {
 class ModelTile extends StatefulWidget {
   final String tileTitle;
   final bool isAvailable;
+  final String modelSlug;
 
-  ModelTile({super.key, required this.tileTitle, required this.isAvailable});
+  ModelTile(
+      {super.key,
+      required this.tileTitle,
+      required this.isAvailable,
+      required this.modelSlug});
 
   @override
   State<ModelTile> createState() => _ModelTileState();
@@ -107,6 +116,7 @@ class _ModelTileState extends State<ModelTile> {
                   GestureDetector(
                     onTap: () {
                       modalState.setModelName(modelName: widget.tileTitle);
+                      modalState.setModelSlug(modelSlug: widget.modelSlug);
                       modalState.setModalToVisible();
                     },
                     child: Icon(
