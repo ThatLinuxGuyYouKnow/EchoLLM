@@ -1,5 +1,6 @@
 import 'package:echo_llm/screens/mainScreen.dart';
 import 'package:echo_llm/screens/modelScreen.dart';
+import 'package:echo_llm/screens/settingsScreen.dart';
 import 'package:echo_llm/widgets/messageListWidget.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,11 @@ class Screenstate extends ChangeNotifier {
 
   chatScreen() {
     _currentScreen = Messagelistwidget();
+    notifyListeners();
+  }
+
+  settingsScreen() {
+    _currentScreen = SettingsScreen();
     notifyListeners();
   }
 }

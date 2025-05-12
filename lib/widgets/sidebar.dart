@@ -51,7 +51,9 @@ class CustomSideBar extends StatelessWidget {
               DrawerTile(
                 tileTitle: 'Settings',
                 tileIcon: Icons.precision_manufacturing,
-                onTilePressed: () {},
+                onTilePressed: () {
+                  setScreenTo.settingsScreen();
+                },
               ),
               DrawerTile(
                 tileTitle: 'Models',
