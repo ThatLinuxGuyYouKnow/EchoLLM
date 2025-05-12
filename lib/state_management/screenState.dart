@@ -1,3 +1,4 @@
+import 'package:echo_llm/screens/keyManagementScreen.dart';
 import 'package:echo_llm/screens/mainScreen.dart';
 import 'package:echo_llm/screens/modelScreen.dart';
 import 'package:echo_llm/screens/settingsScreen.dart';
@@ -20,6 +21,11 @@ class Screenstate extends ChangeNotifier {
 
   settingsScreen() {
     _currentScreen = SettingsScreen();
+    notifyListeners();
+  }
+
+  keyManagementScreen() {
+    _currentScreen = KeyManagementScreen();
     notifyListeners();
   }
 }
