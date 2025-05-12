@@ -65,7 +65,9 @@ class CustomSideBar extends StatelessWidget {
               DrawerTile(
                 tileTitle: 'Keys',
                 tileIcon: Icons.key,
-                onTilePressed: () {},
+                onTilePressed: () {
+                  setScreenTo.keyManagementScreen();
+                },
               ),
               SizedBox(
                 height: 70,
