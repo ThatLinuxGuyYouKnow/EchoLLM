@@ -1,3 +1,4 @@
+import 'package:echo_llm/mappings/modelSlugMappings.dart';
 import 'package:flutter/material.dart';
 
 class Modelselector extends StatefulWidget {
@@ -8,9 +9,8 @@ class Modelselector extends StatefulWidget {
 }
 
 class _ModelselectorState extends State<Modelselector> {
-  String selectedValue = 'Agege GPT v1';
-
-  List<String> options = ['Agege GPT v1', 'Agege GPT v2', 'Gemini 2.5 pro'];
+  String selectedValue = onlineModels.keys.first;
+  final options = onlineModels.keys;
 
   @override
   Widget build(BuildContext context) {
