@@ -16,6 +16,7 @@ class _ModelselectorState extends State<Modelselector> {
   Widget build(BuildContext context) {
     return Container(
       width: 300,
+      height: 50,
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
           color: Colors.black,
