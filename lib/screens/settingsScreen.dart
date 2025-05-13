@@ -145,15 +145,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget _buildSettingsCard({required List<Widget> children}) {
-    return Card(
-      color: _cardBackgroundColor,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-        // side: BorderSide(color: Colors.grey[800]!, width: 0.5), // Optional subtle border
-      ),
-      child: Column(
-        children: children,
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: 150),
+      child: Card(
+        color: _cardBackgroundColor,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          // side: BorderSide(color: Colors.grey[800]!, width: 0.5), // Optional subtle border
+        ),
+        child: Column(
+          children: children,
+        ),
       ),
     );
   }
@@ -174,8 +177,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       trailing: Switch(
         value: value,
         onChanged: onChanged,
-        activeColor: Colors.white,
-        activeTrackColor: Colors.cyanAccent.shade700,
+        activeColor: Color.fromARGB(255, 58, 91, 134),
+        activeTrackColor: Color(0xFF1E2733),
         inactiveThumbColor: Colors.grey[400],
         inactiveTrackColor: Colors.grey[700],
       ),
