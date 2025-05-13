@@ -11,4 +11,6 @@ Map<String, bool> onlineModelAvailability = {
       keyHandler.readKey(modelSlugNotName: 'gemini-2.0-flash').length > 1,
   "gemini-2.0-flash-lite":
       keyHandler.readKey(modelSlugNotName: 'gemini-2.0-flash-lite').length > 1,
+  "gpt-4.1":
+      keyHandler.readKey(modelSlugNotName: 'gemini-2.0-flash-lite').length > 1,
 };
