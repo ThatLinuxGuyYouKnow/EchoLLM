@@ -16,7 +16,8 @@ class InferenceSuperClass {
       final ApiKey = apikey.readKey(modelSlugNotName: modelSlug);
       final gemini =
           Geminihelper(modelSlug: modelSlug, apiKey: ApiKey, context: context);
-      gemini.getResponse();
+      return gemini.getResponse();
     }
+    if (modelClassMapping[model] == 'openai') {}
   }
 }
