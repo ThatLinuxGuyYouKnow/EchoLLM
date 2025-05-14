@@ -41,14 +41,13 @@ class _ModelselectorState extends State<Modelselector> {
               child: Text(option),
             );
           }).toList(),
-           onChanged: (value) {
-             if (value != null) {
-               setState(() {
-                 selectedValue = value;
-                 Config.model = onlineModels[value]!;
-               });
-             }
-           },
+          onChanged: (value) {
+            if (value != null) {
+              setState(() {
+                selectedValue = value;
+              });
+            }
+          },
         ),
       ),
     );
