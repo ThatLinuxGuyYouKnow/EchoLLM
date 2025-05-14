@@ -13,6 +13,7 @@ class CONFIG extends ChangeNotifier {
     String modelName = preferencesBox.read('preferredModel');
     _model = modelName;
     _modelSlug = onlineModels[model] ?? '';
+    print('model' + _model);
   }
 
   setPreferredModel({required String modelName}) {

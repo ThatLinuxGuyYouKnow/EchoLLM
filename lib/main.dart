@@ -4,6 +4,7 @@ import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/screenState.dart';
 import 'package:echo_llm/state_management/sidebarState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
+import 'package:echo_llm/userConfig.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -11,6 +12,7 @@ import 'package:provider/provider.dart';
 
 Future<void> main() async {
   await GetStorage.init('api-keys');
+  await GetStorage.init('preferences');
   runApp(
     MultiProvider(
       providers: [
@@ -30,6 +32,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CONFIG().loadPreferences();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

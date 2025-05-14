@@ -4,15 +4,15 @@ import 'package:echo_llm/mappings/modelClassMapping.dart';
 import 'package:echo_llm/userConfig.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class InferenceSuperClass {
-  final CONFIG config = CONFIG();
   final BuildContext context;
-
-  InferenceSuperClass({required this.context});
+  InferenceSuperClass({required this.context}) {}
 
   Future<String?> runInference(String prompt) async {
     try {
+      final CONFIG config = Provider.of<CONFIG>(context, listen: false);
       final String modelSlug = config.modelSlug;
       final apikey = ApiKeyHelper();
 
