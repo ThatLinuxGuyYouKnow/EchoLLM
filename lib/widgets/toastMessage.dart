@@ -27,7 +27,6 @@ void showCustomToast(
       iconColor = Colors.redAccent[100];
       break;
     case ToastMessageType.passive:
-    default:
       backgroundColor = const Color(0xFF2A3441);
       leadingIconData = Icons.info_outline_rounded;
       iconColor = Colors.cyanAccent[100];
