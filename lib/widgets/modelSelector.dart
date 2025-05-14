@@ -1,4 +1,5 @@
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
+import 'package:echo_llm/userConfig.dart';
 import 'package:flutter/material.dart';
 
 class Modelselector extends StatefulWidget {
@@ -11,7 +12,7 @@ class Modelselector extends StatefulWidget {
 class _ModelselectorState extends State<Modelselector> {
   String selectedValue = onlineModels.keys.first;
   final options = onlineModels.keys;
-
+  final CONFIG config = CONFIG();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,6 +47,7 @@ class _ModelselectorState extends State<Modelselector> {
               setState(() {
                 selectedValue = value;
               });
+              config.setPreferredModel(modelName: value);
             }
           },
         ),

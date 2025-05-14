@@ -1,3 +1,4 @@
+import 'package:echo_llm/dataHandlers/superHandler.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
 import 'package:echo_llm/widgets/buttons.dart';
@@ -15,7 +16,7 @@ class ChatTextField extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final isPhoneScreen = screenWidth <= 900;
     bool isExpanded = textfieldState.isExpanded;
-
+    final modelInference = InferenceSuperClass(context: context);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -99,6 +100,8 @@ class ChatTextField extends StatelessWidget {
                                     messageState.addMessage(
                                         message: chatController.text.trim());
                                     chatController.clear();
+                                    modelInference
+                                        .runInference(chatController.text);
                                   },
                                 ),
                               ),
