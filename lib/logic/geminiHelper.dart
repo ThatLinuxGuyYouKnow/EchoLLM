@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:js_interop';
 
+import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:http/http.dart' as http;
 
 class Geminihelper {
@@ -18,6 +19,10 @@ class Geminihelper {
       if (modelResponse.length > 1) {
         return modelResponse;
       }
-    } else {}
+    } else if (response.statusCode == 403) {
+      return Toastmessage(
+          toastMessage:
+              "Could'nt reach Gemini, your api key liekly isnt valid");
+    }
   }
 }
