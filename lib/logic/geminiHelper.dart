@@ -1,13 +1,15 @@
 import 'dart:convert';
-import 'dart:js_interop';
 
 import 'package:echo_llm/widgets/toastMessage.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class Geminihelper {
   String modelSlug;
   String apiKey;
-  Geminihelper({required this.modelSlug, required this.apiKey});
+  BuildContext context;
+  Geminihelper(
+      {required this.modelSlug, required this.apiKey, required this.context});
   getResponse() async {
     var response = await http.get(Uri.parse(
         'https://generativelanguage.googleapis.com/v1beta/models/${modelSlug}:generateContent?key=${apiKey}'));
@@ -20,9 +22,25 @@ class Geminihelper {
         return modelResponse;
       }
     } else if (response.statusCode == 403) {
-      return Toastmessage(
-          toastMessage:
-              "Could'nt reach Gemini, your api key liekly isnt valid");
+      showCustomToast(
+        context,
+        message: "Couldn't reach Gemini, your api key likekly isnt valid",
+        type: ToastMessageType.error,
+        duration: Duration(seconds: 5),
+      );
+    } else if (response.statusCode == 500 | 504) {
+      showCustomToast(
+        context,
+        message:
+            "An error occured while processing your prompt, your chat is likely getting too long",
+        type: ToastMessageType.error,
+        duration: Duration(seconds: 5),
+      );
+    } else {
+      showCustomToast(context,
+          message: 'An error occured',
+          type: ToastMessageType.error,
+          duration: Duration(seconds: 3));
     }
   }
 }
