@@ -115,9 +115,11 @@ class _ModelTileState extends State<ModelTile> {
                       style: GoogleFonts.ubuntu(color: Colors.white)),
                   GestureDetector(
                     onTap: () {
-                      modalState.setModelName(modelName: widget.tileTitle);
-                      modalState.setModelSlug(modelSlug: widget.modelSlug);
-                      modalState.setModalToVisible();
+                      if (!widget.isAvailable) {
+                        modalState.setModelName(modelName: widget.tileTitle);
+                        modalState.setModelSlug(modelSlug: widget.modelSlug);
+                        modalState.setModalToVisible();
+                      }
                     },
                     child: Icon(
                       widget.isAvailable
