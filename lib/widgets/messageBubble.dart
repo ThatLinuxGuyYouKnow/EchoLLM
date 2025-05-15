@@ -62,9 +62,8 @@ class MessageBubble extends StatelessWidget {
       code: baseTextStyle.copyWith(
         fontFamily:
             GoogleFonts.sourceCodePro().fontFamily, // Monospace font for code
-        backgroundColor:
-            Colors.black.withOpacity(0.2), // Background for inline code
-        color: Colors.orangeAccent[100], // Text color for code
+
+        color: Colors.white, // Text color for code
         fontSize: 14,
       ),
       // Blockquotes
