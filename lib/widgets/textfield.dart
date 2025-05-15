@@ -96,12 +96,15 @@ class ChatTextField extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: ChatButton(
-                                  whenPressed: () {
+                                  whenPressed: () async {
                                     messageState.addMessage(
                                         message: chatController.text.trim());
-                                    chatController.clear();
-                                    modelInference
+                                    var response = await modelInference
                                         .runInference(chatController.text);
+                                    chatController.clear();
+
+                                    messageState.addMessage(
+                                        message: response.toString());
                                   },
                                 ),
                               ),

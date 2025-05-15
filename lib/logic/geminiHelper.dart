@@ -15,7 +15,8 @@ class Geminihelper {
     required this.context,
   });
 
-  Future<String?> getResponse(String prompt) async {
+  Future<String?> getResponse({required String prompt}) async {
+    print('prompt hetting to gemini' + prompt);
     try {
       final response = await http.post(
         Uri.parse(

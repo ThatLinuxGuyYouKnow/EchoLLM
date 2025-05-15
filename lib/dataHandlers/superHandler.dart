@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 class InferenceSuperClass {
   final BuildContext context;
-  InferenceSuperClass({required this.context}) {}
+  InferenceSuperClass({required this.context});
 
   Future<String?> runInference(String prompt) async {
     try {
@@ -21,6 +21,7 @@ class InferenceSuperClass {
       final apiKey = apikey.readKey(modelSlugNotName: modelSlug);
       print('model' + model);
       print('apikey' + apiKey);
+      print(prompt + "prppppppppppppppppp");
       if (apiKey.isEmpty) {
         showCustomToast(
           context,
@@ -37,7 +38,7 @@ class InferenceSuperClass {
             apiKey: apiKey,
             context: context,
           );
-          return await gemini.getResponse(prompt);
+          return await gemini.getResponse(prompt: prompt);
 
         case 'openai':
           // Implement OpenAI helper
