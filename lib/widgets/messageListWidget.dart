@@ -27,12 +27,13 @@ class Messagelistwidget extends StatelessWidget {
               vertical: 20,
             ),
             child: ListView.builder(
+              padding: EdgeInsets.only(bottom: 200),
               itemCount: messageStream.length,
               itemBuilder: (context, index) {
                 final messageMap = messageStream[index];
                 final messageIndex = messageMap.keys.first;
                 final messageText = messageMap[messageIndex]!;
-                final isModel = messageIndex.isEven;
+
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6.0),
                   child: MessageBubble(
