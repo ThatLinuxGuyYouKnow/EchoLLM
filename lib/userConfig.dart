@@ -9,11 +9,12 @@ class CONFIG extends ChangeNotifier {
   String _modelSlug = '';
   final apiKeyBox = GetStorage('api-keys');
   final preferencesBox = GetStorage('preferences');
+
   loadPreferences() {
     String modelName = preferencesBox.read('preferredModel');
     _model = modelName;
     _modelSlug = onlineModels[model] ?? '';
-    print('model' + _model);
+    print('model' + model);
   }
 
   setPreferredModel({required String modelName}) {

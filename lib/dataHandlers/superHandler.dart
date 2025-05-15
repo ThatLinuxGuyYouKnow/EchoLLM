@@ -13,16 +13,18 @@ class InferenceSuperClass {
   Future<String?> runInference(String prompt) async {
     try {
       final CONFIG config = Provider.of<CONFIG>(context, listen: false);
+      final String model = config.model;
       final String modelSlug = config.modelSlug;
       final apikey = ApiKeyHelper();
 
       final modelType = modelClassMapping[modelSlug];
       final apiKey = apikey.readKey(modelSlugNotName: modelSlug);
-
+      print('model' + model);
+      print('apikey' + apiKey);
       if (apiKey.isEmpty) {
         showCustomToast(
           context,
-          message: "API key not found for $modelSlug",
+          message: "API key not found for $model",
           type: ToastMessageType.error,
         );
         return null;

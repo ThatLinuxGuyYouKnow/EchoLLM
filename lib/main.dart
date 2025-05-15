@@ -21,6 +21,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => Sidebarstate()),
         ChangeNotifierProvider(create: (_) => Screenstate()),
         ChangeNotifierProvider(create: (_) => ApikeyModalState()),
+        ChangeNotifierProvider(create: (_) => CONFIG()),
       ],
       child: const MyApp(),
     ),
@@ -32,7 +33,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CONFIG().loadPreferences();
+    final config = Provider.of<CONFIG>(context, listen: false);
+    config.loadPreferences();
+    print('model init' + config.model);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
