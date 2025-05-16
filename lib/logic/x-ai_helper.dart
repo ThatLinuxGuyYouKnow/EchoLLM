@@ -49,18 +49,20 @@ class XaiHelper {
     switch (response.statusCode) {
       case 200:
         final Map<String, dynamic> data = jsonDecode(response.body);
+        final List<dynamic>? choices = data['choices'];
 
-        final List<dynamic>? candidates = data['candidates'];
-        if (candidates == null || candidates.isEmpty) {
-          throw Exception('No response candidates found');
+        if (choices == null || choices.isEmpty) {
+          throw Exception('No choices returned in response');
         }
-        final first = candidates.first as Map<String, dynamic>;
-        final parts = first['content']['parts'] as List<dynamic>?;
-        if (parts == null || parts.isEmpty) {
-          throw Exception('No content parts found');
-        }
-        return parts.first['text'] as String?;
 
+        final Map<String, dynamic>? message = choices.first['message'];
+        final String? content = message?['content'];
+
+        if (content == null || content.isEmpty) {
+          throw Exception('Message content is empty');
+        }
+
+        return content;
       case 400:
         showCustomToast(
           context,
