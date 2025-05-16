@@ -18,14 +18,17 @@ class XaiHelper {
     try {
       final response = await http.post(
         Uri.parse(
-          'https://generativelanguage.googleapis.com/v1beta/models/$modelSlug:generateContent?key=$apiKey',
+          'https://api.x.ai/v1/chat/completions ',
         ),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json'
+              "Authorization: Bearer ${apiKey}"
+        },
         body: jsonEncode({
-          'contents': [
+          'messages': [
             {
-              'parts': [
-                {'text': prompt}
+              'role': [
+                {'user': prompt}
               ]
             }
           ]
