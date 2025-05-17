@@ -76,12 +76,12 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
                 final entry = modelKeyEntries[index];
                 final apiKey = ApiKey(
                   id: entry.key,
-                  name: entry.key, // You can customize this later
-                  serviceName: _deriveServiceName(entry.key), // Optional helper
+                  name: entry.key,
+                  serviceName: _deriveServiceName(entry.key),
                   modelName: entry.key,
                   keyValue: entry.value,
                 );
-                return _buildApiKeyCard(apiKey);
+                return _buildApiKeyCard(apikey: apiKey);
               }),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
@@ -117,101 +117,28 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
     );
   }
 
-  Widget _buildApiKeyCard(ApiKey apiKey) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFF1F2A37), // A softer dark tone for contrast
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 6,
-            offset: const Offset(0, 4),
-          )
-        ],
-        border: Border.all(color: Colors.grey.shade800, width: 1),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 20.0),
-      margin: const EdgeInsets.only(bottom: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Model + Service Header
-          Row(
-            children: [
-              const Icon(Icons.api_rounded, color: Colors.cyanAccent, size: 20),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  '${apiKey.serviceName} - ${apiKey.modelName}',
-                  style: GoogleFonts.ubuntu(
-                    fontSize: 16,
-                    color: Colors.cyanAccent,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
+  Widget _buildApiKeyCard({required ApiKey apikey}) {
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: 150),
+      child: Card(
+        color: _cardBackgroundColor,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          // side: BorderSide(color: Colors.grey[800]!, width: 0.5), // Optional subtle border
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 12.0, top: 8.0),
+          child: ListTile(
+            leading: Icon(
+              Icons.key_outlined,
+              color: Colors.white,
+            ),
+            title: Text(apikey.serviceName,
+                style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 15)),
+            subtitle: Text(_maskApiKey(apikey.keyValue)),
           ),
-          const SizedBox(height: 10),
-
-          // Masked key & copy button
-          Row(
-            children: [
-              const Icon(Icons.vpn_key_rounded, color: Colors.grey, size: 18),
-              const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  _maskApiKey(apiKey.keyValue),
-                  style: GoogleFonts.ubuntu(
-                    fontSize: 14,
-                    color: Colors.grey[300],
-                    fontStyle: FontStyle.italic,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.copy_outlined, color: Colors.white70),
-                tooltip: 'Copy API Key',
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: apiKey.keyValue));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('API Key copied to clipboard!')),
-                  );
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Divider(color: Colors.grey[800], thickness: 1),
-          const SizedBox(height: 10),
-
-          // Footer with actions
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton.icon(
-                icon: Icon(Icons.edit_outlined,
-                    color: Colors.amberAccent[200], size: 18),
-                label: Text('Edit',
-                    style: GoogleFonts.ubuntu(color: Colors.amberAccent[200])),
-                onPressed: () {
-                  // TODO: edit logic
-                },
-              ),
-              const SizedBox(width: 8),
-              TextButton.icon(
-                icon: Icon(Icons.delete_outline,
-                    color: Colors.redAccent[100], size: 18),
-                label: Text('Delete',
-                    style: GoogleFonts.ubuntu(color: Colors.redAccent[100])),
-                onPressed: () => _showDeleteConfirmation(context, apiKey),
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }
