@@ -84,12 +84,12 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
               }),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
-        backgroundColor: Colors.cyan,
-        icon: const Icon(Icons.add, color: Colors.black87),
+        backgroundColor: Color.fromARGB(255, 37, 52, 71),
+        icon: const Icon(Icons.add, color: Colors.white),
         label: Text(
           'Add New Key',
           style: GoogleFonts.ubuntu(
-              color: Colors.black87, fontWeight: FontWeight.w600),
+              color: Colors.white, fontWeight: FontWeight.w600),
         ),
       ),
     );
