@@ -16,7 +16,8 @@ class ChatTextField extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final isPhoneScreen = screenWidth <= 900;
     bool isExpanded = textfieldState.isExpanded;
-    final modelInference = InferenceSuperClass(context: context);
+    final modelInference = InferenceSuperClass(
+        context: context, conversationContext: messageState.messages);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),

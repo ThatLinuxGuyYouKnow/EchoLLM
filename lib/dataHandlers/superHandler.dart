@@ -1,6 +1,7 @@
 import 'package:echo_llm/dataHandlers/heyHelper.dart';
 import 'package:echo_llm/logic/geminiHelper.dart';
 import 'package:echo_llm/mappings/modelClassMapping.dart';
+import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/userConfig.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +9,15 @@ import 'package:provider/provider.dart';
 
 class InferenceSuperClass {
   final BuildContext context;
-  InferenceSuperClass({required this.context});
+  final List conversationContext;
+  InferenceSuperClass(
+      {required this.context, required this.conversationContext});
 
   Future<String?> runInference(String prompt) async {
     try {
+      final String prompt_context =
+          "Generate an appropriate continuation to the current conversation, it starts thus: ";
+      final finalPrompt = prompt_context + conversationContext.toString();
       final CONFIG config = Provider.of<CONFIG>(context, listen: false);
       final String model = config.model;
       final String modelSlug = config.modelSlug;
@@ -19,9 +25,7 @@ class InferenceSuperClass {
 
       final modelType = modelClassMapping[modelSlug];
       final apiKey = apikey.readKey(modelSlugNotName: modelSlug);
-      print('model' + model);
-      print('apikey' + apiKey);
-      print(prompt + "prppppppppppppppppp");
+
       if (apiKey.isEmpty) {
         showCustomToast(
           context,
@@ -38,7 +42,7 @@ class InferenceSuperClass {
             apiKey: apiKey,
             context: context,
           );
-          return await gemini.getResponse(prompt: prompt);
+          return await gemini.getResponse(prompt: finalPrompt);
 
         case 'openai':
           // Implement OpenAI helper
