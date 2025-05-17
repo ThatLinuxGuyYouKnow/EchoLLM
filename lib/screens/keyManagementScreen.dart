@@ -31,25 +31,6 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
   final apikey = ApiKeyHelper();
 
   final Color _cardBackgroundColor = Color(0xFF1C1C1E);
-  final TextStyle _keyNameStyle = GoogleFonts.ubuntu(
-      color: Colors.white, fontSize: 17, fontWeight: FontWeight.w500);
-  final TextStyle _keyDetailStyle =
-      GoogleFonts.ubuntu(color: Colors.grey[400], fontSize: 13);
-  final TextStyle _maskedKeyStyle = GoogleFonts.ubuntu(
-      color: Colors.grey[500], fontSize: 14, fontStyle: FontStyle.italic);
-
-/*   void _addOrUpdateKey(ApiKey key) {
-    // Logic to add or update key in your persistent storage / state
-    final index = _apiKeys.indexWhere((k) => k.id == key.id);
-    setState(() {
-      if (index != -1) {
-        _apiKeys[index] = key;
-      } else {
-        _apiKeys.add(key);
-      }
-    });
-  }
- */
 
   String _maskApiKey(String apiKey) {
     if (apiKey.length <= 8) return apiKey;
@@ -129,6 +110,7 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
         child: Padding(
           padding: const EdgeInsets.only(bottom: 12.0, top: 8.0),
           child: ListTile(
+            trailing: IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
             leading: Icon(
               Icons.key_outlined,
               color: Colors.white,
