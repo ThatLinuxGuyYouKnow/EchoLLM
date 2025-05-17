@@ -9,19 +9,29 @@ import 'package:provider/provider.dart';
 
 class InferenceSuperClass {
   final BuildContext context;
-  final List conversationContext;
-  InferenceSuperClass(
-      {required this.context, required this.conversationContext});
+  final List<Map<int, String>> conversationHistory;
+
+  InferenceSuperClass({
+    required this.context,
+    required this.conversationHistory,
+  });
 
   Future<String?> runInference(String prompt) async {
     try {
-      final String prompt_context =
-          "Generate an appropriate continuation to the current conversation, it starts thus: ";
-      final finalPrompt = prompt_context + conversationContext.toString();
       final CONFIG config = Provider.of<CONFIG>(context, listen: false);
-      final String model = config.model;
       final String modelSlug = config.modelSlug;
       final apikey = ApiKeyHelper();
+
+      // Build proper conversation context
+      final List<Map<String, String>> formattedHistory = [];
+      for (var entry in conversationHistory) {
+        final key = entry.keys.first;
+        final role = key % 2 == 0 ? "user" : "model";
+        formattedHistory.add({
+          "role": role,
+          "content": entry[key]!,
+        });
+      }
 
       final modelType = modelClassMapping[modelSlug];
       final apiKey = apikey.readKey(modelSlugNotName: modelSlug);
@@ -29,7 +39,7 @@ class InferenceSuperClass {
       if (apiKey.isEmpty) {
         showCustomToast(
           context,
-          message: "API key not found for $model",
+          message: "API key not found for ${config.model}",
           type: ToastMessageType.error,
         );
         return null;
@@ -42,7 +52,10 @@ class InferenceSuperClass {
             apiKey: apiKey,
             context: context,
           );
-          return await gemini.getResponse(prompt: finalPrompt);
+          return await gemini.getResponse(
+            prompt: prompt,
+            history: formattedHistory,
+          );
 
         case 'openai':
           // Implement OpenAI helper

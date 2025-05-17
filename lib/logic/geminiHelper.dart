@@ -15,8 +15,10 @@ class Geminihelper {
     required this.context,
   });
 
-  Future<String?> getResponse({required String prompt}) async {
-    print('prompt hetting to gemini' + prompt);
+  Future<String?> getResponse({
+    required String prompt,
+    required List<Map<String, String>> history,
+  }) async {
     try {
       final response = await http.post(
         Uri.parse(
@@ -25,7 +27,14 @@ class Geminihelper {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'contents': [
+            ...history.map((entry) => {
+                  'role': entry['role'],
+                  'parts': [
+                    {'text': entry['content']}
+                  ]
+                }),
             {
+              'role': 'user',
               'parts': [
                 {'text': prompt}
               ]
