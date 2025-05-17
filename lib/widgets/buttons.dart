@@ -23,7 +23,7 @@ class ChatButton extends StatelessWidget {
         ),
         child: Icon(
           Icons.send,
-          color: Colors.black54,
+          color: Colors.black,
           size: 20,
         ),
       ),

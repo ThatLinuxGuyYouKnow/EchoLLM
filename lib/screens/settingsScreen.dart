@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:echo_llm/widgets/appBar.dart';
-
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 

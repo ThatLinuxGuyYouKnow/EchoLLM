@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:echo_llm/widgets/appBar.dart';
-import 'package:echo_llm/widgets/modals/enterApiKeyModal.dart';
-
 class ApiKey {
   final String id;
   String name;
@@ -60,7 +57,7 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
   final TextStyle _maskedKeyStyle = GoogleFonts.ubuntu(
       color: Colors.grey[500], fontSize: 14, fontStyle: FontStyle.italic);
 
-  void _addOrUpdateKey(ApiKey key) {
+/*   void _addOrUpdateKey(ApiKey key) {
     // Logic to add or update key in your persistent storage / state
     final index = _apiKeys.indexWhere((k) => k.id == key.id);
     setState(() {
@@ -71,7 +68,7 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
       }
     });
   }
-
+ */
   void _deleteKey(String keyId) {
     // Logic to delete key
     setState(() {

@@ -39,7 +39,7 @@ void showCustomToast(
     SnackBar(
       content: Row(
         children: [
-          if (leadingIconData != null) ...[
+          ...[
             Icon(leadingIconData, color: iconColor ?? textColor, size: 22),
             const SizedBox(width: 12),
           ],

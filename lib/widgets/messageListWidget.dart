@@ -1,5 +1,5 @@
 import 'package:echo_llm/state_management/messageStreamState.dart';
-import 'package:echo_llm/state_management/sidebarState.dart';
+
 import 'package:echo_llm/widgets/messageBubble.dart';
 import 'package:echo_llm/widgets/textfield.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +11,6 @@ class Messagelistwidget extends StatelessWidget {
     final messageStream =
         Provider.of<Messagestreamstate>(context, listen: true).messages;
 
-    final sidebarIsCollapsed =
-        Provider.of<Sidebarstate>(context, listen: true).isCollapsed;
     final screenWidth = MediaQuery.of(context).size.width;
     final isPhoneScreen = screenWidth <= 900;
 

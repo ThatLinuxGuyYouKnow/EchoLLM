@@ -2,7 +2,7 @@ import 'package:echo_llm/state_management/screenState.dart';
 import 'package:echo_llm/state_management/sidebarState.dart';
 import 'package:echo_llm/widgets/modelSelector.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 
 class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
