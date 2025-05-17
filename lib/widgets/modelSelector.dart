@@ -79,8 +79,8 @@ class _ModelselectorState extends State<Modelselector> {
         color: const Color(0xFF1A1C1E),
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(
-          color: Colors.cyan.withOpacity(0.8),
-          width: 1.5,
+          color: Color(0xFF1E2733),
+          width: 2,
         ),
         boxShadow: [
           BoxShadow(
@@ -108,11 +108,11 @@ class _ModelselectorState extends State<Modelselector> {
                 value: _selectedValue,
                 isExpanded: true,
                 icon: Icon(
-                  Icons.unfold_more_rounded,
-                  color: Colors.cyanAccent[100]?.withOpacity(0.8),
-                  size: 22,
+                  Icons.arrow_drop_down,
+                  color: Color(0xFF1E2733),
+                  size: 30,
                 ),
-                dropdownColor: const Color(0xFF1E2733),
+                dropdownColor: const Color.fromARGB(255, 18, 29, 43),
                 borderRadius: BorderRadius.circular(10.0),
                 elevation: 8,
                 style: GoogleFonts.ubuntu(
