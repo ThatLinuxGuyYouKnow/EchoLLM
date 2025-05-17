@@ -146,7 +146,6 @@ class _SpecialDrawerTileState extends State<SpecialDrawerTile> {
   }
 }
 
-// Update CustomSideBar usage
 class CustomSideBar extends StatelessWidget {
   CustomSideBar({super.key});
 
@@ -163,7 +162,6 @@ class CustomSideBar extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
           child: Column(
             children: [
-              // ... other elements
               DrawerTile(
                 tileTitle: 'Settings',
                 tileIcon: Icons.precision_manufacturing,

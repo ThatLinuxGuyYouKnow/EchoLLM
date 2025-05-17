@@ -83,36 +83,57 @@ class ModelTile extends StatefulWidget {
 
 class _ModelTileState extends State<ModelTile> {
   bool isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
     final modalState = Provider.of<ApikeyModalState>(context);
     return MouseRegion(
       onHover: (event) {
-        isHovered = true;
-        setState(() {});
+        setState(() {
+          isHovered = true;
+        });
       },
       onExit: (event) {
-        isHovered = false;
-        setState(() {});
+        setState(() {
+          isHovered = false;
+        });
       },
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
         height: 100,
         width: 100,
         constraints: BoxConstraints(
             minWidth: 80, minHeight: 80, maxHeight: 200, maxWidth: 200),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+          boxShadow: isHovered
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFF4C83D1).withOpacity(0.2),
+                    blurRadius: 8,
+                    spreadRadius: 1,
+                    offset: const Offset(0, 1),
+                  )
+                ]
+              : [],
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
             color: isHovered
-                ? Color.fromARGB(255, 26, 31, 37)
-                : Color(0xFF1E2733)),
+                ? const Color(0xFF4C83D1).withOpacity(0.3)
+                : Colors.transparent,
+            width: 1.0,
+          ),
+          color: isHovered ? const Color(0xFF1A1F25) : const Color(0xFF1C1C1D),
+        ),
         child: Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(widget.tileTitle,
-                      style: GoogleFonts.ubuntu(color: Colors.white)),
+                      style: GoogleFonts.ubuntu(
+                          color: Colors.white, fontWeight: FontWeight.normal)),
                   GestureDetector(
                     onTap: () {
                       if (!widget.isAvailable) {
@@ -125,8 +146,10 @@ class _ModelTileState extends State<ModelTile> {
                       widget.isAvailable
                           ? Icons.check_circle
                           : Icons.add_circle,
-                      color:
-                          widget.isAvailable ? Color(0xFF4C83D1) : Colors.white,
+                      color: widget.isAvailable
+                          ? const Color(0xFF4C83D1)
+                          : Colors.white.withOpacity(isHovered ? 0.9 : 0.7),
+                      size: isHovered ? 22 : 20,
                     ),
                   )
                 ],
