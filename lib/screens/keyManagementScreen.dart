@@ -30,8 +30,7 @@ class KeyManagementScreen extends StatefulWidget {
 class _KeyManagementScreenState extends State<KeyManagementScreen> {
   final apikey = ApiKeyHelper();
 
-  final Color _cardBackgroundColor = const Color(
-      0xFF1E2733); // Using sidebar color for cards or Color(0xFF1C1C1E)
+  final Color _cardBackgroundColor = Color(0xFF1C1C1E);
   final TextStyle _keyNameStyle = GoogleFonts.ubuntu(
       color: Colors.white, fontSize: 17, fontWeight: FontWeight.w500);
   final TextStyle _keyDetailStyle =
