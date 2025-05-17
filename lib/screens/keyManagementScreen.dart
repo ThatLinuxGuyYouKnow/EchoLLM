@@ -1,3 +1,5 @@
+import 'package:echo_llm/dataHandlers/heyHelper.dart';
+import 'package:echo_llm/mappings/modelSlugMappings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,27 +28,7 @@ class KeyManagementScreen extends StatefulWidget {
 }
 
 class _KeyManagementScreenState extends State<KeyManagementScreen> {
-  final List<ApiKey> _apiKeys = [
-    ApiKey(
-        id: '1',
-        name: 'Personal Dev Key',
-        serviceName: 'OpenAI',
-        modelName: 'GPT-4 Turbo',
-        keyValue:
-            'sk-abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'),
-    ApiKey(
-        id: '2',
-        name: 'Project Echo Key',
-        serviceName: 'Gemini',
-        modelName: 'Gemini 1.5 Pro',
-        keyValue: 'ai-anotherlongapikeyvaluegoeshereandcanbequitelongindeed'),
-    ApiKey(
-        id: '3',
-        name: 'Shared Team Key',
-        serviceName: 'Anthropic',
-        modelName: 'Claude 3 Opus',
-        keyValue: 'claude-apikey-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'),
-  ];
+  final apikey = ApiKeyHelper();
 
   final Color _cardBackgroundColor = const Color(
       0xFF1E2733); // Using sidebar color for cards or Color(0xFF1C1C1E)
@@ -69,12 +51,6 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
     });
   }
  */
-  void _deleteKey(String keyId) {
-    // Logic to delete key
-    setState(() {
-      _apiKeys.removeWhere((key) => key.id == keyId);
-    });
-  }
 
   String _maskApiKey(String apiKey) {
     if (apiKey.length <= 8) return apiKey;
@@ -83,18 +59,30 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final ModelKeyMap = apikey.getAvailableModelKeyMap();
+    final modelKeyEntries = ModelKeyMap.entries.toList();
+    String _deriveServiceName(String modelSlug) {
+      final reversed = {for (var e in onlineModels.entries) e.value: e.key};
+      return reversed[modelSlug] ?? "Unknown Service";
+    }
+
     return Scaffold(
       backgroundColor: Colors.black,
-      body: _apiKeys.isEmpty
+      body: ModelKeyMap.isEmpty
           ? _buildEmptyState()
           : ListView.builder(
-              padding: const EdgeInsets.all(16.0),
-              itemCount: _apiKeys.length,
+              itemCount: modelKeyEntries.length,
               itemBuilder: (context, index) {
-                final apiKey = _apiKeys[index];
+                final entry = modelKeyEntries[index];
+                final apiKey = ApiKey(
+                  id: entry.key,
+                  name: entry.key, // You can customize this later
+                  serviceName: _deriveServiceName(entry.key), // Optional helper
+                  modelName: entry.key,
+                  keyValue: entry.value,
+                );
                 return _buildApiKeyCard(apiKey);
-              },
-            ),
+              }),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
         backgroundColor: Colors.cyan,
@@ -130,71 +118,100 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
   }
 
   Widget _buildApiKeyCard(ApiKey apiKey) {
-    return Card(
-      color: _cardBackgroundColor,
-      elevation: 2,
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF1F2A37), // A softer dark tone for contrast
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 6,
+            offset: const Offset(0, 4),
+          )
+        ],
+        border: Border.all(color: Colors.grey.shade800, width: 1),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 20.0),
       margin: const EdgeInsets.only(bottom: 16.0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(apiKey.name, style: _keyNameStyle),
-            const SizedBox(height: 4),
-            Text('${apiKey.serviceName} - ${apiKey.modelName}',
-                style: _keyDetailStyle),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Icon(Icons.security, color: Colors.grey[500], size: 18),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    _maskApiKey(apiKey.keyValue),
-                    style: _maskedKeyStyle,
-                    overflow: TextOverflow.ellipsis,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Model + Service Header
+          Row(
+            children: [
+              const Icon(Icons.api_rounded, color: Colors.cyanAccent, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  '${apiKey.serviceName} - ${apiKey.modelName}',
+                  style: GoogleFonts.ubuntu(
+                    fontSize: 16,
+                    color: Colors.cyanAccent,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.copy_outlined,
-                      color: Colors.grey[400], size: 20),
-                  tooltip: 'Copy Key',
-                  onPressed: () {
-                    Clipboard.setData(ClipboardData(text: apiKey.keyValue));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('API Key copied to clipboard!')),
-                    );
-                  },
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+
+          // Masked key & copy button
+          Row(
+            children: [
+              const Icon(Icons.vpn_key_rounded, color: Colors.grey, size: 18),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  _maskApiKey(apiKey.keyValue),
+                  style: GoogleFonts.ubuntu(
+                    fontSize: 14,
+                    color: Colors.grey[300],
+                    fontStyle: FontStyle.italic,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Divider(color: Colors.grey[700]),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton.icon(
-                  icon: Icon(Icons.edit_outlined,
-                      color: Colors.cyan[600], size: 18),
-                  label: Text('Edit',
-                      style: GoogleFonts.ubuntu(color: Colors.cyan[600])),
-                  onPressed: () {},
-                ),
-                const SizedBox(width: 8),
-                TextButton.icon(
-                  icon: Icon(Icons.delete_outline,
-                      color: Colors.redAccent[100], size: 18),
-                  label: Text('Delete',
-                      style: GoogleFonts.ubuntu(color: Colors.redAccent[100])),
-                  onPressed: () => _showDeleteConfirmation(context, apiKey),
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.copy_outlined, color: Colors.white70),
+                tooltip: 'Copy API Key',
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(text: apiKey.keyValue));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('API Key copied to clipboard!')),
+                  );
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Divider(color: Colors.grey[800], thickness: 1),
+          const SizedBox(height: 10),
+
+          // Footer with actions
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton.icon(
+                icon: Icon(Icons.edit_outlined,
+                    color: Colors.amberAccent[200], size: 18),
+                label: Text('Edit',
+                    style: GoogleFonts.ubuntu(color: Colors.amberAccent[200])),
+                onPressed: () {
+                  // TODO: edit logic
+                },
+              ),
+              const SizedBox(width: 8),
+              TextButton.icon(
+                icon: Icon(Icons.delete_outline,
+                    color: Colors.redAccent[100], size: 18),
+                label: Text('Delete',
+                    style: GoogleFonts.ubuntu(color: Colors.redAccent[100])),
+                onPressed: () => _showDeleteConfirmation(context, apiKey),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -235,7 +252,6 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
               child: Text('Delete',
                   style: GoogleFonts.ubuntu(color: Colors.white)),
               onPressed: () {
-                _deleteKey(apiKey.id);
                 Navigator.of(dialogContext).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('API Key "${apiKey.name}" deleted.')),
