@@ -1,5 +1,6 @@
 import 'package:echo_llm/dataHandlers/heyHelper.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
+import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -171,21 +172,10 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
                     break;
                   case 'copy':
                     Clipboard.setData(ClipboardData(text: apikey.keyValue));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'API Key copied to clipboard!',
-                          style: GoogleFonts.ubuntu(),
-                        ),
-                        backgroundColor: Colors.greenAccent[400],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              10), // Updated to 10 for consistency
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                        margin: const EdgeInsets.all(16),
-                      ),
-                    );
+                    showCustomToast(context,
+                        message: 'API key copied to clipboard',
+                        type: ToastMessageType.passive,
+                        duration: Duration(seconds: 1));
                     break;
                 }
               },
