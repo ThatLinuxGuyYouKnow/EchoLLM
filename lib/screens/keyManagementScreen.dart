@@ -105,12 +105,71 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
-          // side: BorderSide(color: Colors.grey[800]!, width: 0.5), // Optional subtle border
         ),
         child: Padding(
           padding: const EdgeInsets.only(bottom: 12.0, top: 8.0),
           child: ListTile(
-            trailing: IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
+            trailing: PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert, color: Colors.white),
+              color: const Color(0xFF2A2A2E),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              onSelected: (value) {
+                switch (value) {
+                  case 'edit':
+                    // TODO: Add edit logic
+                    break;
+                  case 'delete':
+                    _showDeleteConfirmation(context, apikey);
+                    break;
+                  case 'copy':
+                    Clipboard.setData(ClipboardData(text: apikey.keyValue));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('API Key copied to clipboard!'),
+                        backgroundColor: Colors.greenAccent[400],
+                      ),
+                    );
+                    break;
+                }
+              },
+              itemBuilder: (BuildContext context) => [
+                PopupMenuItem(
+                  value: 'copy',
+                  child: Row(
+                    children: [
+                      const Icon(Icons.copy, size: 18, color: Colors.grey),
+                      const SizedBox(width: 10),
+                      Text('Copy', style: GoogleFonts.ubuntu()),
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'edit',
+                  child: Row(
+                    children: [
+                      const Icon(Icons.edit_outlined,
+                          size: 18, color: Colors.white),
+                      const SizedBox(width: 10),
+                      Text('Edit',
+                          style: GoogleFonts.ubuntu(color: Colors.white)),
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'delete',
+                  child: Row(
+                    children: [
+                      const Icon(Icons.delete_outline,
+                          size: 18, color: Colors.redAccent),
+                      const SizedBox(width: 10),
+                      Text('Delete',
+                          style: GoogleFonts.ubuntu(color: Colors.white)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
             leading: Icon(
               Icons.key_outlined,
               color: Colors.white,
