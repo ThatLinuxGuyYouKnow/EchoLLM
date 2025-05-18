@@ -29,8 +29,8 @@ class KeyManagementScreen extends StatefulWidget {
 
 class _KeyManagementScreenState extends State<KeyManagementScreen> {
   final apikey = ApiKeyHelper();
-
-  final Color _cardBackgroundColor = Color(0xFF1C1C1E);
+  final Color _cardBackgroundColor = const Color(0xFF1C1C1E);
+  bool _isFabHovered = false;
 
   String _maskApiKey(String apiKey) {
     if (apiKey.length <= 8) return apiKey;
@@ -51,6 +51,7 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
       body: ModelKeyMap.isEmpty
           ? _buildEmptyState()
           : ListView.builder(
+              padding: const EdgeInsets.only(bottom: 80), // Add padding for FAB
               itemCount: modelKeyEntries.length,
               itemBuilder: (context, index) {
                 final entry = modelKeyEntries[index];
@@ -63,16 +64,60 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
                 );
                 return _buildApiKeyCard(apikey: apiKey);
               }),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        backgroundColor: Color.fromARGB(255, 37, 52, 71),
-        icon: const Icon(Icons.add, color: Colors.white),
-        label: Text(
-          'Add New Key',
-          style: GoogleFonts.ubuntu(
-              color: Colors.white, fontWeight: FontWeight.w600),
+      floatingActionButton: MouseRegion(
+        onEnter: (_) => setState(() => _isFabHovered = true),
+        onExit: (_) => setState(() => _isFabHovered = false),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          decoration: BoxDecoration(
+            color:
+                const Color(0xFF4C83D1).withOpacity(_isFabHovered ? 1.0 : 0.8),
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: _isFabHovered
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFF4C83D1).withOpacity(0.3),
+                      blurRadius: 8,
+                      spreadRadius: 1,
+                    )
+                  ]
+                : [],
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(10),
+              onTap: () {
+                // Add new key logic
+              },
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: _isFabHovered ? 22 : 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Add New Key',
+                      style: GoogleFonts.ubuntu(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: _isFabHovered ? 15 : 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
@@ -99,12 +144,13 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
 
   Widget _buildApiKeyCard({required ApiKey apikey}) {
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: 150),
+      constraints: const BoxConstraints(maxHeight: 150),
       child: Card(
         color: _cardBackgroundColor,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius:
+              BorderRadius.circular(10.0), // Updated to 10.0 for consistency
         ),
         child: Padding(
           padding: const EdgeInsets.only(bottom: 12.0, top: 8.0),
@@ -113,7 +159,8 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
               icon: const Icon(Icons.more_vert, color: Colors.white),
               color: const Color(0xFF2A2A2E),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
+                  borderRadius: BorderRadius.circular(
+                      10)), // Updated to 10 for consistency
               onSelected: (value) {
                 switch (value) {
                   case 'edit':
@@ -126,8 +173,17 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
                     Clipboard.setData(ClipboardData(text: apikey.keyValue));
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('API Key copied to clipboard!'),
+                        content: Text(
+                          'API Key copied to clipboard!',
+                          style: GoogleFonts.ubuntu(),
+                        ),
                         backgroundColor: Colors.greenAccent[400],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              10), // Updated to 10 for consistency
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                        margin: const EdgeInsets.all(16),
                       ),
                     );
                     break;
@@ -171,13 +227,16 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
                 ),
               ],
             ),
-            leading: Icon(
+            leading: const Icon(
               Icons.key_outlined,
               color: Colors.white,
             ),
             title: Text(apikey.serviceName,
                 style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 15)),
-            subtitle: Text(_maskApiKey(apikey.keyValue)),
+            subtitle: Text(
+              _maskApiKey(apikey.keyValue),
+              style: GoogleFonts.ubuntu(color: Colors.grey),
+            ),
           ),
         ),
       ),
@@ -191,7 +250,11 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
       barrierDismissible: false, // User must tap button
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          backgroundColor: const Color(0xFF2A3441), // Dark dialog background
+          backgroundColor: const Color(0xFF2A3441),
+          shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(10), // Updated to 10 for consistency
+          ),
           title: Text('Delete API Key?',
               style: GoogleFonts.ubuntu(color: Colors.white)),
           content: SingleChildScrollView(
@@ -216,13 +279,30 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
             ),
             TextButton(
               style: TextButton.styleFrom(
-                  backgroundColor: Colors.redAccent.withOpacity(0.8)),
+                backgroundColor: Colors.redAccent.withOpacity(0.8),
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(8), // Slightly smaller for buttons
+                ),
+              ),
               child: Text('Delete',
                   style: GoogleFonts.ubuntu(color: Colors.white)),
               onPressed: () {
                 Navigator.of(dialogContext).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('API Key "${apiKey.name}" deleted.')),
+                  SnackBar(
+                    content: Text(
+                      'API Key "${apiKey.name}" deleted.',
+                      style: GoogleFonts.ubuntu(),
+                    ),
+                    backgroundColor: Colors.redAccent.withOpacity(0.8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          10), // Updated to 10 for consistency
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                    margin: const EdgeInsets.all(16),
+                  ),
                 );
               },
             ),
