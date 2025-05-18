@@ -138,9 +138,10 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
                   value: 'copy',
                   child: Row(
                     children: [
-                      const Icon(Icons.copy, size: 18, color: Colors.grey),
+                      const Icon(Icons.copy, size: 18, color: Colors.white),
                       const SizedBox(width: 10),
-                      Text('Copy', style: GoogleFonts.ubuntu()),
+                      Text('Copy',
+                          style: GoogleFonts.ubuntu(color: Colors.white)),
                     ],
                   ),
                 ),
