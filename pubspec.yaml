@@ -41,6 +41,7 @@ dependencies:
   get_storage:
   flutter_markdown: ^0.7.7+1
   url_launcher: ^6.3.1
+  hive:
 
 dev_dependencies:
   flutter_test:
