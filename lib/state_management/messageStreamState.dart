@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
 class Messagestreamstate extends ChangeNotifier {
-  List get messages => _messages;
   List<Map<int, String>> _messages = [];
+  bool _isProcessing = false;
+
+  List<Map<int, String>> get messages => _messages;
+  bool get isProcessing => _isProcessing;
 
   addMessage({required String message}) {
-    int message_index =
-        _messages.isNotEmpty ? _messages.last.keys.first + 1 : 1;
+    int messageIndex = _messages.isNotEmpty ? _messages.last.keys.first + 1 : 0;
+    _messages.add({messageIndex: message});
+    notifyListeners();
+  }
 
-    _messages.add({message_index: message});
+  setProcessing(bool processing) {
+    _isProcessing = processing;
     notifyListeners();
   }
 
