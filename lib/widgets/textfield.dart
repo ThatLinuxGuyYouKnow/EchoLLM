@@ -99,14 +99,33 @@ class ChatTextField extends StatelessWidget {
                                 ),
                                 child: ChatButton(
                                   whenPressed: () async {
-                                    messageState.addMessage(
-                                        message: chatController.text.trim());
-                                    var response = await modelInference
-                                        .runInference(chatController.text);
-                                    chatController.clear();
+                                    final userMessage =
+                                        chatController.text.trim();
+                                    if (userMessage.isEmpty) return;
 
-                                    messageState.addMessage(
-                                        message: response.toString());
+                                    final messageState =
+                                        Provider.of<Messagestreamstate>(context,
+                                            listen: false);
+
+                                    try {
+                                      messageState.addMessage(
+                                          message: userMessage);
+                                      messageState.setProcessing(true);
+
+                                      final response = await modelInference
+                                          .runInference(userMessage);
+                                      chatController.clear();
+
+                                      if (response != null &&
+                                          response.isNotEmpty) {
+                                        messageState.addMessage(
+                                            message: response);
+                                      }
+                                    } catch (e) {
+                                      // Handle error
+                                    } finally {
+                                      messageState.setProcessing(false);
+                                    }
                                   },
                                 ),
                               ),
