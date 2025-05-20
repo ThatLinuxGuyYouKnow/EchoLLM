@@ -10,7 +10,7 @@ class Messagelistwidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final messageStream =
         Provider.of<Messagestreamstate>(context, listen: true).messages;
-
+    final messageState = Provider.of<Messagestreamstate>(context, listen: true);
     final screenWidth = MediaQuery.of(context).size.width;
     final isPhoneScreen = screenWidth <= 900;
 
@@ -21,23 +21,28 @@ class Messagelistwidget extends StatelessWidget {
             constraints: BoxConstraints(
               maxWidth: isPhoneScreen ? 400 : screenWidth / 2.5,
             ),
-            padding: const EdgeInsets.symmetric(
-              vertical: 20,
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 20),
             child: ListView.builder(
-              padding: EdgeInsets.only(bottom: 200),
-              itemCount: messageStream.length,
+              padding: const EdgeInsets.only(bottom: 200),
+              itemCount:
+                  messageStream.length + (messageState.isProcessing ? 1 : 0),
               itemBuilder: (context, index) {
-                final messageMap = messageStream[index];
-                final messageIndex = messageMap.keys.first;
-                final messageText = messageMap[messageIndex]!;
+                if (index < messageStream.length) {
+                  final messageMap = messageStream[index];
+                  final messageIndex = messageMap.keys.first;
+                  final messageText = messageMap[messageIndex]!;
 
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6.0),
-                  child: MessageBubble(
-                    messageText: messageText,
-                    isModelResponse: messageIndex % 2 == 0,
-                  ),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6.0),
+                    child: MessageBubble(
+                      messageText: messageText,
+                      isModelResponse: messageIndex % 2 != 0,
+                    ),
+                  );
+                }
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 6.0),
+                  child: BufferingMessageBubble(),
                 );
               },
             ),
