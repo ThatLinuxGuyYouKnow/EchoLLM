@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -115,6 +117,94 @@ class MessageBubble extends StatelessWidget {
                 messageText,
                 style: baseTextStyle,
               ),
+      ),
+    );
+  }
+}
+
+class BufferingMessageBubble extends StatefulWidget {
+  const BufferingMessageBubble({super.key});
+
+  @override
+  State<BufferingMessageBubble> createState() => _BufferingMessageBubbleState();
+}
+
+class _BufferingMessageBubbleState extends State<BufferingMessageBubble> {
+  final int _numberOfDots = 3;
+  int _currentDot = 0; // Index of the dot that is currently "on"
+  Timer? _timer;
+
+  final Color _activeDotColor = Colors.white.withOpacity(0.9);
+  final Color _inactiveDotColor = Colors.white.withOpacity(0.4);
+  final double _dotSize = 10.0;
+  final Duration _animationSpeed = const Duration(milliseconds: 400);
+
+  @override
+  void initState() {
+    super.initState();
+    _startAnimation();
+  }
+
+  void _startAnimation() {
+    _timer = Timer.periodic(_animationSpeed, (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      setState(() {
+        _currentDot = (_currentDot + 1) % _numberOfDots;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Widget _buildDot(int index) {
+    return AnimatedContainer(
+      duration: Duration(
+          milliseconds: _animationSpeed.inMilliseconds ~/
+              2), // Faster transition for opacity
+      margin: const EdgeInsets.symmetric(horizontal: 3.0),
+      width: _dotSize,
+      height: _dotSize,
+      decoration: BoxDecoration(
+        color: index == _currentDot ? _activeDotColor : _inactiveDotColor,
+        shape: BoxShape.circle,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bubbleColor = const Color(0xFF2A3441);
+
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+        constraints: const BoxConstraints(
+          maxWidth: 100,
+          minHeight: 50,
+        ),
+        decoration: BoxDecoration(
+          color: bubbleColor,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+            bottomLeft: Radius.circular(0),
+            bottomRight: Radius.circular(16),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment:
+              MainAxisAlignment.center, // Center the dots in the bubble
+          children: List.generate(_numberOfDots, (index) => _buildDot(index)),
+        ),
       ),
     );
   }
