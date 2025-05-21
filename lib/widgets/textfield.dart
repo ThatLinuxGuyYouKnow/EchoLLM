@@ -1,3 +1,4 @@
+import 'package:echo_llm/dataHandlers/hive/chatStrorage.dart';
 import 'package:echo_llm/dataHandlers/superHandler.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
@@ -120,9 +121,10 @@ class ChatTextField extends StatelessWidget {
                                           response.isNotEmpty) {
                                         messageState.addMessage(
                                             message: response);
+                                            saveChatLocally(messages: messageState.messages, chatTitle: chatTitle)
                                       }
                                     } catch (e) {
-                                      // Handle error
+                                  
                                     } finally {
                                       messageState.setProcessing(false);
                                     }
