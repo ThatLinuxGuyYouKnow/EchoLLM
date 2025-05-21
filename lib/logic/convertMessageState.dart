@@ -1,12 +1,15 @@
 import 'package:echo_llm/models/chats.dart';
 
-List<Message> convertToHiveMessages(List<Map<String, dynamic>> messages) {
-  return messages.map((msgMap) {
+List<Message> convertIndexedMessagesToHive(List<Map<int, String>> messages) {
+  return List.generate(messages.length, (index) {
+    final entry = messages[index].entries.first;
+    final content = entry.value;
+
     return Message()
-      ..id = DateTime.now().millisecondsSinceEpoch.toString()
-      ..content = msgMap['content'] ?? ''
-      ..role = msgMap['role'] ?? 'user'
-      ..timestamp = DateTime.now() // You could store actual time per message
-      ..metadata = msgMap['metadata'] ?? {};
-  }).toList();
+      ..id = DateTime.now().millisecondsSinceEpoch.toString() + index.toString()
+      ..content = content
+      ..role = index % 2 == 0 ? 'user' : 'assistant'
+      ..timestamp = DateTime.now()
+      ..metadata = {};
+  });
 }
