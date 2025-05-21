@@ -1,9 +1,11 @@
 import 'package:echo_llm/dataHandlers/hive/chatStrorage.dart';
 import 'package:echo_llm/dataHandlers/superHandler.dart';
+import 'package:echo_llm/logic/convertMessageState.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
 import 'package:echo_llm/widgets/buttons.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 class ChatTextField extends StatelessWidget {
@@ -107,12 +109,11 @@ class ChatTextField extends StatelessWidget {
                                     final messageState =
                                         Provider.of<Messagestreamstate>(context,
                                             listen: false);
+                                    messageState.addMessage(
+                                        message: userMessage);
+                                    messageState.setProcessing(true);
 
                                     try {
-                                      messageState.addMessage(
-                                          message: userMessage);
-                                      messageState.setProcessing(true);
-
                                       final response = await modelInference
                                           .runInference(userMessage);
                                       chatController.clear();
@@ -121,10 +122,19 @@ class ChatTextField extends StatelessWidget {
                                           response.isNotEmpty) {
                                         messageState.addMessage(
                                             message: response);
-                                            saveChatLocally(messages: messageState.messages, chatTitle: chatTitle)
+
+                                        final hiveReadyMessages =
+                                            convertIndexedMessagesToHive(
+                                                messageState.messages);
+                                        final title = titleFromFirstMessage(
+                                            messageState.messages);
+
+                                        await saveChatLocally(
+                                            messages: hiveReadyMessages,
+                                            chatTitle: title);
                                       }
                                     } catch (e) {
-                                  
+                                      // You could show a snackbar or log error here
                                     } finally {
                                       messageState.setProcessing(false);
                                     }
@@ -145,4 +155,10 @@ class ChatTextField extends StatelessWidget {
       ),
     );
   }
+}
+
+String titleFromFirstMessage(List<Map<int, String>> messages) {
+  if (messages.isEmpty) return "Untitled Chat";
+  final first = messages.first.values.first;
+  return first.length > 30 ? '${first.substring(0, 30)}...' : first;
 }
