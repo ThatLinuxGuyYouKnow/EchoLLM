@@ -1,3 +1,4 @@
+import 'package:echo_llm/models/chats.dart';
 import 'package:echo_llm/screens/mainScreen.dart';
 import 'package:echo_llm/state_management/apikeyModalState.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
@@ -8,11 +9,19 @@ import 'package:echo_llm/userConfig.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   await GetStorage.init('api-keys');
   await GetStorage.init('preferences');
+
+  await Hive.initFlutter();
+
+  await Hive.openBox('chatBox');
+  Hive.registerAdapter(ChatAdapter());
+  Hive.registerAdapter(MessageAdapter());
   runApp(
     MultiProvider(
       providers: [
