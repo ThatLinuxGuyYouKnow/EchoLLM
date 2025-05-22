@@ -134,7 +134,6 @@ class ChatTextField extends StatelessWidget {
                                             chatTitle: title);
                                       }
                                     } catch (e) {
-                                      // You could show a snackbar or log error here
                                     } finally {
                                       messageState.setProcessing(false);
                                     }

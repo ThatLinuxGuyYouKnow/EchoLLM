@@ -8,3 +8,8 @@ Future<List<MapEntry<String, String>>> getChatLabelsAndIds() async {
       .map((chat) => MapEntry(chat.id, chat.chatTitle))
       .toList();
 }
+
+Future<List<String>> getAllChatTitles() async {
+  final box = await Hive.openBox('chatBox');
+  return box.keys.cast<String>().toList(); // keys are titles
+}

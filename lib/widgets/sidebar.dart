@@ -1,3 +1,4 @@
+import 'package:echo_llm/dataHandlers/hive/getChats.dart';
 import 'package:echo_llm/screens/keyManagementScreen.dart';
 import 'package:echo_llm/screens/modelScreen.dart';
 import 'package:echo_llm/screens/settingsScreen.dart';
@@ -146,8 +147,28 @@ class _SpecialDrawerTileState extends State<SpecialDrawerTile> {
   }
 }
 
-class CustomSideBar extends StatelessWidget {
-  CustomSideBar({super.key});
+class CustomSideBar extends StatefulWidget {
+  const CustomSideBar({super.key});
+
+  @override
+  State<CustomSideBar> createState() => _CustomSideBarState();
+}
+
+class _CustomSideBarState extends State<CustomSideBar> {
+  List<String> chatTitles = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadChatTitles();
+  }
+
+  Future<void> loadChatTitles() async {
+    final titles = await getAllChatTitles();
+    setState(() {
+      chatTitles = titles;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -161,6 +182,7 @@ class CustomSideBar extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               DrawerTile(
                 tileTitle: 'Settings',
@@ -187,6 +209,35 @@ class CustomSideBar extends StatelessWidget {
                   onTilePressed: () => screenState.chatScreen(),
                   isActive: isOnChatScreen,
                 ),
+
+              const Divider(color: Colors.white30),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  'Saved Chats',
+                  style: GoogleFonts.ubuntu(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+
+              // List of chat titles
+              ...chatTitles.map((title) => ListTile(
+                    dense: true,
+                    title: Text(
+                      title,
+                      style: GoogleFonts.ubuntu(color: Colors.white),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    leading: const Icon(Icons.chat, color: Colors.white),
+                    onTap: () {
+                      // Later: navigate to that chat
+                      debugPrint('Tapped on chat: $title');
+                    },
+                  )),
             ],
           ),
         ),
