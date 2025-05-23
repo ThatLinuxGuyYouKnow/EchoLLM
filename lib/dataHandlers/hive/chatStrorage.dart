@@ -19,12 +19,13 @@ saveChatLocally(
     ..lastModified = dateTimeRighNow
     ..messages = messages;
   final chatBox = await Hive.openBox<Chat>('chats');
-
-  try {
-    chatBox.put(chat.id, chat);
-    showCustomToast(context, message: 'saved chat ');
-    return true;
-  } catch (Error) {
-    return false;
+  if (messages.length < 2) {
+    try {
+      chatBox.put(chat.id, chat);
+      showCustomToast(context, message: 'saved chat ');
+      return true;
+    } catch (Error) {
+      return false;
+    }
   }
 }
