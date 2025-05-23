@@ -11,5 +11,5 @@ Future<List<MapEntry<String, String>>> getChatLabelsAndIds() async {
 
 Future<List<String>> getAllChatTitles() async {
   final box = await Hive.openBox('chatBox');
-  return box.keys.cast<String>().toList(); // keys are titles
+  return box.keys.cast<String>().toList();
 }

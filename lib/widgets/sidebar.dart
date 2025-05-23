@@ -155,7 +155,7 @@ class CustomSideBar extends StatefulWidget {
 }
 
 class _CustomSideBarState extends State<CustomSideBar> {
-  List<String> chatTitles = [];
+  List<MapEntry<String, String>> chatMetadata = [];
 
   @override
   void initState() {
@@ -164,9 +164,9 @@ class _CustomSideBarState extends State<CustomSideBar> {
   }
 
   Future<void> loadChatTitles() async {
-    final titles = await getAllChatTitles();
+    final entries = await getChatLabelsAndIds();
     setState(() {
-      chatTitles = titles;
+      chatMetadata = entries;
     });
   }
 
@@ -209,9 +209,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
                   onTilePressed: () => screenState.chatScreen(),
                   isActive: isOnChatScreen,
                 ),
-
               const Divider(color: Colors.white30),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
@@ -223,19 +221,17 @@ class _CustomSideBarState extends State<CustomSideBar> {
                 ),
               ),
               const SizedBox(height: 8),
-
-              // List of chat titles
-              ...chatTitles.map((title) => ListTile(
+              ...chatMetadata.map((entry) => ListTile(
                     dense: true,
                     title: Text(
-                      title,
+                      entry.value,
                       style: GoogleFonts.ubuntu(color: Colors.white),
                       overflow: TextOverflow.ellipsis,
                     ),
                     leading: const Icon(Icons.chat, color: Colors.white),
                     onTap: () {
-                      // Later: navigate to that chat
-                      debugPrint('Tapped on chat: $title');
+                      debugPrint('Tapped on chat with ID: ${entry.key}');
+                      // TODO: Use entry.key to fetch and load full chat
                     },
                   )),
             ],

@@ -130,6 +130,7 @@ class ChatTextField extends StatelessWidget {
                                             messageState.messages);
 
                                         await saveChatLocally(
+                                            context: context,
                                             messages: hiveReadyMessages,
                                             chatTitle: title);
                                       }
