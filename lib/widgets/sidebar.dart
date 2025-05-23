@@ -2,6 +2,7 @@ import 'package:echo_llm/dataHandlers/hive/getChats.dart';
 import 'package:echo_llm/screens/keyManagementScreen.dart';
 import 'package:echo_llm/screens/modelScreen.dart';
 import 'package:echo_llm/screens/settingsScreen.dart';
+import 'package:echo_llm/state_management/messageStreamState.dart';
 
 import 'package:echo_llm/state_management/screenState.dart';
 
@@ -230,8 +231,10 @@ class _CustomSideBarState extends State<CustomSideBar> {
                     ),
                     leading: const Icon(Icons.chat, color: Colors.white),
                     onTap: () {
+                      Provider.of<Messagestreamstate>(context, listen: false)
+                          .setCurrentChatID(entry.key);
+
                       debugPrint('Tapped on chat with ID: ${entry.key}');
-                      // TODO: Use entry.key to fetch and load full chat
                     },
                   )),
             ],
