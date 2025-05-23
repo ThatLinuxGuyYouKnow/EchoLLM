@@ -15,6 +15,10 @@ class Messagestreamstate extends ChangeNotifier {
     notifyListeners();
   }
 
+  setMessages({required List<Map<int, String>> newMessageList}) {
+    _messages = newMessageList;
+  }
+
   setProcessing(bool processing) {
     _isProcessing = processing;
     notifyListeners();
