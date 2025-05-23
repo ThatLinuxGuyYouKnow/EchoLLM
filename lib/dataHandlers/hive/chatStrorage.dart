@@ -27,5 +27,5 @@ saveChatLocally(
     } catch (Error) {
       return false;
     }
-  }
+  } else {}
 }

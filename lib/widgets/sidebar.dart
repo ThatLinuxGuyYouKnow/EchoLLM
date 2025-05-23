@@ -1,4 +1,6 @@
 import 'package:echo_llm/dataHandlers/hive/getChats.dart';
+import 'package:echo_llm/logic/convertMessageState.dart';
+import 'package:echo_llm/models/chats.dart';
 import 'package:echo_llm/screens/keyManagementScreen.dart';
 import 'package:echo_llm/screens/modelScreen.dart';
 import 'package:echo_llm/screens/settingsScreen.dart';
@@ -8,6 +10,7 @@ import 'package:echo_llm/state_management/screenState.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 // Update DrawerTile class
@@ -230,9 +233,22 @@ class _CustomSideBarState extends State<CustomSideBar> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     leading: const Icon(Icons.chat, color: Colors.white),
-                    onTap: () {
-                      Provider.of<Messagestreamstate>(context, listen: false)
-                          .setCurrentChatID(entry.key);
+                    onTap: () async {
+                      final messageState = Provider.of<Messagestreamstate>(
+                          context,
+                          listen: false);
+                      messageState.setCurrentChatID(entry.key);
+
+                      final chatBox = await Hive.openBox<Chat>('chats');
+                      final selectedChat = chatBox.get(entry.key);
+
+                      if (selectedChat != null) {
+                        final restoredMessages =
+                            convertHiveMessagesToIndexed(selectedChat.messages);
+                        messageState.setMessages(
+                            newMessageList: restoredMessages);
+                        screenState.chatScreen();
+                      }
 
                       debugPrint('Tapped on chat with ID: ${entry.key}');
                     },
