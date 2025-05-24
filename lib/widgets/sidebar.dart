@@ -247,7 +247,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               NewChatTile(
-                onTilePressed: messageState.clear(),
+                onTilePressed: () => messageState.clear(),
               ),
               DrawerTile(
                 tileTitle: 'Settings',
