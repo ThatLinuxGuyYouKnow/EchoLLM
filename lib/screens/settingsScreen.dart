@@ -127,7 +127,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Widget _buildSectionTitle(String title) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0, top: 8.0),
+      padding: const EdgeInsets.only(bottom: 0.0, top: 5.0),
       child: Text(
         title.toUpperCase(),
         style: GoogleFonts.ubuntu(
@@ -142,7 +142,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Widget _buildSettingsCard({required List<Widget> children}) {
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: 150),
+      constraints: BoxConstraints(maxHeight: 180),
       child: Card(
         color: _cardBackgroundColor,
         elevation: 0,
