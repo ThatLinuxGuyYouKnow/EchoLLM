@@ -245,9 +245,11 @@ class _CustomSideBarState extends State<CustomSideBar> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              NewChatTile(
-                onTilePressed: () => messageState.clear(),
-              ),
+              isOnChatScreen
+                  ? NewChatTile(
+                      onTilePressed: () => messageState.clear(),
+                    )
+                  : SizedBox.shrink(),
               DrawerTile(
                 tileTitle: 'Settings',
                 tileIcon: Icons.precision_manufacturing,
