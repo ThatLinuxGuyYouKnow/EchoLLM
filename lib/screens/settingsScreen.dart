@@ -75,7 +75,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     setState(() {
                       _selectedTheme = newValue;
                     });
-                    // Implement theme changing logic
                   }
                 },
               ),

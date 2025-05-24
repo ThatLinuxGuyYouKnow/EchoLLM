@@ -13,7 +13,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
-// Update DrawerTile class
 class DrawerTile extends StatefulWidget {
   final String tileTitle;
   final IconData tileIcon;
@@ -181,7 +180,7 @@ class _NewChatTileState extends State<NewChatTile> {
             height: 50,
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(
-                isHovered ? 0.7 : 0.4,
+                isHovered ? 1 : 0.4,
               ),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -191,7 +190,6 @@ class _NewChatTileState extends State<NewChatTile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(Icons.add, color: Colors.white),
                   Text(
                     'New Chat',
                     style: GoogleFonts.ubuntu(
@@ -199,6 +197,7 @@ class _NewChatTileState extends State<NewChatTile> {
                       fontSize: 16,
                     ),
                   ),
+                  Icon(Icons.add, color: Colors.white),
                 ],
               ),
             ),
@@ -255,18 +254,18 @@ class _CustomSideBarState extends State<CustomSideBar> {
                 onTilePressed: () => screenState.settingsScreen(),
                 isActive: screenState.currentScreen is SettingsScreen,
               ),
-              DrawerTile(
+              /*      DrawerTile(
                 tileTitle: 'Models',
                 tileIcon: Icons.smart_toy,
                 onTilePressed: () => screenState.modelScreen(),
                 isActive: screenState.currentScreen is ModelScreen,
-              ),
-              DrawerTile(
+              ), */
+              /*  DrawerTile(
                 tileTitle: 'Keys',
                 tileIcon: Icons.key,
                 onTilePressed: () => screenState.keyManagementScreen(),
                 isActive: screenState.currentScreen is KeyManagementScreen,
-              ),
+              ), */
               if (!isOnChatScreen)
                 SpecialDrawerTile(
                   tileTitle: 'Back to chat',
@@ -278,10 +277,12 @@ class _CustomSideBarState extends State<CustomSideBar> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
-                  'Saved Chats',
+                  'PREVIOUS CHATS',
                   style: GoogleFonts.ubuntu(
-                    color: Colors.white70,
-                    fontSize: 14,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                    letterSpacing: 0.8,
                   ),
                 ),
               ),
