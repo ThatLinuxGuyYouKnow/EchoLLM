@@ -20,8 +20,8 @@ class ChatTextField extends StatelessWidget {
     final isPhoneScreen = screenWidth <= 900;
     bool isExpanded = textfieldState.isExpanded;
     final modelInference = InferenceSuperClass(
-        context: context,
-        conversationHistory: messageState.messages as List<Map<int, String>>);
+        context: context, conversationHistory: messageState.messages);
+    final existingID = messageState.chatID;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -129,10 +129,14 @@ class ChatTextField extends StatelessWidget {
                                         final title = titleFromFirstMessage(
                                             messageState.messages);
 
-                                        await saveChatLocally(
+                                        final chatId = await saveChatLocally(
+                                            existingChatID: existingID,
                                             context: context,
                                             messages: hiveReadyMessages,
                                             chatTitle: title);
+                                        if (existingID.isEmpty) {
+                                          messageState.setCurrentChatID(chatId);
+                                        }
                                       }
                                     } catch (e) {
                                     } finally {
