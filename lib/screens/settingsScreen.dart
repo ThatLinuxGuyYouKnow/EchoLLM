@@ -113,9 +113,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 iconColor: Colors.red[400],
                 textColor: Colors.red[400],
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Logging out...')),
-                  );
+                  _buildDeleteConfirmationDialog();
                 },
               ),
             ],
@@ -285,8 +283,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               style: TextButton.styleFrom(
                 backgroundColor: Colors.redAccent.withOpacity(0.8),
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(8), // Slightly smaller for buttons
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
               child: Text('Delete',
