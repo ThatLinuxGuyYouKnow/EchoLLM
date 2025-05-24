@@ -108,12 +108,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               _buildDivider(),
               _buildNavigationListTile(
-                title: 'Log Out',
-                icon: Icons.logout,
-                iconColor: Colors.red[400], // Different color for emphasis
+                title: 'Delete Chat History',
+                icon: Icons.delete_forever,
+                iconColor: Colors.red[400],
                 textColor: Colors.red[400],
                 onTap: () {
-                  // Implement log out logic
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Logging out...')),
                   );
