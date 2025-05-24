@@ -1,4 +1,5 @@
 import 'package:echo_llm/models/chats.dart';
+import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -280,7 +281,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onPressed: () async {
                 Navigator.of(dialogContext).pop();
                 final chatBox = await Hive.openBox<Chat>('chats');
-                chatBox.deleteFromDisk();
+                try {
+                  chatBox.deleteFromDisk();
+                  showCustomToast(context,
+                      message: 'Deleted your chat history',
+                      type: ToastMessageType.success);
+                } catch (Error) {
+                  showCustomToast(context,
+                      message:
+                          'Unexpected Error Occured, couldnt delete your chats');
+                }
               },
             ),
             TextButton(
