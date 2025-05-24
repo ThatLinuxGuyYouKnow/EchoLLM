@@ -249,7 +249,12 @@ class _CustomSideBarState extends State<CustomSideBar> {
                   ? NewChatTile(
                       onTilePressed: () => messageState.clear(),
                     )
-                  : SizedBox.shrink(),
+                  : SpecialDrawerTile(
+                      tileTitle: 'Back to chat',
+                      tileIcon: Icons.arrow_back_ios,
+                      onTilePressed: () => screenState.chatScreen(),
+                      isActive: isOnChatScreen,
+                    ),
               DrawerTile(
                 tileTitle: 'Settings',
                 tileIcon: Icons.precision_manufacturing,
@@ -268,13 +273,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
                 onTilePressed: () => screenState.keyManagementScreen(),
                 isActive: screenState.currentScreen is KeyManagementScreen,
               ), */
-              if (!isOnChatScreen)
-                SpecialDrawerTile(
-                  tileTitle: 'Back to chat',
-                  tileIcon: Icons.arrow_back_ios,
-                  onTilePressed: () => screenState.chatScreen(),
-                  isActive: isOnChatScreen,
-                ),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
