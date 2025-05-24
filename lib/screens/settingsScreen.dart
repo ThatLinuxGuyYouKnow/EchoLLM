@@ -248,4 +248,56 @@ class _SettingsScreenState extends State<SettingsScreen> {
       indent: 56,
     );
   }
+
+  _buildDeleteConfirmationDialog() {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User must tap button
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF2A3441),
+          shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(10), // Updated to 10 for consistency
+          ),
+          title: Text('Delete Chat History?',
+              style: GoogleFonts.ubuntu(color: Colors.white)),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure you want to delete your chat history?',
+                    style: GoogleFonts.ubuntu(color: Colors.grey[300])),
+                Text('This action cannot be undone.',
+                    style: GoogleFonts.ubuntu(
+                        color: Colors.grey[400], fontStyle: FontStyle.italic)),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel',
+                  style: GoogleFonts.ubuntu(color: Colors.grey[400])),
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.redAccent.withOpacity(0.8),
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(8), // Slightly smaller for buttons
+                ),
+              ),
+              child: Text('Delete',
+                  style: GoogleFonts.ubuntu(color: Colors.white)),
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
