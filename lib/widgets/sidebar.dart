@@ -273,7 +273,6 @@ class _CustomSideBarState extends State<CustomSideBar> {
                   onTilePressed: () => screenState.chatScreen(),
                   isActive: isOnChatScreen,
                 ),
-              const Divider(color: Colors.white30),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
