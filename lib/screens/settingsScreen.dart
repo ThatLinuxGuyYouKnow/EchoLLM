@@ -280,17 +280,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   style: GoogleFonts.ubuntu(color: Colors.grey[400])),
               onPressed: () async {
                 Navigator.of(dialogContext).pop();
-                final chatBox = await Hive.openBox<Chat>('chats');
-                try {
-                  chatBox.deleteFromDisk();
-                  showCustomToast(context,
-                      message: 'Deleted your chat history',
-                      type: ToastMessageType.success);
-                } catch (Error) {
-                  showCustomToast(context,
-                      message:
-                          'Unexpected Error Occured, couldnt delete your chats');
-                }
               },
             ),
             TextButton(
@@ -302,8 +291,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               child: Text('Delete',
                   style: GoogleFonts.ubuntu(color: Colors.white)),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(dialogContext).pop();
+                try {
+                  final chatBox = await Hive.openBox<Chat>('chats');
+                  chatBox.deleteFromDisk();
+                  showCustomToast(context,
+                      message: 'Deleted your chat history',
+                      type: ToastMessageType.success);
+                } catch (Error) {
+                  showCustomToast(context,
+                      message:
+                          'Unexpected Error Occured, couldnt delete your chats');
+                }
               },
             ),
           ],
