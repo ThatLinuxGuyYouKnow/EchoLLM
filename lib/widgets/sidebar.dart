@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:echo_llm/dataHandlers/hive/getChats.dart';
 import 'package:echo_llm/logic/convertMessageState.dart';
 import 'package:echo_llm/models/chats.dart';
@@ -217,11 +219,31 @@ class CustomSideBar extends StatefulWidget {
 
 class _CustomSideBarState extends State<CustomSideBar> {
   List<MapEntry<String, String>> chatMetadata = [];
+  late final Box<Chat> chatBox;
+  late final StreamSubscription<BoxEvent> chatBoxListener;
 
   @override
   void initState() {
     super.initState();
+    initHiveListener();
+  }
+
+  Future<void> initHiveListener() async {
+    chatBox = await Hive.openBox<Chat>('chats');
+
+    // Load existing chat metadata
     loadChatTitles();
+
+    // We Watch for changes here
+    chatBoxListener = chatBox.watch().listen((event) {
+      loadChatTitles();
+    });
+  }
+
+  @override
+  void dispose() {
+    chatBoxListener.cancel();
+    super.dispose();
   }
 
   Future<void> loadChatTitles() async {
@@ -274,7 +296,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
                 isActive: screenState.currentScreen is KeyManagementScreen,
               ), */
 
-              if (screenState.isOnMainScreen) ...[
+              if (screenState.isOnMainScreen && chatMetadata.isNotEmpty) ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
