@@ -1,5 +1,7 @@
+import 'package:echo_llm/models/chats.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -275,8 +277,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             TextButton(
               child: Text('Cancel',
                   style: GoogleFonts.ubuntu(color: Colors.grey[400])),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(dialogContext).pop();
+                final chatBox = await Hive.openBox<Chat>('chats');
+                chatBox.deleteFromDisk();
               },
             ),
             TextButton(
