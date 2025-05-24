@@ -274,47 +274,49 @@ class _CustomSideBarState extends State<CustomSideBar> {
                 isActive: screenState.currentScreen is KeyManagementScreen,
               ), */
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  'PREVIOUS CHATS',
-                  style: GoogleFonts.ubuntu(
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13,
-                    letterSpacing: 0.8,
+              if (screenState.isOnMainScreen) ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    'PREVIOUS CHATS',
+                    style: GoogleFonts.ubuntu(
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                      letterSpacing: 0.8,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              ...chatMetadata.map((entry) => ListTile(
-                    dense: true,
-                    title: Text(
-                      entry.value,
-                      style: GoogleFonts.ubuntu(color: Colors.white),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    leading: const Icon(Icons.chat, color: Colors.white),
-                    onTap: () async {
-                      final messageState = Provider.of<Messagestreamstate>(
-                          context,
-                          listen: false);
-                      messageState.setCurrentChatID(entry.key);
+                const SizedBox(height: 8),
+                ...chatMetadata.map((entry) => ListTile(
+                      dense: true,
+                      title: Text(
+                        entry.value,
+                        style: GoogleFonts.ubuntu(color: Colors.white),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      leading: const Icon(Icons.chat, color: Colors.white),
+                      onTap: () async {
+                        final messageState = Provider.of<Messagestreamstate>(
+                            context,
+                            listen: false);
+                        messageState.setCurrentChatID(entry.key);
 
-                      final chatBox = await Hive.openBox<Chat>('chats');
-                      final selectedChat = chatBox.get(entry.key);
+                        final chatBox = await Hive.openBox<Chat>('chats');
+                        final selectedChat = chatBox.get(entry.key);
 
-                      if (selectedChat != null) {
-                        final restoredMessages =
-                            convertHiveMessagesToIndexed(selectedChat.messages);
-                        messageState.setMessages(
-                            newMessageList: restoredMessages);
-                        screenState.chatScreen();
-                      }
+                        if (selectedChat != null) {
+                          final restoredMessages = convertHiveMessagesToIndexed(
+                              selectedChat.messages);
+                          messageState.setMessages(
+                              newMessageList: restoredMessages);
+                          screenState.chatScreen();
+                        }
 
-                      debugPrint('Tapped on chat with ID: ${entry.key}');
-                    },
-                  )),
+                        debugPrint('Tapped on chat with ID: ${entry.key}');
+                      },
+                    )),
+              ]
             ],
           ),
         ),
