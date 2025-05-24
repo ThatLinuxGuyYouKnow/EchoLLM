@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:echo_llm/dataHandlers/hive/getChats.dart';
 import 'package:echo_llm/logic/convertMessageState.dart';
 import 'package:echo_llm/models/chats.dart';
-import 'package:echo_llm/screens/keyManagementScreen.dart';
-import 'package:echo_llm/screens/modelScreen.dart';
+
 import 'package:echo_llm/screens/settingsScreen.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 
