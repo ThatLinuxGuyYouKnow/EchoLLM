@@ -2,6 +2,7 @@ import 'package:echo_llm/state_management/screenState.dart';
 import 'package:echo_llm/state_management/sidebarState.dart';
 
 import 'package:echo_llm/widgets/appBar.dart';
+import 'package:echo_llm/widgets/collapsedSidebar.dart';
 
 import 'package:echo_llm/widgets/sidebar.dart';
 
@@ -28,7 +29,10 @@ class _MainScreenState extends State<MainScreen> {
     return Row(
       children: [
         sidebarIsCollapsed
-            ? SizedBox.shrink()
+            ? SizedBox(
+                width: 100,
+                child: Collapsedsidebar(),
+              )
             : SizedBox(
                 width: 250,
                 child: CustomSideBar(),

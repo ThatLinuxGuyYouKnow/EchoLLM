@@ -352,7 +352,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
     final screenState = Provider.of<Screenstate>(context);
     final isOnChatScreen = screenState.isOnMainScreen;
     final messageState = Provider.of<Messagestreamstate>(context);
-    final sidebarState = Sidebarstate();
+    final sidebarState = Provider.of<Sidebarstate>(context);
     selectedChatId = messageState.chatID;
 
     return Material(
@@ -364,7 +364,9 @@ class _CustomSideBarState extends State<CustomSideBar> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MinimalCollapseIcon(onPressed: () => sidebarState.collapse()),
+              MinimalCollapseIcon(onPressed: () {
+                sidebarState.collapse();
+              }),
               isOnChatScreen
                   ? NewChatTile(
                       onTilePressed: () {
