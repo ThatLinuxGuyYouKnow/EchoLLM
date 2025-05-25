@@ -17,9 +17,10 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final modelBubbleColor = Color(0xFF2A3441);
-    final userBubbleColor = Color(0xFF3B4B59);
-    final textColor = Colors.white.withOpacity(0.9);
+    final modelBubbleColor = const Color(0xFF2A3441);
+    final userBubbleColor = const Color(0xFF427BBF);
+
+    final textColor = Colors.white.withOpacity(0.95);
     final baseTextStyle = TextStyle(
       fontFamily: GoogleFonts.ubuntu().fontFamily,
       color: textColor,
@@ -27,6 +28,7 @@ class MessageBubble extends StatelessWidget {
       height: 1.4,
     );
 
+    //
     final MarkdownStyleSheet markdownStyleSheet = MarkdownStyleSheet.fromTheme(
       ThemeData(
         textTheme: TextTheme(
@@ -34,41 +36,39 @@ class MessageBubble extends StatelessWidget {
         ),
       ),
     ).copyWith(
-      // General text style
       p: baseTextStyle,
-      // Bold text
       strong: baseTextStyle.copyWith(fontWeight: FontWeight.bold),
-      // Italic text
       em: baseTextStyle.copyWith(fontStyle: FontStyle.italic),
-      // Links
       a: baseTextStyle.copyWith(
-        color: Colors.cyan[400], // Link color
+        color: const Color(0xFF60A5FA),
         decoration: TextDecoration.underline,
-        decorationColor: Colors.cyan[400]?.withOpacity(0.7),
+        decorationColor: const Color(0xFF60A5FA).withOpacity(0.7),
       ),
-      // Headings
       h1: baseTextStyle.copyWith(
-          fontSize: 24, fontWeight: FontWeight.bold, color: Colors.cyan[200]),
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: const Color(0xFF60A5FA).withOpacity(0.8)),
       h2: baseTextStyle.copyWith(
-          fontSize: 20, fontWeight: FontWeight.bold, color: Colors.cyan[300]),
-      h3: baseTextStyle.copyWith(fontSize: 18, fontWeight: FontWeight.w600),
-      // Lists
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: const Color(0xFF60A5FA).withOpacity(0.7)),
+      h3: baseTextStyle.copyWith(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: const Color(0xFF60A5FA).withOpacity(0.6)),
       listBullet: baseTextStyle.copyWith(color: textColor.withOpacity(0.8)),
-      listIndent: 12.0, // Indentation for list items
-      // Code blocks
+      listIndent: 12.0,
       codeblockDecoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.3), // Background for code blocks
-        borderRadius: BorderRadius.circular(4),
+        color: Colors.black.withOpacity(0.35),
+        borderRadius: BorderRadius.circular(6),
         border: Border.all(color: Colors.grey[700]!, width: 0.5),
       ),
       code: baseTextStyle.copyWith(
-        fontFamily:
-            GoogleFonts.sourceCodePro().fontFamily, // Monospace font for code
-
-        color: Colors.white, // Text color for code
+        fontFamily: GoogleFonts.sourceCodePro().fontFamily,
+        backgroundColor: Colors.black.withOpacity(0.25),
+        color: Colors.orangeAccent[100],
         fontSize: 14,
       ),
-      // Blockquotes
       blockquoteDecoration: BoxDecoration(
         color: Colors.black.withOpacity(0.1),
         border: Border(left: BorderSide(color: Colors.grey[600]!, width: 4)),
@@ -85,18 +85,24 @@ class MessageBubble extends StatelessWidget {
           maxWidth: 700,
         ),
         decoration: BoxDecoration(
-          color: isModelResponse ? modelBubbleColor : userBubbleColor,
-          borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(16),
-            topRight: const Radius.circular(16),
-            bottomLeft: isModelResponse
-                ? const Radius.circular(0)
-                : const Radius.circular(16),
-            bottomRight: isModelResponse
-                ? const Radius.circular(16)
-                : const Radius.circular(0),
-          ),
-        ),
+            color: isModelResponse ? modelBubbleColor : userBubbleColor,
+            borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(16),
+              topRight: const Radius.circular(16),
+              bottomLeft: isModelResponse
+                  ? const Radius.circular(0)
+                  : const Radius.circular(16),
+              bottomRight: isModelResponse
+                  ? const Radius.circular(16)
+                  : const Radius.circular(0),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              )
+            ]),
         child: isModelResponse
             ? MarkdownBody(
                 data: messageText,
@@ -113,7 +119,7 @@ class MessageBubble extends StatelessWidget {
                   }
                 },
               )
-            : Text(
+            : SelectableText(
                 messageText,
                 style: baseTextStyle,
               ),
@@ -131,17 +137,23 @@ class BufferingMessageBubble extends StatefulWidget {
 
 class _BufferingMessageBubbleState extends State<BufferingMessageBubble> {
   final int _numberOfDots = 3;
-  int _currentDot = 0; // Index of the dot that is currently "on"
+
+  int _currentDot = 0;
+
   Timer? _timer;
 
   final Color _activeDotColor = Colors.white.withOpacity(0.9);
+
   final Color _inactiveDotColor = Colors.white.withOpacity(0.4);
+
   final double _dotSize = 10.0;
+
   final Duration _animationSpeed = const Duration(milliseconds: 400);
 
   @override
   void initState() {
     super.initState();
+
     _startAnimation();
   }
 
@@ -149,8 +161,10 @@ class _BufferingMessageBubbleState extends State<BufferingMessageBubble> {
     _timer = Timer.periodic(_animationSpeed, (timer) {
       if (!mounted) {
         timer.cancel();
+
         return;
       }
+
       setState(() {
         _currentDot = (_currentDot + 1) % _numberOfDots;
       });
@@ -160,14 +174,13 @@ class _BufferingMessageBubbleState extends State<BufferingMessageBubble> {
   @override
   void dispose() {
     _timer?.cancel();
+
     super.dispose();
   }
 
   Widget _buildDot(int index) {
     return AnimatedContainer(
-      duration: Duration(
-          milliseconds: _animationSpeed.inMilliseconds ~/
-              2), // Faster transition for opacity
+      duration: Duration(milliseconds: _animationSpeed.inMilliseconds ~/ 2),
       margin: const EdgeInsets.symmetric(horizontal: 3.0),
       width: _dotSize,
       height: _dotSize,
@@ -201,8 +214,7 @@ class _BufferingMessageBubbleState extends State<BufferingMessageBubble> {
           ),
         ),
         child: Row(
-          mainAxisAlignment:
-              MainAxisAlignment.center, // Center the dots in the bubble
+          mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(_numberOfDots, (index) => _buildDot(index)),
         ),
       ),
