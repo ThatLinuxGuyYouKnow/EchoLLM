@@ -369,6 +369,8 @@ class _CustomSideBarState extends State<CustomSideBar> {
                   ? NewChatTile(
                       onTilePressed: () {
                         messageState.clear();
+                        messageState.setCurrentChatID(
+                            ''); // so if the user creates a new chat, the previous chatID is cleared and the tile is deselected
                         setState(() {
                           selectedChatId = null;
                         });
