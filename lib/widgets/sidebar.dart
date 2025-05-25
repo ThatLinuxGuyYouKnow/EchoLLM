@@ -8,7 +8,6 @@ import 'package:echo_llm/screens/settingsScreen.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 
 import 'package:echo_llm/state_management/screenState.dart';
-import 'package:echo_llm/state_management/sidebarState.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -235,11 +234,13 @@ class _NewChatTileState extends State<NewChatTile> {
 class ChatTile extends StatefulWidget {
   final MapEntry<String, String> chatEntry;
   final VoidCallback onTap;
+  final bool isSelected;
 
   const ChatTile({
     super.key,
     required this.chatEntry,
     required this.onTap,
+    required this.isSelected,
   });
 
   @override
@@ -251,6 +252,8 @@ class _ChatTileState extends State<ChatTile> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isHighlighted = widget.isSelected || isHovered;
+
     return MouseRegion(
       onEnter: (event) => setState(() => isHovered = true),
       onExit: (event) => setState(() => isHovered = false),
@@ -258,12 +261,18 @@ class _ChatTileState extends State<ChatTile> {
         duration: Duration(milliseconds: 150),
         margin: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
         decoration: BoxDecoration(
-          color: isHovered
-              ? Color(0xFF4A90E2).withOpacity(0.15)
-              : Colors.transparent,
+          color: widget.isSelected
+              ? Color(0xFF4A90E2).withOpacity(0.25)
+              : isHovered
+                  ? Color(0xFF4A90E2).withOpacity(0.15)
+                  : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
-          border: isHovered
-              ? Border.all(color: Color(0xFF4A90E2).withOpacity(0.3), width: 1)
+          border: isHighlighted
+              ? Border.all(
+                  color: widget.isSelected
+                      ? Color(0xFF4A90E2).withOpacity(0.6)
+                      : Color(0xFF4A90E2).withOpacity(0.3),
+                  width: widget.isSelected ? 2 : 1)
               : null,
         ),
         child: ListTile(
@@ -272,14 +281,18 @@ class _ChatTileState extends State<ChatTile> {
           title: Text(
             widget.chatEntry.value,
             style: GoogleFonts.ubuntu(
-              color: isHovered ? Color(0xFF4A90E2) : Colors.white,
-              fontWeight: isHovered ? FontWeight.w500 : FontWeight.normal,
+              color: isHighlighted ? Color(0xFF4A90E2) : Colors.white,
+              fontWeight: widget.isSelected
+                  ? FontWeight.w600
+                  : isHovered
+                      ? FontWeight.w500
+                      : FontWeight.normal,
             ),
             overflow: TextOverflow.ellipsis,
           ),
           leading: Icon(
-            Icons.chat_bubble_outline,
-            color: isHovered ? Color(0xFF4A90E2) : Colors.white70,
+            widget.isSelected ? Icons.chat_bubble : Icons.chat_bubble_outline,
+            color: isHighlighted ? Color(0xFF4A90E2) : Colors.white70,
             size: 18,
           ),
           onTap: widget.onTap,
@@ -300,6 +313,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
   List<MapEntry<String, String>> chatMetadata = [];
   late final Box<Chat> chatBox;
   late final StreamSubscription<BoxEvent> chatBoxListener;
+  String? selectedChatId;
 
   @override
   void initState() {
@@ -337,24 +351,26 @@ class _CustomSideBarState extends State<CustomSideBar> {
     final screenState = Provider.of<Screenstate>(context);
     final isOnChatScreen = screenState.isOnMainScreen;
     final messageState = Provider.of<Messagestreamstate>(context);
-    final sidebarState = Provider.of<Sidebarstate>(context);
+
+    selectedChatId = messageState.chatID;
+
     return Material(
       child: AnimatedContainer(
         color: const Color(0xFF1E2733),
         duration: const Duration(seconds: 2),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                icon: Icon(Icons.view_sidebar_outlined),
-                color: Colors.white,
-                onPressed: () => sidebarState.collapse(),
-              ),
               isOnChatScreen
                   ? NewChatTile(
-                      onTilePressed: () => messageState.clear(),
+                      onTilePressed: () {
+                        messageState.clear();
+                        setState(() {
+                          selectedChatId = null;
+                        });
+                      },
                     )
                   : SpecialDrawerTile(
                       tileTitle: 'Back to chat',
@@ -389,10 +405,17 @@ class _CustomSideBarState extends State<CustomSideBar> {
                       final entry = chatMetadata[index];
                       return ChatTile(
                         chatEntry: entry,
+                        isSelected: selectedChatId == entry.key,
                         onTap: () async {
                           final messageState = Provider.of<Messagestreamstate>(
                               context,
                               listen: false);
+
+                          // Update selected chat
+                          setState(() {
+                            selectedChatId = entry.key;
+                          });
+
                           messageState.setCurrentChatID(entry.key);
 
                           final chatBox = await Hive.openBox<Chat>('chats');
