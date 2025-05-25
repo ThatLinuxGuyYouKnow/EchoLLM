@@ -180,10 +180,25 @@ class _NewChatTileState extends State<NewChatTile> {
           child: Container(
             height: 50,
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(
-                isHovered ? 1 : 0.4,
-              ),
+              // Updated colors for better visual appeal
+              gradient: isHovered
+                  ? LinearGradient(
+                      colors: [Color(0xFF4A90E2), Color(0xFF357ABD)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )
+                  : null,
+              color: isHovered ? null : Color(0xFF4A90E2).withOpacity(0.8),
               borderRadius: BorderRadius.circular(10),
+              boxShadow: isHovered
+                  ? [
+                      BoxShadow(
+                        color: Color(0xFF4A90E2).withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: Offset(0, 2),
+                      )
+                    ]
+                  : null,
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -196,13 +211,77 @@ class _NewChatTileState extends State<NewChatTile> {
                     style: GoogleFonts.ubuntu(
                       color: Colors.white,
                       fontSize: 16,
+                      fontWeight:
+                          isHovered ? FontWeight.w600 : FontWeight.normal,
                     ),
                   ),
-                  Icon(Icons.add, color: Colors.white),
+                  Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: isHovered ? 22 : 20,
+                  ),
                 ],
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// New ChatTile widget for individual chat items
+class ChatTile extends StatefulWidget {
+  final MapEntry<String, String> chatEntry;
+  final VoidCallback onTap;
+
+  const ChatTile({
+    super.key,
+    required this.chatEntry,
+    required this.onTap,
+  });
+
+  @override
+  State<ChatTile> createState() => _ChatTileState();
+}
+
+class _ChatTileState extends State<ChatTile> {
+  bool isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (event) => setState(() => isHovered = true),
+      onExit: (event) => setState(() => isHovered = false),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 150),
+        margin: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+        decoration: BoxDecoration(
+          color: isHovered
+              ? Color(0xFF4A90E2).withOpacity(0.15)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: isHovered
+              ? Border.all(color: Color(0xFF4A90E2).withOpacity(0.3), width: 1)
+              : null,
+        ),
+        child: ListTile(
+          dense: true,
+          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          title: Text(
+            widget.chatEntry.value,
+            style: GoogleFonts.ubuntu(
+              color: isHovered ? Color(0xFF4A90E2) : Colors.white,
+              fontWeight: isHovered ? FontWeight.w500 : FontWeight.normal,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+          leading: Icon(
+            Icons.chat_bubble_outline,
+            color: isHovered ? Color(0xFF4A90E2) : Colors.white70,
+            size: 18,
+          ),
+          onTap: widget.onTap,
         ),
       ),
     );
@@ -257,6 +336,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
     final screenState = Provider.of<Screenstate>(context);
     final isOnChatScreen = screenState.isOnMainScreen;
     final messageState = Provider.of<Messagestreamstate>(context);
+
     return Material(
       child: AnimatedContainer(
         color: const Color(0xFF1E2733),
@@ -282,61 +362,51 @@ class _CustomSideBarState extends State<CustomSideBar> {
                 onTilePressed: () => screenState.settingsScreen(),
                 isActive: screenState.currentScreen is SettingsScreen,
               ),
-              /*      DrawerTile(
-                tileTitle: 'Models',
-                tileIcon: Icons.smart_toy,
-                onTilePressed: () => screenState.modelScreen(),
-                isActive: screenState.currentScreen is ModelScreen,
-              ), */
-              /*  DrawerTile(
-                tileTitle: 'Keys',
-                tileIcon: Icons.key,
-                onTilePressed: () => screenState.keyManagementScreen(),
-                isActive: screenState.currentScreen is KeyManagementScreen,
-              ), */
-
               if (screenState.isOnMainScreen && chatMetadata.isNotEmpty) ...[
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 16.0),
                   child: Text(
                     'PREVIOUS CHATS',
                     style: GoogleFonts.ubuntu(
-                      color: Colors.grey[600],
+                      color: Colors.grey[500],
                       fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                      letterSpacing: 0.8,
+                      fontSize: 12,
+                      letterSpacing: 1.2,
                     ),
                   ),
                 ),
-                const SizedBox(height: 8),
-                ...chatMetadata.map((entry) => ListTile(
-                      dense: true,
-                      title: Text(
-                        entry.value,
-                        style: GoogleFonts.ubuntu(color: Colors.white),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      leading: const Icon(Icons.chat, color: Colors.white),
-                      onTap: () async {
-                        final messageState = Provider.of<Messagestreamstate>(
-                            context,
-                            listen: false);
-                        messageState.setCurrentChatID(entry.key);
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: chatMetadata.length,
+                    itemBuilder: (context, index) {
+                      final entry = chatMetadata[index];
+                      return ChatTile(
+                        chatEntry: entry,
+                        onTap: () async {
+                          final messageState = Provider.of<Messagestreamstate>(
+                              context,
+                              listen: false);
+                          messageState.setCurrentChatID(entry.key);
 
-                        final chatBox = await Hive.openBox<Chat>('chats');
-                        final selectedChat = chatBox.get(entry.key);
+                          final chatBox = await Hive.openBox<Chat>('chats');
+                          final selectedChat = chatBox.get(entry.key);
 
-                        if (selectedChat != null) {
-                          final restoredMessages = convertHiveMessagesToIndexed(
-                              selectedChat.messages);
-                          messageState.setMessages(
-                              newMessageList: restoredMessages);
-                          screenState.chatScreen();
-                        }
+                          if (selectedChat != null) {
+                            final restoredMessages =
+                                convertHiveMessagesToIndexed(
+                                    selectedChat.messages);
+                            messageState.setMessages(
+                                newMessageList: restoredMessages);
+                            screenState.chatScreen();
+                          }
 
-                        debugPrint('Tapped on chat with ID: ${entry.key}');
-                      },
-                    )),
+                          debugPrint('Tapped on chat with ID: ${entry.key}');
+                        },
+                      );
+                    },
+                  ),
+                ),
               ]
             ],
           ),
