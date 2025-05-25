@@ -30,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
         sidebarIsCollapsed
             ? SizedBox.shrink()
             : SizedBox(
-                width: 250,
+                width: 300,
                 child: CustomSideBar(),
               ),
         Expanded(

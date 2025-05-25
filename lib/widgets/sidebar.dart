@@ -8,6 +8,7 @@ import 'package:echo_llm/screens/settingsScreen.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 
 import 'package:echo_llm/state_management/screenState.dart';
+import 'package:echo_llm/state_management/sidebarState.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -351,7 +352,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
     final screenState = Provider.of<Screenstate>(context);
     final isOnChatScreen = screenState.isOnMainScreen;
     final messageState = Provider.of<Messagestreamstate>(context);
-
+    final sidebarState = Sidebarstate();
     selectedChatId = messageState.chatID;
 
     return Material(
@@ -363,6 +364,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              MinimalCollapseIcon(onPressed: () => sidebarState.collapse()),
               isOnChatScreen
                   ? NewChatTile(
                       onTilePressed: () {
@@ -438,6 +440,49 @@ class _CustomSideBarState extends State<CustomSideBar> {
                 ),
               ]
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MinimalCollapseIcon extends StatefulWidget {
+  final VoidCallback onPressed;
+
+  const MinimalCollapseIcon({super.key, required this.onPressed});
+
+  @override
+  State<MinimalCollapseIcon> createState() => _MinimalCollapseIconState();
+}
+
+class _MinimalCollapseIconState extends State<MinimalCollapseIcon> {
+  bool isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 16),
+      alignment: Alignment.centerLeft,
+      child: MouseRegion(
+        onEnter: (event) => setState(() => isHovered = true),
+        onExit: (event) => setState(() => isHovered = false),
+        child: GestureDetector(
+          onTap: widget.onPressed,
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 200),
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: isHovered
+                  ? Color(0xFF4A90E2).withOpacity(0.15)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Icon(
+              Icons.view_sidebar_outlined,
+              color: isHovered ? Color(0xFF4A90E2) : Colors.white60,
+              size: 22,
+            ),
           ),
         ),
       ),
