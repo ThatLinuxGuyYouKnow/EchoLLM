@@ -8,6 +8,7 @@ import 'package:echo_llm/screens/settingsScreen.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 
 import 'package:echo_llm/state_management/screenState.dart';
+import 'package:echo_llm/state_management/sidebarState.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -336,16 +337,21 @@ class _CustomSideBarState extends State<CustomSideBar> {
     final screenState = Provider.of<Screenstate>(context);
     final isOnChatScreen = screenState.isOnMainScreen;
     final messageState = Provider.of<Messagestreamstate>(context);
-
+    final sidebarState = Provider.of<Sidebarstate>(context);
     return Material(
       child: AnimatedContainer(
         color: const Color(0xFF1E2733),
         duration: const Duration(seconds: 2),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              IconButton(
+                icon: Icon(Icons.view_sidebar_outlined),
+                color: Colors.white,
+                onPressed: () => sidebarState.collapse(),
+              ),
               isOnChatScreen
                   ? NewChatTile(
                       onTilePressed: () => messageState.clear(),
