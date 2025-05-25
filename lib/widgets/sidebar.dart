@@ -464,24 +464,27 @@ class _MinimalCollapseIconState extends State<MinimalCollapseIcon> {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       alignment: Alignment.centerLeft,
-      child: MouseRegion(
-        onEnter: (event) => setState(() => isHovered = true),
-        onExit: (event) => setState(() => isHovered = false),
-        child: GestureDetector(
-          onTap: widget.onPressed,
-          child: AnimatedContainer(
-            duration: Duration(milliseconds: 200),
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: isHovered
-                  ? Color(0xFF4A90E2).withOpacity(0.15)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Icon(
-              Icons.view_sidebar_outlined,
-              color: isHovered ? Color(0xFF4A90E2) : Colors.white60,
-              size: 22,
+      child: Tooltip(
+        message: 'Collapse this sidebar',
+        child: MouseRegion(
+          onEnter: (event) => setState(() => isHovered = true),
+          onExit: (event) => setState(() => isHovered = false),
+          child: GestureDetector(
+            onTap: widget.onPressed,
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 200),
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isHovered
+                    ? Color(0xFF4A90E2).withOpacity(0.15)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Icon(
+                Icons.view_sidebar_outlined,
+                color: isHovered ? Color(0xFF4A90E2) : Colors.white60,
+                size: 22,
+              ),
             ),
           ),
         ),
