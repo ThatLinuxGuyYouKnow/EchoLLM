@@ -1,8 +1,10 @@
 import 'package:echo_llm/models/chats.dart';
+import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -255,6 +257,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       barrierDismissible: false, // User must tap button
       builder: (BuildContext dialogContext) {
+        final messageState = Provider.of<Messagestreamstate>(context);
         return AlertDialog(
           backgroundColor: const Color(0xFF2A3441),
           shape: RoundedRectangleBorder(
@@ -295,7 +298,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Navigator.of(dialogContext).pop();
                 try {
                   final chatBox = await Hive.openBox<Chat>('chats');
-                  chatBox.deleteFromDisk();
+                  chatBox.clear();
+                  messageState.clear();
                   showCustomToast(context,
                       message: 'Deleted your chat history',
                       type: ToastMessageType.success);
