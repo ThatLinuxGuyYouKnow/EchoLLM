@@ -139,6 +139,7 @@ class ChatTextField extends StatelessWidget {
                                         }
                                       }
                                     } catch (e) {
+                                      messageState.deleteUserLast();
                                     } finally {
                                       messageState.setProcessing(false);
                                     }
