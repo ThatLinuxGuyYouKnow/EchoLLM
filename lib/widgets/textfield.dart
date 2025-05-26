@@ -5,7 +5,7 @@ import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
 import 'package:echo_llm/widgets/buttons.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 class ChatTextField extends StatelessWidget {
@@ -93,8 +93,8 @@ class ChatTextField extends StatelessWidget {
                               ),
                             ),
                             Positioned(
-                              bottom: 4,
-                              right: 4,
+                              bottom: 4, // Reduced from 10
+                              right: 4, // Reduced from 10
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: const Color(0xFF1E2733),
