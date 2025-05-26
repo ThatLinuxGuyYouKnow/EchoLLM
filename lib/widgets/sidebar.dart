@@ -452,8 +452,9 @@ class _CustomSideBarState extends State<CustomSideBar> {
 
 class MinimalCollapseIcon extends StatefulWidget {
   final VoidCallback onPressed;
-
-  const MinimalCollapseIcon({super.key, required this.onPressed});
+  final bool isCollapsed;
+  const MinimalCollapseIcon(
+      {super.key, required this.onPressed, this.isCollapsed = false});
 
   @override
   State<MinimalCollapseIcon> createState() => _MinimalCollapseIconState();
@@ -468,7 +469,8 @@ class _MinimalCollapseIconState extends State<MinimalCollapseIcon> {
       margin: EdgeInsets.only(bottom: 16),
       alignment: Alignment.centerLeft,
       child: Tooltip(
-        message: 'Collapse this sidebar',
+        message:
+            widget.isCollapsed ? 'Expand Sidebar' : 'Collapse this sidebar',
         child: MouseRegion(
           onEnter: (event) => setState(() => isHovered = true),
           onExit: (event) => setState(() => isHovered = false),
