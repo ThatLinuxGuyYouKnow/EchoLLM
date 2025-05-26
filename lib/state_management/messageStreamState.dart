@@ -33,4 +33,8 @@ class Messagestreamstate extends ChangeNotifier {
     _chatID = chatid;
     notifyListeners();
   }
+
+  deleteUserLastMessage() {
+    _messages.removeLast();
+  }
 }

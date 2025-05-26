@@ -18,7 +18,8 @@ class InferenceSuperClass {
   });
 
   Future<String?> runInference(String prompt) async {
-    final messageState = Provider.of<Messagestreamstate>(context);
+    final messageState =
+        Provider.of<Messagestreamstate>(context, listen: false);
     try {
       final CONFIG config = Provider.of<CONFIG>(context, listen: false);
       final String modelSlug = config.modelSlug;
@@ -34,6 +35,7 @@ class InferenceSuperClass {
           "content": entry[key]!,
         });
       }
+      print('attemping inference');
 
       final modelType = modelClassMapping[modelSlug];
       final apiKey = apikey.readKey(modelSlugNotName: modelSlug);
@@ -73,7 +75,7 @@ class InferenceSuperClass {
           throw Exception('Unknown model type: $modelType');
       }
     } catch (e) {
-      messageState.deleteUserLast();
+      messageState.deleteUserLastMessage();
       showCustomToast(context, message: 'Error $e');
       return null;
     }

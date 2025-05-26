@@ -4,6 +4,7 @@ import 'package:echo_llm/logic/convertMessageState.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
 import 'package:echo_llm/widgets/buttons.dart';
+import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
@@ -139,6 +140,8 @@ class ChatTextField extends StatelessWidget {
                                         }
                                       }
                                     } catch (e) {
+                                      showCustomToast(context,
+                                          message: 'Error $e');
                                     } finally {
                                       messageState.setProcessing(false);
                                     }
