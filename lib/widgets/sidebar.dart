@@ -83,7 +83,6 @@ class _DrawerTileState extends State<DrawerTile> {
   }
 }
 
-// Update SpecialDrawerTile class
 class SpecialDrawerTile extends StatefulWidget {
   final String tileTitle;
   final IconData tileIcon;
