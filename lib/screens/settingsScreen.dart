@@ -1,10 +1,155 @@
 import 'package:echo_llm/models/chats.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
+import 'package:echo_llm/state_management/screenState.dart';
+import 'package:echo_llm/widgets/sidebar.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+
+class DrawerTile extends StatefulWidget {
+  final String tileTitle;
+  final IconData tileIcon;
+  final Function() onTilePressed;
+  final bool isActive;
+
+  DrawerTile({
+    super.key,
+    required this.tileTitle,
+    required this.tileIcon,
+    required this.onTilePressed,
+    this.isActive = false,
+  });
+
+  @override
+  State<DrawerTile> createState() => _DrawerTileState();
+}
+
+class _DrawerTileState extends State<DrawerTile>
+    with SingleTickerProviderStateMixin {
+  bool isHovered = false;
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+  late Animation<Color?> _colorAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.02,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+
+    _colorAnimation = ColorTween(
+      begin: Colors.blue.withOpacity(widget.isActive ? 0.4 : 0.2),
+      end: Colors.blue.withOpacity(0.7),
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+      child: MouseRegion(
+        onEnter: (event) {
+          setState(() => isHovered = true);
+          _animationController.forward();
+        },
+        onExit: (event) {
+          setState(() => isHovered = false);
+          _animationController.reverse();
+        },
+        child: GestureDetector(
+          onTap: widget.onTilePressed,
+          child: AnimatedBuilder(
+            animation: _animationController,
+            builder: (context, child) {
+              return Transform.scale(
+                scale: _scaleAnimation.value,
+                child: Container(
+                  height: 52,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        _colorAnimation.value ?? Colors.blue.withOpacity(0.2),
+                        (_colorAnimation.value ?? Colors.blue.withOpacity(0.2))
+                            .withOpacity(0.8),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: widget.isActive
+                          ? Colors.blue.withOpacity(0.6)
+                          : Colors.transparent,
+                      width: 1.5,
+                    ),
+                    boxShadow: isHovered
+                        ? [
+                            BoxShadow(
+                              color: Colors.blue.withOpacity(0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            )
+                          ]
+                        : null,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            widget.tileTitle,
+                            style: GoogleFonts.ubuntu(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: widget.isActive
+                                  ? FontWeight.w600
+                                  : FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Icon(
+                          widget.tileIcon,
+                          color: Colors.white.withOpacity(0.9),
+                          size: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -16,7 +161,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _sendOnEnter = true;
   bool _enableStreaming = false;
-  String _selectedTheme = 'Dark'; // Example theme state
+  String _selectedTheme = 'Dark';
 
   // Define consistent styling
   final TextStyle _settingTitleStyle = GoogleFonts.ubuntu(
@@ -27,17 +172,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
     color: Colors.grey[500],
     fontSize: 13,
   );
-  final Color _cardBackgroundColor =
-      const Color(0xFF1C1C1E); // Dark card background
+  final Color _cardBackgroundColor = const Color(0xFF1C1C1E);
   final Color _iconColor = Colors.grey[400]!;
 
   @override
   Widget build(BuildContext context) {
+    final screenState = Provider.of<Screenstate>(context);
     return Scaffold(
       backgroundColor: Colors.black,
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: <Widget>[
+          Row(
+            children: [
+              Expanded(
+                child: DrawerTile(
+                  tileTitle: 'Models',
+                  tileIcon: Icons.smart_toy,
+                  onTilePressed: () {
+                    screenState.modelScreen();
+                  },
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: DrawerTile(
+                  tileTitle: 'Manage Keys',
+                  tileIcon: Icons.key_sharp,
+                  onTilePressed: () {
+                    screenState.keyManagementScreen();
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
           _buildSectionTitle('Chat Interface'),
           _buildSettingsCard(
             children: [
@@ -130,7 +299,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Widget _buildSectionTitle(String title) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 0.0, top: 5.0),
+      padding: const EdgeInsets.only(bottom: 8.0, top: 5.0),
       child: Text(
         title.toUpperCase(),
         style: GoogleFonts.ubuntu(
@@ -144,18 +313,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget _buildSettingsCard({required List<Widget> children}) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: 180),
-      child: Card(
-        color: _cardBackgroundColor,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-          // side: BorderSide(color: Colors.grey[800]!, width: 0.5), // Optional subtle border
-        ),
-        child: Column(
-          children: children,
-        ),
+    return Card(
+      color: _cardBackgroundColor,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      child: Column(
+        mainAxisSize:
+            MainAxisSize.min, // This makes the card size to its content
+        children: children,
       ),
     );
   }
