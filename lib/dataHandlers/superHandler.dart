@@ -1,6 +1,7 @@
 import 'package:echo_llm/dataHandlers/heyHelper.dart';
 import 'package:echo_llm/logic/geminiHelper.dart';
 import 'package:echo_llm/mappings/modelClassMapping.dart';
+import 'package:echo_llm/state_management/messageStreamState.dart';
 
 import 'package:echo_llm/userConfig.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
@@ -17,6 +18,7 @@ class InferenceSuperClass {
   });
 
   Future<String?> runInference(String prompt) async {
+    final messageState = Provider.of<Messagestreamstate>(context);
     try {
       final CONFIG config = Provider.of<CONFIG>(context, listen: false);
       final String modelSlug = config.modelSlug;
@@ -71,12 +73,8 @@ class InferenceSuperClass {
           throw Exception('Unknown model type: $modelType');
       }
     } catch (e) {
-      showCustomToast(
-        context,
-        message: 'Inference error: ${e.toString()}',
-        type: ToastMessageType.error,
-        duration: const Duration(seconds: 5),
-      );
+      messageState.deleteUserLast();
+      showCustomToast(context, message: 'Error $e');
       return null;
     }
   }

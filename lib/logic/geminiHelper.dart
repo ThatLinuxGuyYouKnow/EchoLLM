@@ -19,39 +19,30 @@ class Geminihelper {
     required String prompt,
     required List<Map<String, String>> history,
   }) async {
-    try {
-      final response = await http.post(
-        Uri.parse(
-          'https://generativelanguage.googleapis.com/v1beta/models/$modelSlug:generateContent?key=$apiKey',
-        ),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'contents': [
-            ...history.map((entry) => {
-                  'role': entry['role'],
-                  'parts': [
-                    {'text': entry['content']}
-                  ]
-                }),
-            {
-              'role': 'user',
-              'parts': [
-                {'text': prompt}
-              ]
-            }
-          ]
-        }),
-      );
+    final response = await http.post(
+      Uri.parse(
+        'https://generativelanguage.googleapis.com/v1beta/models/$modelSlug:generateContent?key=$apiKey',
+      ),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'contents': [
+          ...history.map((entry) => {
+                'role': entry['role'],
+                'parts': [
+                  {'text': entry['content']}
+                ]
+              }),
+          {
+            'role': 'user',
+            'parts': [
+              {'text': prompt}
+            ]
+          }
+        ]
+      }),
+    );
 
-      return _handleResponse(response);
-    } catch (e) {
-      showCustomToast(
-        context,
-        message: 'Network error: ${e.toString()}',
-        type: ToastMessageType.error,
-      );
-      return null;
-    }
+    return _handleResponse(response);
   }
 
   String? _handleResponse(http.Response response) {
