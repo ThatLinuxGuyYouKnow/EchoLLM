@@ -1,4 +1,6 @@
 import 'package:echo_llm/dataHandlers/heyHelper.dart';
+import 'package:echo_llm/mappings/modelClassMapping.dart';
+import 'package:echo_llm/mappings/modelSlugMappings.dart';
 
 final keyHandler = ApiKeyHelper();
 
@@ -31,10 +33,29 @@ bool isAtleastOneModelAvailable() {
 }
 
 List<String> getAvailableModelsForUser() {
-  final allModels = onlineModelAvailability.keys.toList();
-  final available = allModels.where((model) {
-    return keyHandler.readKey(modelSlugNotName: model).isNotEmpty;
+  final allSlugs = onlineModelAvailability.keys.toList();
+  List<String> availableModelNames = [];
+
+  final availableSlugs = allSlugs.where((slug) {
+    return keyHandler.readKey(modelSlugNotName: slug).isNotEmpty;
   }).toList();
 
-  return available.isNotEmpty ? available : allModels;
+  // Reverse lookup: get model names from slugs
+  for (var slug in availableSlugs) {
+    final modelName = onlineModels.entries
+        .firstWhere((entry) => entry.value == slug,
+            orElse: () => const MapEntry('', ''))
+        .key;
+
+    if (modelName.isNotEmpty) {
+      availableModelNames.add(modelName);
+    }
+  }
+
+  // If no keys set, just show all names (not slugs)
+  if (availableModelNames.isEmpty) {
+    availableModelNames = onlineModels.keys.toList();
+  }
+
+  return availableModelNames;
 }
