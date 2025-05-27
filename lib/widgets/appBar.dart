@@ -24,20 +24,6 @@ class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         children: [
           const SizedBox(width: 16),
-          if (sidebar.isCollapsed) ...[
-            IconButton.filled(
-              style: IconButton.styleFrom(
-                backgroundColor: const Color(0xFF1E2733),
-              ),
-              onPressed: sidebar.expand,
-              icon: const Icon(
-                Icons.trip_origin,
-                color: Colors.white,
-                weight: 0.1,
-              ),
-            ),
-            const SizedBox(width: 16),
-          ],
           ConstrainedBox(
             constraints: const BoxConstraints(
               maxHeight: 150,
