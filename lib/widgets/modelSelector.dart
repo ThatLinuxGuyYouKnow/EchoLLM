@@ -1,6 +1,8 @@
+import 'package:echo_llm/mappings/modelAvailabilityMapping.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart'; // Assuming this contains 'onlineModels'
 import 'package:echo_llm/userConfig.dart'; // Your CONFIG class
 import 'package:flutter/material.dart';
+import 'package:get/utils.dart';
 import 'package:google_fonts/google_fonts.dart'; // For consistent font
 import 'package:provider/provider.dart';
 
@@ -14,15 +16,14 @@ class Modelselector extends StatefulWidget {
 class _ModelselectorState extends State<Modelselector> {
   late String _selectedValue; // Use a more descriptive private name
   late CONFIG _config; // Store the config instance
-
+  List<String> availableOptions = getAvailableModelsForUser();
+  @override
   @override
   void initState() {
     super.initState();
 
     _config = context.read<CONFIG>();
 
-    // Initialize _selectedValue from the config, ensuring it's a valid option
-    List<String> availableOptions = onlineModels.keys.toList();
     String initialModelFromConfig = _config.model.trim();
 
     if (availableOptions.isNotEmpty) {
@@ -44,34 +45,6 @@ class _ModelselectorState extends State<Modelselector> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> availableOptions = onlineModels.keys.toList();
-
-    if (availableOptions.isEmpty) {
-      return Container(
-        width: 300,
-        height: 50,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.3),
-          borderRadius: BorderRadius.circular(10.0),
-          border: Border.all(color: Colors.grey[700]!, width: 1),
-        ),
-        child: Center(
-          child: Text(
-            "No models available",
-            style: GoogleFonts.ubuntu(
-              color: Colors.grey[500],
-              fontSize: 15,
-            ),
-          ),
-        ),
-      );
-    }
-
-    if (_selectedValue.isEmpty || !availableOptions.contains(_selectedValue)) {
-      _selectedValue = availableOptions.first;
-    }
-
     return Container(
       width: 300,
       height: 50,
