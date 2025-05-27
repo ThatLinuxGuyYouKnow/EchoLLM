@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 class Collapsedsidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     final sidebarstate = Provider.of<Sidebarstate>(context);
+    final screenState = Provider.of<Screenstate>(context);
     return AnimatedContainer(
       color: Color(0xFF1E2733),
       duration: Duration(seconds: 1),
@@ -32,7 +33,7 @@ class Collapsedsidebar extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            SettingsCollapsedTile()
+            if (!screenState.isOnSettingsScreen) ...[SettingsCollapsedTile()]
           ],
         ),
       ),

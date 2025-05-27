@@ -398,12 +398,14 @@ class _CustomSideBarState extends State<CustomSideBar> {
                       onTilePressed: () => screenState.chatScreen(),
                       isActive: isOnChatScreen,
                     ),
-              DrawerTile(
-                tileTitle: 'Settings',
-                tileIcon: Icons.precision_manufacturing,
-                onTilePressed: () => screenState.settingsScreen(),
-                isActive: screenState.currentScreen is SettingsScreen,
-              ),
+              if (!screenState.isOnSettingsScreen) ...[
+                DrawerTile(
+                  tileTitle: 'Settings',
+                  tileIcon: Icons.precision_manufacturing,
+                  onTilePressed: () => screenState.settingsScreen(),
+                  isActive: screenState.currentScreen is SettingsScreen,
+                )
+              ],
               if (screenState.isOnMainScreen && chatMetadata.isNotEmpty) ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(
