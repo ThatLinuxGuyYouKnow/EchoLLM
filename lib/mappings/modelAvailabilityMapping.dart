@@ -18,3 +18,15 @@ Map<String, bool> onlineModelAvailability = {
   'grok-3-mini-beta':
       keyHandler.readKey(modelSlugNotName: 'grok-3-mini-beta').length > 1
 };
+
+isAtleastOneModelAvailable() {
+  List models = onlineModelAvailability.keys.toList();
+  List availableModels = [];
+  for (var model in models) {
+    String key = keyHandler.readKey(modelSlugNotName: model);
+    if (key.isNotEmpty) {
+      availableModels.add(model);
+    }
+  }
+  return models;
+}
