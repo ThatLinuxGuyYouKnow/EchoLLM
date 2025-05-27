@@ -9,6 +9,7 @@ class Screenstate extends ChangeNotifier {
   Widget get currentScreen => _currentScreen;
   Widget _currentScreen = Messagelistwidget();
   bool get isOnMainScreen => _currentScreen is Messagelistwidget;
+  bool get isOnSettingsScreen => _currentScreen is SettingsScreen;
   modelScreen() {
     _currentScreen = ModelScreen();
     notifyListeners();
