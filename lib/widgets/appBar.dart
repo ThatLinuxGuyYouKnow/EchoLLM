@@ -1,5 +1,5 @@
 import 'package:echo_llm/state_management/screenState.dart';
-import 'package:echo_llm/state_management/sidebarState.dart';
+
 import 'package:echo_llm/widgets/modelSelector.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +13,6 @@ class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sidebar = context.watch<Sidebarstate>();
     final isOnMainScreen = context.watch<Screenstate>().isOnMainScreen;
 
     return AppBar(
