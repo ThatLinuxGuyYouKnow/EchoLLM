@@ -1,9 +1,9 @@
 import 'package:echo_llm/mappings/modelAvailabilityMapping.dart';
-import 'package:echo_llm/mappings/modelSlugMappings.dart'; // Assuming this contains 'onlineModels'
-import 'package:echo_llm/userConfig.dart'; // Your CONFIG class
+
+import 'package:echo_llm/userConfig.dart';
 import 'package:flutter/material.dart';
-import 'package:get/utils.dart';
-import 'package:google_fonts/google_fonts.dart'; // For consistent font
+
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class Modelselector extends StatefulWidget {
