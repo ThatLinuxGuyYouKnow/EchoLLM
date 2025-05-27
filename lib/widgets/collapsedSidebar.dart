@@ -3,7 +3,7 @@ import 'package:echo_llm/state_management/screenState.dart';
 import 'package:echo_llm/state_management/sidebarState.dart';
 import 'package:echo_llm/widgets/sidebar.dart';
 import 'package:flutter/material.dart';
-import 'package:get/state_manager.dart';
+
 import 'package:provider/provider.dart';
 
 class Collapsedsidebar extends StatelessWidget {
@@ -69,7 +69,7 @@ class _NewChatCollapsedTileState extends State<NewChatCollapsedTile> {
               color: Color(0xFF4A90E2).withOpacity(isHovered ? 1 : 0.7)),
           child: Center(
             child: Icon(
-              screenState.isOnMainScreen ? Icons.add : Icons.arrow_back_ios,
+              screenState.isOnMainScreen ? Icons.add : Icons.chat_bubble,
               color: Colors.white,
             ),
           ),

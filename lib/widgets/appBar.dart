@@ -18,7 +18,8 @@ class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       toolbarHeight: 80,
-      backgroundColor: Colors.black,
+      foregroundColor: Colors.transparent,
+      backgroundColor: Colors.black.withOpacity(0.4),
       titleSpacing: 0,
       title: Row(
         children: [

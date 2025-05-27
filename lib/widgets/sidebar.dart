@@ -122,10 +122,25 @@ class _SpecialDrawerTileState extends State<SpecialDrawerTile> {
           child: Container(
             height: 50,
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(
-                isHovered ? 0.7 : (widget.isActive ? 0.4 : 0.2),
-              ),
+              // Updated colors for better visual appeal
+              gradient: isHovered
+                  ? LinearGradient(
+                      colors: [Color(0xFF4A90E2), Color(0xFF357ABD)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )
+                  : null,
+              color: isHovered ? null : Color(0xFF4A90E2).withOpacity(0.8),
               borderRadius: BorderRadius.circular(10),
+              boxShadow: isHovered
+                  ? [
+                      BoxShadow(
+                        color: Color(0xFF4A90E2).withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: Offset(0, 2),
+                      )
+                    ]
+                  : null,
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -133,7 +148,6 @@ class _SpecialDrawerTileState extends State<SpecialDrawerTile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(widget.tileIcon, color: Colors.white),
                   Text(
                     widget.tileTitle,
                     style: GoogleFonts.ubuntu(
@@ -141,6 +155,7 @@ class _SpecialDrawerTileState extends State<SpecialDrawerTile> {
                       fontSize: 16,
                     ),
                   ),
+                  Icon(widget.tileIcon, color: Colors.white),
                 ],
               ),
             ),
@@ -379,7 +394,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
                     )
                   : SpecialDrawerTile(
                       tileTitle: 'Back to chat',
-                      tileIcon: Icons.arrow_back_ios,
+                      tileIcon: Icons.chat_bubble,
                       onTilePressed: () => screenState.chatScreen(),
                       isActive: isOnChatScreen,
                     ),
