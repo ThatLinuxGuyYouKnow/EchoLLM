@@ -132,10 +132,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 icon: Icons.keyboard_return,
                 value: shouldSendOnEnter,
                 onChanged: (value) {
-                  if (shouldSendOnEnter) {
-                    config.setNotToSendOnEnter();
-                  } else {
+                  if (value) {
                     config.setToSendonEnter();
+                  } else {
+                    config.setNotToSendOnEnter();
                   }
                 },
               ),

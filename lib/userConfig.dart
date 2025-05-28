@@ -13,6 +13,7 @@ class CONFIG extends ChangeNotifier {
   bool _shouldSendOnEnter = false;
   loadPreferences() {
     String modelName = preferencesBox.read('preferredModel');
+    _shouldSendOnEnter = preferencesBox.read('sendOnEnter');
     _model = modelName;
     _modelSlug = onlineModels[model] ?? '';
   }
