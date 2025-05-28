@@ -15,9 +15,7 @@ class ApiKeyHelper {
 
   String readKey({required String modelSlugNotName}) {
     final String key = box.read(modelSlugNotName) ?? '';
-    key.length > 1
-        ? print('key for ' + modelSlugNotName + "is not null")
-        : print('key is null for ' + modelSlugNotName);
+
     return key;
   }
 

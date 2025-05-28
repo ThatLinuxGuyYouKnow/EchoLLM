@@ -104,7 +104,7 @@ class _ModelselectorState extends State<Modelselector> {
                         option,
                         style: GoogleFonts.ubuntu(
                           color: isSelected
-                              ? Colors.cyanAccent[100]
+                              ? const Color.fromARGB(255, 168, 174, 180)
                               : Colors.white.withOpacity(0.85),
                           fontWeight:
                               isSelected ? FontWeight.w600 : FontWeight.normal,

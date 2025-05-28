@@ -35,7 +35,6 @@ class InferenceSuperClass {
           "content": entry[key]!,
         });
       }
-      print('attemping inference');
 
       final modelType = modelClassMapping[modelSlug];
       final apiKey = apikey.readKey(modelSlugNotName: modelSlug);

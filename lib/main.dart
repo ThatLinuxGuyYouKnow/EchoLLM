@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final config = Provider.of<CONFIG>(context, listen: false);
     config.loadPreferences();
-    print('model init' + config.model);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

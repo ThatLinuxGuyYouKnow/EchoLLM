@@ -372,7 +372,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
     return Material(
       child: AnimatedContainer(
         color: const Color(0xFF1E2733),
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 10),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
           child: Column(
@@ -451,8 +451,6 @@ class _CustomSideBarState extends State<CustomSideBar> {
                                 newMessageList: restoredMessages);
                             screenState.chatScreen();
                           }
-
-                          debugPrint('Tapped on chat with ID: ${entry.key}');
                         },
                       );
                     },

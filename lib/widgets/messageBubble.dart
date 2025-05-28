@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -114,7 +115,9 @@ class MessageBubble extends StatelessWidget {
                     if (uri != null && await canLaunchUrl(uri)) {
                       await launchUrl(uri);
                     } else {
-                      print('Could not launch $href');
+                      showCustomToast(context,
+                          message: "Couldn't launch this url",
+                          type: ToastMessageType.error);
                     }
                   }
                 },
