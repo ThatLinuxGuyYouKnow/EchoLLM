@@ -9,11 +9,24 @@ class CONFIG extends ChangeNotifier {
   String _modelSlug = '';
   final apiKeyBox = GetStorage('api-keys');
   final preferencesBox = GetStorage('preferences');
-
+  bool get shouldSendOnEnter => _shouldSendOnEnter;
+  bool _shouldSendOnEnter = false;
   loadPreferences() {
     String modelName = preferencesBox.read('preferredModel');
     _model = modelName;
     _modelSlug = onlineModels[model] ?? '';
+  }
+
+  setToSendonEnter() {
+    _shouldSendOnEnter = true;
+    preferencesBox.write('sendOnEnter', true);
+    notifyListeners();
+  }
+
+  setNotToSendOnEnter() {
+    _shouldSendOnEnter = false;
+    preferencesBox.write('sendOnEnter', false);
+    notifyListeners();
   }
 
   setPreferredModel({required String modelName}) {

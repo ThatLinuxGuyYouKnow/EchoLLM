@@ -3,6 +3,7 @@ import 'package:echo_llm/dataHandlers/superHandler.dart';
 import 'package:echo_llm/logic/convertMessageState.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
+import 'package:echo_llm/userConfig.dart';
 import 'package:echo_llm/widgets/buttons.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class ChatTextField extends StatelessWidget {
     final modelInference = InferenceSuperClass(
         context: context, conversationHistory: messageState.messages);
     final existingID = messageState.chatID;
+    final _shouldSendOnEnter = Provider.of<CONFIG>(context).shouldSendOnEnter;
     final FocusNode keyboardNode = FocusNode();
 
     Future<void> sendMessage() async {
@@ -65,7 +67,7 @@ class ChatTextField extends StatelessWidget {
       onKey: (node, event) {
         if (event.logicalKey == LogicalKeyboardKey.enter &&
             event is KeyDownEvent) {
-          if (chatController.text.isNotEmpty) {
+          if (chatController.text.isNotEmpty && _shouldSendOnEnter) {
             sendMessage();
             return KeyEventResult.handled;
           }

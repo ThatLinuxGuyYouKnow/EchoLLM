@@ -1,5 +1,5 @@
 import 'package:echo_llm/dataHandlers/heyHelper.dart';
-import 'package:echo_llm/mappings/modelClassMapping.dart';
+
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
 
 final keyHandler = ApiKeyHelper();

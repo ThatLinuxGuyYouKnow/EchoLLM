@@ -1,6 +1,7 @@
 import 'package:echo_llm/models/chats.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/screenState.dart';
+import 'package:echo_llm/userConfig.dart';
 
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
@@ -83,7 +84,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool _sendOnEnter = true;
   bool _enableStreaming = false;
   String _selectedTheme = 'Dark';
 
@@ -102,6 +102,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final screenState = Provider.of<Screenstate>(context);
+    final config = Provider.of<CONFIG>(context);
+    final bool shouldSendOnEnter = config.shouldSendOnEnter;
     return Scaffold(
       backgroundColor: Colors.black,
       body: ListView(
@@ -128,11 +130,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 title: 'Send on Enter',
                 subtitle: 'Press Enter key to send messages',
                 icon: Icons.keyboard_return,
-                value: _sendOnEnter,
+                value: shouldSendOnEnter,
                 onChanged: (value) {
-                  setState(() {
-                    _sendOnEnter = value;
-                  });
+                  if (shouldSendOnEnter) {
+                    config.setNotToSendOnEnter();
+                  } else {
+                    config.setToSendonEnter();
+                  }
                 },
               ),
               _buildDivider(),
