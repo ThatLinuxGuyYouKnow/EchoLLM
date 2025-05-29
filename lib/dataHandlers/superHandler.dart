@@ -25,7 +25,6 @@ class InferenceSuperClass {
       final String modelSlug = config.modelSlug;
       final apikey = ApiKeyHelper();
 
-      // Build proper conversation context
       final List<Map<String, String>> formattedHistory = [];
       for (var entry in conversationHistory) {
         final key = entry.keys.first;

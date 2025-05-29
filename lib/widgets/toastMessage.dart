@@ -32,28 +32,28 @@ void showCustomToast(
       iconColor = Colors.cyanAccent[100];
       break;
   }
-
   ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Row(
-        children: [
-          ...[
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 600),
+        child: Row(
+          children: [
             Icon(leadingIconData, color: iconColor ?? textColor, size: 22),
             const SizedBox(width: 12),
-          ],
-          Expanded(
-            child: Text(
-              message,
-              style: GoogleFonts.ubuntu(
-                color: textColor,
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
+            Expanded(
+              child: Text(
+                message,
+                style: GoogleFonts.ubuntu(
+                  color: textColor,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       backgroundColor: backgroundColor,
       duration: duration,
