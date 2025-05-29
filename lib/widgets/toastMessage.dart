@@ -36,32 +36,29 @@ void showCustomToast(
 
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 600),
-        child: Row(
-          children: [
-            Icon(leadingIconData, color: iconColor ?? textColor, size: 22),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                message,
-                style: GoogleFonts.ubuntu(
-                  color: textColor,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                ),
+      width: 600,
+      behavior: SnackBarBehavior.floating,
+      content: Row(
+        children: [
+          Icon(leadingIconData, color: iconColor ?? textColor, size: 22),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              message,
+              style: GoogleFonts.ubuntu(
+                color: textColor,
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       backgroundColor: backgroundColor,
       duration: duration,
-      behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
       elevation: 4.0,
     ),
   );

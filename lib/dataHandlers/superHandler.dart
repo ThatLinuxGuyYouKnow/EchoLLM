@@ -60,9 +60,6 @@ class InferenceSuperClass {
           );
 
         case 'openai':
-          // Implement OpenAI helper
-          // final openai = OpenAIhelper(...);
-          // return await openai.getResponse(prompt);
           throw UnimplementedError('OpenAI support not yet implemented');
 
         case 'x-ai':
