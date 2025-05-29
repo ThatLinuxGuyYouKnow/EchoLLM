@@ -104,10 +104,10 @@ class _ModelTileState extends State<ModelTile> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 100),
-        height: 150,
-        width: 150,
+        height: 100,
+        width: 100,
         constraints: BoxConstraints(
-            minWidth: 100, minHeight: 100, maxHeight: 210, maxWidth: 210),
+            minWidth: 100, minHeight: 100, maxHeight: 200, maxWidth: 200),
         decoration: BoxDecoration(
           boxShadow: isHovered
               ? [
@@ -129,7 +129,7 @@ class _ModelTileState extends State<ModelTile> {
           color: isHovered ? const Color(0xFF1A1F25) : const Color(0xFF1C1C1D),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
