@@ -104,10 +104,10 @@ class _ModelTileState extends State<ModelTile> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 100),
-        height: 100,
-        width: 100,
+        height: 150,
+        width: 150,
         constraints: BoxConstraints(
-            minWidth: 80, minHeight: 80, maxHeight: 200, maxWidth: 200),
+            minWidth: 100, minHeight: 100, maxHeight: 210, maxWidth: 210),
         decoration: BoxDecoration(
           boxShadow: isHovered
               ? [
@@ -131,14 +131,35 @@ class _ModelTileState extends State<ModelTile> {
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset(widget.modelFamilyIconPath),
-                  Text(widget.tileTitle,
-                      style: GoogleFonts.ubuntu(
-                          color: Colors.white, fontWeight: FontWeight.normal)),
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Image.asset(
+                          widget.modelFamilyIconPath,
+                          width: 25,
+                        ),
+                        const SizedBox(width: 5),
+                        Expanded(
+                          child: Text(
+                            widget.tileTitle,
+                            style: GoogleFonts.ubuntu(
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   GestureDetector(
                     onTap: () {
                       if (!widget.isAvailable) {
@@ -156,9 +177,12 @@ class _ModelTileState extends State<ModelTile> {
                           : Colors.white.withOpacity(isHovered ? 0.9 : 0.7),
                       size: isHovered ? 22 : 20,
                     ),
-                  )
+                  ),
                 ],
-              )
+              ),
+              // Add some spacing if needed
+              const Spacer(),
+              // Add any additional content here
             ],
           ),
         ),
