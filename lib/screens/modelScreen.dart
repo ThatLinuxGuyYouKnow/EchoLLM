@@ -1,4 +1,5 @@
 import 'package:echo_llm/mappings/modelAvailabilityMapping.dart';
+import 'package:echo_llm/mappings/modelClassMapping.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
 import 'package:echo_llm/state_management/apikeyModalState.dart';
 import 'package:echo_llm/widgets/modals/enterApiKeyModal.dart';
@@ -33,8 +34,9 @@ class ModelScreen extends StatelessWidget {
                 final modelName = onlineModels.keys.elementAt(index);
                 final slug = onlineModels[modelName] ?? '';
                 final isAvailable = onlineModelAvailability[slug] ?? false;
-
+                String modelIcon = getModelIcon(modelSlug: slug);
                 return ModelTile(
+                  modelFamilyIconPath: modelIcon,
                   modelSlug: slug,
                   tileTitle: modelName,
                   isAvailable: isAvailable,
@@ -70,12 +72,14 @@ class ModelTile extends StatefulWidget {
   final String tileTitle;
   final bool isAvailable;
   final String modelSlug;
+  final String modelFamilyIconPath;
 
   ModelTile(
       {super.key,
       required this.tileTitle,
       required this.isAvailable,
-      required this.modelSlug});
+      required this.modelSlug,
+      required this.modelFamilyIconPath});
 
   @override
   State<ModelTile> createState() => _ModelTileState();
@@ -131,6 +135,7 @@ class _ModelTileState extends State<ModelTile> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Image.asset(widget.modelFamilyIconPath),
                   Text(widget.tileTitle,
                       style: GoogleFonts.ubuntu(
                           color: Colors.white, fontWeight: FontWeight.normal)),
@@ -159,5 +164,16 @@ class _ModelTileState extends State<ModelTile> {
         ),
       ),
     );
+  }
+}
+
+String getModelIcon({required String modelSlug}) {
+  String model_family = modelClassMapping[modelSlug]!;
+  if (model_family == 'gemini') {
+    return 'assets/model_icons/gemini-icon.png';
+  } else if (model_family == 'openai') {
+    return 'assets/model_icons/openai-icon.png';
+  } else {
+    return 'assets/model_icons/xai-icon.png';
   }
 }
