@@ -357,7 +357,8 @@ class _CustomSideBarState extends State<CustomSideBar> {
   Future<void> loadChatTitles() async {
     final entries = await getChatLabelsAndIds();
     setState(() {
-      chatMetadata = entries;
+      chatMetadata =
+          entries.reversed.toList(); // Reverses order for recent-first
     });
   }
 
