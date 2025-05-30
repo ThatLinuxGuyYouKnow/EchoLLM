@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        platform: TargetPlatform.macOS,
         useMaterial3: true,
       ),
       home: MainScreen(),
