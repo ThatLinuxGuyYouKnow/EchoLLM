@@ -11,77 +11,88 @@ class AddNewKeyModal extends StatelessWidget {
       backgroundColor: const Color(0xFF1E2733),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
-        side: BorderSide(
-          color: Colors.blue.withOpacity(0.3),
-          width: 1.0,
-        ),
       ),
       elevation: 10,
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Add a new key',
-                  style: GoogleFonts.ubuntu(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 500),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center, // Centered content
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Add a new key',
+                    style: GoogleFonts.ubuntu(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.close, color: Colors.grey[500]),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
-            const SizedBox(height: 15),
-            const Text(
-              'Select Model',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
+                  IconButton(
+                    icon: Icon(Icons.close, color: Colors.grey[500]),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 8),
-            const PlainModelSelector(),
-            const SizedBox(height: 20),
-            const Text(
-              'API Key',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
+              const SizedBox(height: 20),
+
+              // Centered content container
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Select Model',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    PlainModelSelector(),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'API Key',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    _ModaltextField(),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            const _ModaltextField(),
-            const SizedBox(height: 25),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                _consentButton(
-                  buttonText: 'Cancel',
-                  onPressed: () => Navigator.of(context).pop(),
-                  buttonColor: Colors.transparent,
-                  textColor: Colors.grey[400]!,
-                ),
-                const SizedBox(width: 10),
-                _consentButton(
-                  buttonText: 'Save Key',
-                  onPressed: () {},
-                  buttonColor: const Color(0xFF4C83D1),
-                  textColor: Colors.white,
-                ),
-              ],
-            ),
-          ],
+
+              const SizedBox(height: 25),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center, // Centered buttons
+                children: [
+                  _consentButton(
+                    buttonText: 'Cancel',
+                    onPressed: () => Navigator.of(context).pop(),
+                    buttonColor: Colors.transparent,
+                    textColor: Colors.grey[400]!,
+                  ),
+                  const SizedBox(width: 20),
+                  _consentButton(
+                    buttonText: 'Save Key',
+                    onPressed: () {},
+                    buttonColor: const Color(0xFF4C83D1),
+                    textColor: Colors.white,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -108,80 +119,84 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
   Widget build(BuildContext context) {
     final availableOptions = onlineModels.keys.toList();
 
-    return Container(
-      width: 400,
-      height: 50,
-      decoration: BoxDecoration(
-        color: const Color(0xFF2A3441),
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(
-          color: const Color(0xFF3A4A5F),
-          width: 1.5,
+    return SizedBox(
+      // Constrained width
+      width: 450,
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          color: const Color(0xFF2A3441),
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(
+            color: const Color(0xFF3A4A5F),
+            width: 1.5,
+          ),
         ),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(10.0),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            value: _selectedValue,
-            isExpanded: true,
-            icon: Icon(
-              Icons.arrow_drop_down,
-              color: Colors.cyanAccent[100],
-              size: 28,
-            ),
-            dropdownColor: const Color(0xFF1E2733),
-            borderRadius: BorderRadius.circular(10.0),
-            elevation: 8,
-            style: GoogleFonts.ubuntu(
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-            ),
-            items: availableOptions.map((String option) {
-              final isSelected = option == _selectedValue;
-              return DropdownMenuItem<String>(
-                value: option,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text(
-                    option,
-                    style: GoogleFonts.ubuntu(
-                      color: isSelected ? Colors.cyanAccent[100] : Colors.white,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 14,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                ),
-              );
-            }).toList(),
-            onChanged: (value) {
-              if (value == null || value == _selectedValue) return;
-              setState(() => _selectedValue = value);
-            },
-            selectedItemBuilder: (BuildContext context) {
-              return availableOptions.map<Widget>((String item) {
-                return Align(
-                  alignment: Alignment.centerLeft,
+        child: Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(10.0),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: _selectedValue,
+              isExpanded: true,
+              icon: Icon(
+                Icons.arrow_drop_down,
+                color: Color(0xFF4A90E2),
+                size: 28,
+              ),
+              dropdownColor: const Color(0xFF1E2733),
+              borderRadius: BorderRadius.circular(10.0),
+              elevation: 8,
+              style: GoogleFonts.ubuntu(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
+              items: availableOptions.map((String option) {
+                final isSelected = option == _selectedValue;
+                return DropdownMenuItem<String>(
+                  value: option,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 12.0),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Text(
-                      item,
+                      option,
                       style: GoogleFonts.ubuntu(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
+                        color:
+                            isSelected ? Colors.cyanAccent[100] : Colors.white,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14,
                       ),
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+                      maxLines: 2,
                     ),
                   ),
                 );
-              }).toList();
-            },
+              }).toList(),
+              onChanged: (value) {
+                if (value == null || value == _selectedValue) return;
+                setState(() => _selectedValue = value);
+              },
+              selectedItemBuilder: (BuildContext context) {
+                return availableOptions.map<Widget>((String item) {
+                  return Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
+                      child: Text(
+                        item,
+                        style: GoogleFonts.ubuntu(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                  );
+                }).toList();
+              },
+            ),
           ),
         ),
       ),
@@ -194,27 +209,30 @@ class _ModaltextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 400,
-      height: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: const Color(0xFF2A3441),
-        border: Border.all(
-          color: const Color(0xFF3A4A5F),
-          width: 1.5,
+    return SizedBox(
+      // Constrained width
+      width: 450,
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: const Color(0xFF2A3441),
+          border: Border.all(
+            color: const Color(0xFF3A4A5F),
+            width: 1.5,
+          ),
         ),
-      ),
-      child: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.0),
-        child: TextField(
-          style: TextStyle(color: Colors.white, fontSize: 15),
-          obscureText: true,
-          obscuringCharacter: '•',
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: 'Enter your API key...',
-            hintStyle: TextStyle(color: Colors.grey),
+        child: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.0),
+          child: TextField(
+            style: TextStyle(color: Colors.white, fontSize: 15),
+            obscureText: true,
+            obscuringCharacter: '•',
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: 'Enter your API key...',
+              hintStyle: TextStyle(color: Colors.grey),
+            ),
           ),
         ),
       ),
@@ -232,7 +250,7 @@ Widget _consentButton({
     onPressed: onPressed,
     style: ElevatedButton.styleFrom(
       backgroundColor: buttonColor,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: buttonColor == Colors.transparent
@@ -245,6 +263,7 @@ Widget _consentButton({
       style: GoogleFonts.ubuntu(
         color: textColor,
         fontWeight: FontWeight.w500,
+        fontSize: 14,
       ),
     ),
   );
