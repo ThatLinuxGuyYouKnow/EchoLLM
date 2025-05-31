@@ -8,7 +8,7 @@ class AddNewKeyModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: const Color(0xFF1A1C1E),
+      backgroundColor: const Color(0xFF1E2733),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
@@ -25,8 +25,12 @@ class AddNewKeyModal extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: 20),
-            const PlainModelSelector(),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              child: const PlainModelSelector(),
+            ),
+            _ModaltextField()
           ],
         ),
       ),
@@ -55,10 +59,10 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
     final availableOptions = onlineModels.keys.toList();
 
     return Container(
-      width: 300,
+      width: 400,
       height: 50,
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1C1E),
+        color: const Color(0xFF1E2733),
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(
           color: const Color(0xFF1E2733),
@@ -142,4 +146,20 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
       ),
     );
   }
+}
+
+Widget _ModaltextField() {
+  return Container(
+    width: 400,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10), color: Colors.black),
+    height: 40,
+    child: Center(
+      child: TextField(
+        decoration: InputDecoration(
+          border: InputBorder.none,
+        ),
+      ),
+    ),
+  );
 }

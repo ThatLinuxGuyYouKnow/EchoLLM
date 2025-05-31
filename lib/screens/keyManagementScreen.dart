@@ -53,7 +53,7 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
       body: ModelKeyMap.isEmpty
           ? _buildEmptyState()
           : ListView.builder(
-              padding: const EdgeInsets.only(bottom: 80), // Add padding for FAB
+              padding: const EdgeInsets.only(bottom: 80),
               itemCount: modelKeyEntries.length,
               itemBuilder: (context, index) {
                 final entry = modelKeyEntries[index];
@@ -164,12 +164,10 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
               icon: const Icon(Icons.more_vert, color: Colors.white),
               color: const Color(0xFF2A2A2E),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                      10)), // Updated to 10 for consistency
+                  borderRadius: BorderRadius.circular(10)),
               onSelected: (value) {
                 switch (value) {
                   case 'edit':
-                    // TODO: Add edit logic
                     break;
                   case 'delete':
                     _showDeleteConfirmation(context, apikey);
@@ -275,8 +273,7 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
               style: TextButton.styleFrom(
                 backgroundColor: Colors.redAccent.withOpacity(0.8),
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(8), // Slightly smaller for buttons
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
               child: Text('Delete',
@@ -291,8 +288,7 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
                     ),
                     backgroundColor: Colors.redAccent.withOpacity(0.8),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          10), // Updated to 10 for consistency
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     behavior: SnackBarBehavior.floating,
                     margin: const EdgeInsets.all(16),
