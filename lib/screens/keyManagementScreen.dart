@@ -1,5 +1,6 @@
 import 'package:echo_llm/dataHandlers/heyHelper.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
+import 'package:echo_llm/widgets/modals/addNewKeyModal.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -89,7 +90,10 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
             child: InkWell(
               borderRadius: BorderRadius.circular(10),
               onTap: () {
-                // Add new key logic
+                showDialog(
+                  context: context,
+                  builder: (context) => const AddNewKeyModal(),
+                );
               },
               child: Padding(
                 padding:
