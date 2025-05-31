@@ -11,26 +11,76 @@ class AddNewKeyModal extends StatelessWidget {
       backgroundColor: const Color(0xFF1E2733),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
+        side: BorderSide(
+          color: Colors.blue.withOpacity(0.3),
+          width: 1.0,
+        ),
       ),
+      elevation: 10,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Add a new key',
-              style: GoogleFonts.ubuntu(
-                color: Colors.white,
-                fontSize: 18,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Add a new key',
+                  style: GoogleFonts.ubuntu(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.close, color: Colors.grey[500]),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
+            const Text(
+              'Select Model',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
-              child: const PlainModelSelector(),
+            const SizedBox(height: 8),
+            const PlainModelSelector(),
+            const SizedBox(height: 20),
+            const Text(
+              'API Key',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-            _ModaltextField()
+            const SizedBox(height: 8),
+            const _ModaltextField(),
+            const SizedBox(height: 25),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _consentButton(
+                  buttonText: 'Cancel',
+                  onPressed: () => Navigator.of(context).pop(),
+                  buttonColor: Colors.transparent,
+                  textColor: Colors.grey[400]!,
+                ),
+                const SizedBox(width: 10),
+                _consentButton(
+                  buttonText: 'Save Key',
+                  onPressed: () {},
+                  buttonColor: const Color(0xFF4C83D1),
+                  textColor: Colors.white,
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -62,19 +112,12 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
       width: 400,
       height: 50,
       decoration: BoxDecoration(
-        color: const Color(0xFF1E2733),
+        color: const Color(0xFF2A3441),
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(
-          color: const Color(0xFF1E2733),
-          width: 2,
+          color: const Color(0xFF3A4A5F),
+          width: 1.5,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.4),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
-          ),
-        ],
       ),
       child: Material(
         color: Colors.transparent,
@@ -85,14 +128,14 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
             isExpanded: true,
             icon: Icon(
               Icons.arrow_drop_down,
-              color: const Color(0xFF1E2733),
-              size: 30,
+              color: Colors.cyanAccent[100],
+              size: 28,
             ),
-            dropdownColor: const Color.fromARGB(255, 18, 29, 43),
+            dropdownColor: const Color(0xFF1E2733),
             borderRadius: BorderRadius.circular(10.0),
             elevation: 8,
             style: GoogleFonts.ubuntu(
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.w500,
             ),
@@ -105,9 +148,7 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
                   child: Text(
                     option,
                     style: GoogleFonts.ubuntu(
-                      color: isSelected
-                          ? const Color.fromARGB(255, 168, 174, 180)
-                          : Colors.white.withOpacity(0.85),
+                      color: isSelected ? Colors.cyanAccent[100] : Colors.white,
                       fontWeight: FontWeight.normal,
                       fontSize: 14,
                     ),
@@ -126,7 +167,7 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
                 return Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
+                    padding: const EdgeInsets.only(left: 12.0),
                     child: Text(
                       item,
                       style: GoogleFonts.ubuntu(
@@ -148,17 +189,62 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
   }
 }
 
-Widget _ModaltextField() {
-  return Container(
-    width: 400,
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10), color: Colors.black),
-    height: 40,
-    child: Center(
-      child: TextField(
-        decoration: InputDecoration(
-          border: InputBorder.none,
+class _ModaltextField extends StatelessWidget {
+  const _ModaltextField();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 400,
+      height: 50,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: const Color(0xFF2A3441),
+        border: Border.all(
+          color: const Color(0xFF3A4A5F),
+          width: 1.5,
         ),
+      ),
+      child: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12.0),
+        child: TextField(
+          style: TextStyle(color: Colors.white, fontSize: 15),
+          obscureText: true,
+          obscuringCharacter: '•',
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: 'Enter your API key...',
+            hintStyle: TextStyle(color: Colors.grey),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Widget _consentButton({
+  required String buttonText,
+  required Function() onPressed,
+  required Color buttonColor,
+  Color textColor = Colors.white,
+}) {
+  return ElevatedButton(
+    onPressed: onPressed,
+    style: ElevatedButton.styleFrom(
+      backgroundColor: buttonColor,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: buttonColor == Colors.transparent
+            ? BorderSide(color: Colors.blue.withOpacity(0.4))
+            : BorderSide.none,
+      ),
+    ),
+    child: Text(
+      buttonText,
+      style: GoogleFonts.ubuntu(
+        color: textColor,
+        fontWeight: FontWeight.w500,
       ),
     ),
   );
