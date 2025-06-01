@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,10 +10,26 @@ class Openaihelper {
   Openaihelper(
       {required this.apikey, required this.modelSlug, required this.context});
 
-  getResponse({required String prompt, required String history}) async {
+  getResponse({required String prompt, required List history}) async {
     final response = await http.post(
-        Uri.parse('https://api.openai.com/v1/responses'),
-        headers: {'Content-type': 'application/json'},
-        body: {});
+      Uri.parse('https://api.openai.com/v1/responses'),
+      headers: {'Content-type': 'application/json'},
+      body: jsonEncode({
+        'input': [
+          ...history.map((entry) => {
+                'role': entry['role'],
+                'parts': [
+                  {'text': entry['content']}
+                ]
+              }),
+          {
+            'role': 'user',
+            'parts': [
+              {'text': prompt}
+            ]
+          }
+        ]
+      }),
+    );
   }
 }
