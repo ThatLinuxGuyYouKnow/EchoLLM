@@ -14,8 +14,12 @@ class Openaihelper {
   getResponse({required String prompt, required List history}) async {
     final response = await http.post(
       Uri.parse('https://api.openai.com/v1/responses'),
-      headers: {'Content-type': 'application/json'},
+      headers: {
+        'Content-type': 'application/json',
+        "Authorization": "Bearer $apikey"
+      },
       body: jsonEncode({
+        'model': modelSlug,
         'input': [
           ...history.map((entry) => {
                 'role': entry['role'],
@@ -81,6 +85,7 @@ class Openaihelper {
         return null;
 
       default:
+        print(response.toString());
         showCustomToast(
           context,
           message: 'Unexpected error: ${response.statusCode}',
