@@ -1,4 +1,3 @@
-// gemini_helper.dart
 import 'dart:convert';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
