@@ -10,14 +10,14 @@ class ApiKey {
   final String id;
   String name;
   String serviceName;
-  String modelName;
+  String modelSlug;
   String keyValue;
 
   ApiKey({
     required this.id,
     required this.name,
     required this.serviceName,
-    required this.modelName,
+    required this.modelSlug,
     required this.keyValue,
   });
 }
@@ -61,7 +61,7 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
                   id: entry.key,
                   name: entry.key,
                   serviceName: _deriveServiceName(entry.key),
-                  modelName: entry.key,
+                  modelSlug: entry.key,
                   keyValue: entry.value,
                 );
                 return _buildApiKeyCard(apikey: apiKey);
@@ -237,6 +237,7 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
 
   Future<void> _showDeleteConfirmation(
       BuildContext context, ApiKey apiKey) async {
+    final modelName = apiKey.serviceName;
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // User must tap button
@@ -252,8 +253,7 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text(
-                    'Are you sure you want to delete the key named "${apiKey.name}" for ${apiKey.serviceName}?',
+                Text('Are you sure you want to delete the key for${modelName}?',
                     style: GoogleFonts.ubuntu(color: Colors.grey[300])),
                 Text('This action cannot be undone.',
                     style: GoogleFonts.ubuntu(
@@ -280,20 +280,16 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
                   style: GoogleFonts.ubuntu(color: Colors.white)),
               onPressed: () {
                 Navigator.of(dialogContext).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'API Key "${apiKey.name}" deleted.',
-                      style: GoogleFonts.ubuntu(),
-                    ),
-                    backgroundColor: Colors.redAccent.withOpacity(0.8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    behavior: SnackBarBehavior.floating,
-                    margin: const EdgeInsets.all(16),
-                  ),
-                );
+                try {
+                  deleteKeyForModel(modelSlug: apiKey.modelSlug);
+                  showCustomToast(context,
+                      message: 'Deleted Key for $modelName');
+                } catch (error) {
+                  showCustomToast(context,
+                      message:
+                          'An error occured while tring to delete this key',
+                      type: ToastMessageType.error);
+                }
               },
             ),
           ],
