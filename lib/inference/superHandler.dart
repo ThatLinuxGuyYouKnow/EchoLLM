@@ -1,5 +1,6 @@
+import 'package:echo_llm/dataHandlers/hive/ApikeyHelper.dart';
 import 'package:echo_llm/inference/geminiHelper.dart';
-import 'package:echo_llm/logic/geminiHelper.dart';
+import 'package:echo_llm/inference/openaiHelper.dart';
 import 'package:echo_llm/mappings/modelClassMapping.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 
@@ -60,7 +61,10 @@ class InferenceSuperClass {
           );
 
         case 'openai':
-          throw UnimplementedError('OpenAI support not yet implemented');
+          final openai = Openaihelper(
+              apikey: apiKey, modelSlug: modelSlug, context: context);
+          return await openai.getResponse(
+              prompt: prompt, history: formattedHistory);
 
         case 'x-ai':
           // Implement X-AI helper

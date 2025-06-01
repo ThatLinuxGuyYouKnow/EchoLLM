@@ -34,3 +34,8 @@ class ApiKeyHelper {
     return result;
   }
 }
+
+deleteKeyForModel({required String modelSlug}) {
+  final box = GetStorage('api-keys');
+  box.remove(modelSlug);
+}

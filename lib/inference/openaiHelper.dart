@@ -35,7 +35,7 @@ class Openaihelper {
     return _handleResponse(response);
   }
 
-  String? _handleResponse(http.Response response) {
+  Future<String?> _handleResponse(http.Response response) async {
     switch (response.statusCode) {
       case 200:
         final data = jsonDecode(response.body) as Map<String, dynamic>;
