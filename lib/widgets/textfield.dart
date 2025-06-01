@@ -1,5 +1,5 @@
 import 'package:echo_llm/dataHandlers/hive/chatStrorage.dart';
-import 'package:echo_llm/dataHandlers/superHandler.dart';
+import 'package:echo_llm/inference/superHandler.dart';
 import 'package:echo_llm/logic/convertMessageState.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
