@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'package:echo_llm/mappings/modelClassMapping.dart';
+import 'package:echo_llm/mappings/modelSlugMappings.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class XaiHelper {
@@ -64,11 +67,17 @@ class XaiHelper {
 
         return content;
       case 400:
+        debugPrint(
+            'OpenAI API Error: ${response.statusCode}\n${response.body}');
         showCustomToast(
           context,
-          message: 'Bad request – please check your prompt format',
+          message: 'Invalid API Key for ${onlineModels.entries.firstWhere(
+                (entry) => entry.value == modelSlug,
+                orElse: () => const MapEntry('Unknown Model', ''),
+              ).key}',
           type: ToastMessageType.error,
         );
+
         return null;
 
       case 401:
@@ -84,6 +93,8 @@ class XaiHelper {
       case 502:
       case 503:
       case 504:
+        debugPrint(
+            'OpenAI API Error: ${response.statusCode}\n${response.body}');
         showCustomToast(
           context,
           message: 'Server error – please try again later',
@@ -92,11 +103,8 @@ class XaiHelper {
         return null;
 
       default:
-        showCustomToast(
-          context,
-          message: 'Error ${response.statusCode}: ${response.reasonPhrase}',
-          type: ToastMessageType.error,
-        );
+        debugPrint(
+            'OpenAI API Error: ${response.statusCode}\n${response.body}');
         return null;
     }
   }

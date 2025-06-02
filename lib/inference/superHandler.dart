@@ -1,6 +1,7 @@
 import 'package:echo_llm/dataHandlers/hive/ApikeyHelper.dart';
 import 'package:echo_llm/inference/geminiHelper.dart';
 import 'package:echo_llm/inference/openaiHelper.dart';
+import 'package:echo_llm/inference/x-ai_helper.dart';
 import 'package:echo_llm/mappings/modelClassMapping.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 
@@ -76,9 +77,13 @@ class InferenceSuperClass {
           }
           return modelResponse;
         case 'x-ai':
-          // Implement X-AI helper
-          throw UnimplementedError('X-AI support not yet implemented');
-
+          final xai =
+              XaiHelper(apiKey: apiKey, modelSlug: modelSlug, context: context);
+          modelResponse = await xai.getResponse(prompt: prompt) ?? '';
+          if (modelResponse.isEmpty) {
+            messageState.deleteUserLastMessage();
+          }
+          return modelResponse;
         default:
           throw Exception('Unknown model type: $modelType');
       }
