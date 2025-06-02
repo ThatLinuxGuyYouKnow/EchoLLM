@@ -38,7 +38,7 @@ class InferenceSuperClass {
 
       final modelType = modelClassMapping[modelSlug];
       final apiKey = apikey.readKey(modelSlugNotName: modelSlug);
-
+      String modelResponse = '';
       if (apiKey.isEmpty) {
         showCustomToast(
           context,
@@ -55,17 +55,26 @@ class InferenceSuperClass {
             apiKey: apiKey,
             context: context,
           );
-          return await gemini.getResponse(
-            prompt: prompt,
-            history: formattedHistory,
-          );
+          modelResponse = await gemini.getResponse(
+                prompt: prompt,
+                history: formattedHistory,
+              ) ??
+              '';
+          if (modelResponse.isEmpty) {
+            messageState.deleteUserLastMessage();
+          }
+          return modelResponse;
 
         case 'openai':
           final openai = Openaihelper(
               apikey: apiKey, modelSlug: modelSlug, context: context);
-          return await openai.getResponse(
-              prompt: prompt, history: formattedHistory);
-
+          modelResponse = await openai.getResponse(
+                  prompt: prompt, history: formattedHistory) ??
+              '';
+          if (modelResponse.isEmpty) {
+            messageState.deleteUserLastMessage();
+          }
+          return modelResponse;
         case 'x-ai':
           // Implement X-AI helper
           throw UnimplementedError('X-AI support not yet implemented');
