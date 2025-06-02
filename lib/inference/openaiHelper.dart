@@ -11,29 +11,26 @@ class Openaihelper {
   Openaihelper(
       {required this.apikey, required this.modelSlug, required this.context});
 
-  getResponse({required String prompt, required List history}) async {
+  Future<String?> getResponse(
+      {required String prompt,
+      required List<Map<String, dynamic>> history}) async {
+    final messages = [
+      ...history.map((entry) => {
+            'role': entry['role'],
+            'content': entry['content'],
+          }),
+      {'role': 'user', 'content': prompt}
+    ];
+
     final response = await http.post(
-      Uri.parse('https://api.openai.com/v1/responses'),
+      Uri.parse('https://api.openai.com/v1/chat/completions'),
       headers: {
-        'Content-type': 'application/json',
-        "Authorization": "Bearer $apikey"
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $apikey',
       },
       body: jsonEncode({
         'model': modelSlug,
-        'input': [
-          ...history.map((entry) => {
-                'role': entry['role'],
-                'parts': [
-                  {'text': entry['content']}
-                ]
-              }),
-          {
-            'role': 'user',
-            'parts': [
-              {'text': prompt}
-            ]
-          }
-        ]
+        'messages': messages,
       }),
     );
     return _handleResponse(response);
@@ -43,52 +40,64 @@ class Openaihelper {
     switch (response.statusCode) {
       case 200:
         final data = jsonDecode(response.body) as Map<String, dynamic>;
-        final candidates = data['content'] as List?;
+        final choices = data['choices'] as List?;
 
-        if (candidates == null || candidates.isEmpty) {
-          throw Exception('No response candidates found');
+        if (choices == null || choices.isEmpty) {
+          throw Exception('No response choices found');
         }
 
-        final firstCandidate = candidates.first as Map<String, dynamic>;
-        final content = firstCandidate['content'] as Map<String, dynamic>;
-        final parts = content['parts'] as List;
-
-        if (parts.isEmpty) {
-          throw Exception('No content parts found');
-        }
-
-        return parts.first['text'] as String?;
+        final firstChoice = choices.first as Map<String, dynamic>;
+        final message = firstChoice['message'] as Map<String, dynamic>;
+        return message['content'] as String?;
 
       case 400:
+        debugPrint(
+            'OpenAI API Error: ${response.statusCode}\n${response.body}');
         showCustomToast(
           context,
-          message: "Bad request - check your input",
+          message: "Bad request ${response.body} - check your input please",
           type: ToastMessageType.error,
         );
         return null;
 
-      case 403:
+      case 401:
+        debugPrint(
+            'OpenAI API Error: ${response.statusCode}\n${response.body}');
         showCustomToast(
           context,
-          message: "Invalid API key for Gemini",
+          message: "Invalid API key for OpenAI",
+          type: ToastMessageType.error,
+        );
+        return null;
+
+      case 429:
+        debugPrint(
+            'OpenAI API Error: ${response.statusCode}\n${response.body}');
+        showCustomToast(
+          context,
+          message: "Rate limit exceeded",
           type: ToastMessageType.error,
         );
         return null;
 
       case 500:
+      case 503:
       case 504:
+        debugPrint(
+            'OpenAI API Error: ${response.statusCode}\n${response.body}');
         showCustomToast(
           context,
-          message: "Server error - try shortening your prompt",
+          message: "Server error - try again later",
           type: ToastMessageType.error,
         );
         return null;
 
       default:
-        print(response.toString());
+        debugPrint(
+            'OpenAI API Error: ${response.statusCode}\n${response.body}');
         showCustomToast(
           context,
-          message: 'Unexpected error: ${response.statusCode}',
+          message: 'API Error: ${response.statusCode}',
           type: ToastMessageType.error,
         );
         return null;
