@@ -141,9 +141,13 @@ class _ModelTileState extends State<ModelTile> {
                   GestureDetector(
                     onTap: () {
                       if (!widget.isAvailable) {
-                        _showApiKeyModal(
+                        showDialog(
+                          context: context,
+                          builder: (_) => EnterApiKeyModal(
                             modelName: widget.tileTitle,
-                            modelSlug: widget.modelSlug);
+                            modelSlug: widget.modelSlug,
+                          ),
+                        );
                       }
                     },
                     child: Icon(
