@@ -87,6 +87,7 @@ class SettingsCollapsedTile extends StatefulWidget {
 
 class _SettingsCollapsedTileState extends State<SettingsCollapsedTile> {
   bool isHovered = false;
+
   Widget build(BuildContext context) {
     final screenState = Provider.of<Screenstate>(context);
     return GestureDetector(
@@ -101,8 +102,11 @@ class _SettingsCollapsedTileState extends State<SettingsCollapsedTile> {
         child: Container(
           height: 50,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.black..withOpacity(isHovered ? 0.7 : 0.1)),
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.black.withOpacity(
+              isHovered ? 0.7 : 0.2,
+            ),
+          ),
           child: Center(
             child: Icon(
               Icons.precision_manufacturing,
