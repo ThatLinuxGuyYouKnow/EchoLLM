@@ -1,21 +1,16 @@
 import 'package:echo_llm/mappings/modelAvailabilityMapping.dart';
 import 'package:echo_llm/mappings/modelClassMapping.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
-import 'package:echo_llm/state_management/apikeyModalState.dart';
+
 import 'package:echo_llm/widgets/modals/enterApiKeyModal.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 class ModelScreen extends StatelessWidget {
   const ModelScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-    final modalState = Provider.of<ApikeyModalState>(context);
-
     return Scaffold(
       backgroundColor: Colors.black,
       body: Padding(
@@ -68,7 +63,6 @@ class _ModelTileState extends State<ModelTile> {
 
   @override
   Widget build(BuildContext context) {
-    final modalState = Provider.of<ApikeyModalState>(context);
     return MouseRegion(
       onHover: (event) {
         setState(() {
@@ -180,9 +174,4 @@ String getModelIcon({required String modelSlug}) {
   } else {
     return 'assets/model_icons/xai-icon.png';
   }
-}
-
-Widget _showApiKeyModal(
-    {required String modelName, required String modelSlug}) {
-  return EnterApiKeyModal(modelName: modelName, modelSlug: modelSlug);
 }
