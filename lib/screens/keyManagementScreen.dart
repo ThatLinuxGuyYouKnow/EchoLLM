@@ -194,18 +194,6 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
                   ),
                 ),
                 PopupMenuItem(
-                  value: 'edit',
-                  child: Row(
-                    children: [
-                      const Icon(Icons.edit_outlined,
-                          size: 18, color: Colors.white),
-                      const SizedBox(width: 10),
-                      Text('Edit',
-                          style: GoogleFonts.ubuntu(color: Colors.white)),
-                    ],
-                  ),
-                ),
-                PopupMenuItem(
                   value: 'delete',
                   child: Row(
                     children: [
