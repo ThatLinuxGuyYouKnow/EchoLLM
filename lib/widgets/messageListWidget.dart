@@ -32,12 +32,9 @@ class Messagelistwidget extends StatelessWidget {
                   final messageIndex = messageMap.keys.first;
                   final messageText = messageMap[messageIndex]!;
 
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
-                    child: MessageBubble(
-                      messageText: messageText,
-                      isModelResponse: messageIndex % 2 != 0,
-                    ),
+                  return MessageBubble(
+                    messageText: messageText,
+                    isModelResponse: messageIndex % 2 != 0,
                   );
                 }
                 return const Padding(
