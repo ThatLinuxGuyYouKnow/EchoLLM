@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,6 +24,7 @@ class MessageBubble extends StatefulWidget {
 class _MessageBubbleState extends State<MessageBubble> {
   @override
   bool isHovered = false;
+  bool hasCopiedMessageText = false;
   Widget build(BuildContext context) {
     final modelBubbleColor = const Color(0xFF2A3441);
     final userBubbleColor = const Color(0xFF427BBF);
@@ -147,23 +149,44 @@ class _MessageBubbleState extends State<MessageBubble> {
                         style: baseTextStyle,
                       ),
               )),
-          isHovered
-              ? Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: widget.isModelResponse
-                        ? MainAxisAlignment.start
-                        : MainAxisAlignment.end,
-                    children: [
-                      Icon(
-                        Icons.copy_rounded,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: widget.isModelResponse
+                  ? MainAxisAlignment.start
+                  : MainAxisAlignment.end,
+              children: [
+                AnimatedOpacity(
+                  opacity: isHovered ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 200),
+                  child: IgnorePointer(
+                    ignoring: !isHovered,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          hasCopiedMessageText = true;
+                        });
+                        Timer(const Duration(seconds: 1), () {
+                          setState(() {
+                            hasCopiedMessageText = false;
+                          });
+                        });
+                        Clipboard.setData(
+                            ClipboardData(text: widget.messageText));
+                      },
+                      child: Icon(
+                        hasCopiedMessageText
+                            ? Icons.check_circle
+                            : Icons.copy_rounded,
                         color: Colors.white,
                         size: 17,
                       ),
-                    ],
+                    ),
                   ),
-                )
-              : SizedBox.shrink(),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
