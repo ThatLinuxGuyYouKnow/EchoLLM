@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,33 +21,8 @@ class MessageBubble extends StatefulWidget {
 }
 
 class _MessageBubbleState extends State<MessageBubble> {
-  bool isHovered = false;
-  bool isCopied = false;
-  Timer? _copiedTimer;
-
   @override
-  void dispose() {
-    _copiedTimer?.cancel();
-    super.dispose();
-  }
-
-  void _copyToClipboard() {
-    Clipboard.setData(ClipboardData(text: widget.messageText));
-    setState(() => isCopied = true);
-
-    _copiedTimer?.cancel();
-    _copiedTimer = Timer(const Duration(seconds: 2), () {
-      if (mounted) setState(() => isCopied = false);
-    });
-
-    showCustomToast(
-      context,
-      message: "Copied to clipboard",
-      type: ToastMessageType.success,
-      duration: const Duration(seconds: 1),
-    );
-  }
-
+  bool isHovered = false;
   Widget build(BuildContext context) {
     final modelBubbleColor = const Color(0xFF2A3441);
     final userBubbleColor = const Color(0xFF427BBF);
@@ -108,41 +82,48 @@ class _MessageBubbleState extends State<MessageBubble> {
       ),
       blockquotePadding: const EdgeInsets.all(10.0),
     );
+
     return MouseRegion(
-      onEnter: (_) => setState(() => isHovered = true),
-      onExit: (_) => setState(() => isHovered = false),
-      child: GestureDetector(
-        onTap: _copyToClipboard,
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-          child: Stack(
-            children: [
-              Container(
+      onEnter: (_) => setState(() {
+        isHovered = true;
+      }),
+      onExit: (_) => setState(() {
+        isHovered = false;
+      }),
+      child: Column(
+        children: [
+          Align(
+              alignment: widget.isModelResponse
+                  ? Alignment.centerLeft
+                  : Alignment.centerRight,
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                 padding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                constraints: const BoxConstraints(maxWidth: 700),
-                decoration: BoxDecoration(
-                  color: widget.isModelResponse
-                      ? modelBubbleColor
-                      : userBubbleColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: const Radius.circular(16),
-                    topRight: const Radius.circular(16),
-                    bottomLeft: widget.isModelResponse
-                        ? const Radius.circular(0)
-                        : const Radius.circular(16),
-                    bottomRight: widget.isModelResponse
-                        ? const Radius.circular(16)
-                        : const Radius.circular(0),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    )
-                  ],
+                constraints: const BoxConstraints(
+                  maxWidth: 700,
                 ),
+                decoration: BoxDecoration(
+                    color: widget.isModelResponse
+                        ? modelBubbleColor
+                        : userBubbleColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: const Radius.circular(16),
+                      topRight: const Radius.circular(16),
+                      bottomLeft: widget.isModelResponse
+                          ? const Radius.circular(0)
+                          : const Radius.circular(16),
+                      bottomRight: widget.isModelResponse
+                          ? const Radius.circular(16)
+                          : const Radius.circular(0),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      )
+                    ]),
                 child: widget.isModelResponse
                     ? MarkdownBody(
                         data: widget.messageText,
@@ -165,43 +146,25 @@ class _MessageBubbleState extends State<MessageBubble> {
                         widget.messageText,
                         style: baseTextStyle,
                       ),
-              ),
-
-              // Copy button overlay
-              if (isHovered)
-                Positioned(
-                  top: 8,
-                  right: widget.isModelResponse ? 8 : null,
-                  left: widget.isModelResponse ? null : 8,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          isCopied ? Icons.check : Icons.content_copy,
-                          size: 16,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          isCopied ? "Copied!" : "Copy",
-                          style: GoogleFonts.ubuntu(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
+              )),
+          isHovered
+              ? Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: widget.isModelResponse
+                        ? MainAxisAlignment.start
+                        : MainAxisAlignment.end,
+                    children: [
+                      Icon(
+                        Icons.copy_rounded,
+                        color: Colors.white,
+                        size: 17,
+                      ),
+                    ],
                   ),
-                ),
-            ],
-          ),
-        ),
+                )
+              : SizedBox.shrink(),
+        ],
       ),
     );
   }
