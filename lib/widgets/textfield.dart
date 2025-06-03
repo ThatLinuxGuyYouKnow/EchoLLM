@@ -26,8 +26,7 @@ class ChatTextField extends StatelessWidget {
     final existingID = messageState.chatID;
     final _shouldSendOnEnter = Provider.of<CONFIG>(context).shouldSendOnEnter;
     final FocusNode textFieldFocusNode = FocusNode();
-    print(
-        'send on enter' + _shouldSendOnEnter.toString()); // this prints as true
+
     Future<void> sendMessage() async {
       final userMessage = chatController.text.trim();
       if (userMessage.isEmpty) return;
@@ -38,8 +37,8 @@ class ChatTextField extends StatelessWidget {
       messageState.setProcessing(true);
 
       try {
-        final response = await modelInference.runInference(userMessage);
         chatController.clear();
+        final response = await modelInference.runInference(userMessage);
 
         if (response != null && response.isNotEmpty) {
           messageState.addMessage(message: response);
@@ -56,6 +55,8 @@ class ChatTextField extends StatelessWidget {
           if (existingID.isEmpty) {
             messageState.setCurrentChatID(chatId);
           }
+        } else if (response != null && response.isEmpty) {
+          chatController.value = TextEditingValue(text: userMessage);
         }
       } catch (e) {
         showCustomToast(context, message: 'Error $e');
