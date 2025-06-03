@@ -154,8 +154,7 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
         color: _cardBackgroundColor,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(10.0), // Updated to 10.0 for consistency
+          borderRadius: BorderRadius.circular(10.0),
         ),
         child: Padding(
           padding: const EdgeInsets.only(bottom: 12.0, top: 8.0),
