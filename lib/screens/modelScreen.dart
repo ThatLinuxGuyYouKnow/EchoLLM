@@ -16,54 +16,32 @@ class ModelScreen extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final modalState = Provider.of<ApikeyModalState>(context);
 
-    return Stack(
-      children: [
-        Scaffold(
-          backgroundColor: Colors.black,
-          body: Padding(
-            padding: const EdgeInsets.all(16),
-            child: GridView.builder(
-              itemCount: onlineModels.length,
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 200,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 1.2,
-              ),
-              itemBuilder: (context, index) {
-                final modelName = onlineModels.keys.elementAt(index);
-                final slug = onlineModels[modelName] ?? '';
-                final isAvailable = onlineModelAvailability[slug] ?? false;
-                String modelIcon = getModelIcon(modelSlug: slug);
-                return ModelTile(
-                  modelFamilyIconPath: modelIcon,
-                  modelSlug: slug,
-                  tileTitle: modelName,
-                  isAvailable: isAvailable,
-                );
-              },
-            ),
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: GridView.builder(
+          itemCount: onlineModels.length,
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 1.2,
           ),
+          itemBuilder: (context, index) {
+            final modelName = onlineModels.keys.elementAt(index);
+            final slug = onlineModels[modelName] ?? '';
+            final isAvailable = onlineModelAvailability[slug] ?? false;
+            String modelIcon = getModelIcon(modelSlug: slug);
+            return ModelTile(
+              modelFamilyIconPath: modelIcon,
+              modelSlug: slug,
+              tileTitle: modelName,
+              isAvailable: isAvailable,
+            );
+          },
         ),
-        modalState.displayModal
-            ? GestureDetector(
-                onTap: () {
-                  modalState.setModalToHidden();
-                },
-                child: Container(
-                  height: screenHeight,
-                  width: screenWidth,
-                  color: Colors.black.withOpacity(0.5),
-                  child: Center(
-                    child: EnterApiKeyModal(
-                      modelName: modalState.modelName,
-                      modelSlug: modalState.modelSlug,
-                    ),
-                  ),
-                ),
-              )
-            : SizedBox.shrink()
-      ],
+      ),
     );
   }
 }
@@ -163,9 +141,9 @@ class _ModelTileState extends State<ModelTile> {
                   GestureDetector(
                     onTap: () {
                       if (!widget.isAvailable) {
-                        modalState.setModelName(modelName: widget.tileTitle);
-                        modalState.setModelSlug(modelSlug: widget.modelSlug);
-                        modalState.setModalToVisible();
+                        _showApiKeyModal(
+                            modelName: widget.tileTitle,
+                            modelSlug: widget.modelSlug);
                       }
                     },
                     child: Icon(
@@ -180,9 +158,7 @@ class _ModelTileState extends State<ModelTile> {
                   ),
                 ],
               ),
-              // Add some spacing if needed
               const Spacer(),
-              // Add any additional content here
             ],
           ),
         ),
@@ -200,4 +176,9 @@ String getModelIcon({required String modelSlug}) {
   } else {
     return 'assets/model_icons/xai-icon.png';
   }
+}
+
+Widget _showApiKeyModal(
+    {required String modelName, required String modelSlug}) {
+  return EnterApiKeyModal(modelName: modelName, modelSlug: modelSlug);
 }

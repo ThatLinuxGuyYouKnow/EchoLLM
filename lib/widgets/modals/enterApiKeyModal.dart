@@ -1,83 +1,114 @@
 import 'package:echo_llm/dataHandlers/hive/ApikeyHelper.dart';
-import 'package:echo_llm/state_management/apikeyModalState.dart';
+import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 class EnterApiKeyModal extends StatefulWidget {
   final String modelName;
   final String modelSlug;
 
-  const EnterApiKeyModal(
-      {super.key, required this.modelName, required this.modelSlug});
+  const EnterApiKeyModal({
+    super.key,
+    required this.modelName,
+    required this.modelSlug,
+  });
 
   @override
   State<EnterApiKeyModal> createState() => _EnterApiKeyModalState();
 }
 
 class _EnterApiKeyModalState extends State<EnterApiKeyModal> {
+  final TextEditingController _apiKeyController = TextEditingController();
+  final ApiKeyHelper _apiKeyHelper = ApiKeyHelper();
+  bool _isSaving = false;
+
+  @override
+  void dispose() {
+    _apiKeyController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final modalState = Provider.of<ApikeyModalState>(context);
-    final focusNode = FocusNode();
-    final apikey = ApiKeyHelper();
-    final rawApiKey = TextEditingController();
-
     return Dialog(
-      child: Container(
-        width: 500,
+      backgroundColor: const Color(0xFF1E2733),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.blue.withOpacity(0.3), width: 1),
+      ),
+      child: Padding(
         padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: const Color(0xFF1E2733),
-          borderRadius: BorderRadius.circular(12),
-        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Enter your API key for ${widget.modelName}',
-                style: GoogleFonts.ubuntu(
-                  color: Colors.white,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w500,
-                ),
+            Text(
+              'Enter your API key for ${widget.modelName}',
+              style: GoogleFonts.ubuntu(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
               ),
             ),
             const SizedBox(height: 20),
-            Container(
-              height: 50,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 26, 31, 37),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: TextField(
-                controller: rawApiKey,
-                style: TextStyle(color: Colors.grey[50]),
-                cursorColor: Colors.white70,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 14),
-                  border: InputBorder.none,
-                  hintText: 'Paste your API key here...',
-                  hintStyle: const TextStyle(color: Colors.white38),
+            TextField(
+              controller: _apiKeyController,
+              obscureText: true,
+              obscuringCharacter: '•',
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: const Color(0xFF2A3441),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
                 ),
+                hintText: 'Paste your API key here...',
+                hintStyle: const TextStyle(color: Colors.grey),
+                contentPadding: const EdgeInsets.all(16),
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 24),
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Spacer(),
-                ModalButton(
-                  isEnabled: rawApiKey.text.length > 5,
-                  buttonText: 'Save',
-                  onPressed: () async {
-                    final successfulSave = await apikey.storeKey(
-                        modelSlugNotName: widget.modelSlug,
-                        apiKey: rawApiKey.text.trim());
-                    if (successfulSave) {}
-                  },
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    'Cancel',
+                    style: GoogleFonts.ubuntu(
+                      color: Colors.grey[400],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                ElevatedButton(
+                  onPressed: _isSaving ? null : _saveApiKey,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF4C83D1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                  ),
+                  child: _isSaving
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(
+                          'Save Key',
+                          style: GoogleFonts.ubuntu(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                 ),
               ],
             ),
@@ -86,52 +117,38 @@ class _EnterApiKeyModalState extends State<EnterApiKeyModal> {
       ),
     );
   }
-}
 
-class ModalButton extends StatefulWidget {
-  final String buttonText;
-  final Function() onPressed;
-  final bool isEnabled;
-  const ModalButton(
-      {required this.buttonText,
-      super.key,
-      required this.onPressed,
-      required this.isEnabled});
+  Future<void> _saveApiKey() async {
+    if (_apiKeyController.text.isEmpty) return;
 
-  @override
-  State<ModalButton> createState() => _ModalButtonState();
-}
+    setState(() => _isSaving = true);
 
-class _ModalButtonState extends State<ModalButton> {
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      child: GestureDetector(
-        onTap: () {
-          widget.onPressed();
-        },
-        child: AnimatedContainer(
-          duration: Duration(milliseconds: 150),
-          height: 40,
-          width: 110,
-          decoration: BoxDecoration(
-            color: widget.isEnabled
-                ? const Color(0xFF4C83D1)
-                : const Color.fromARGB(255, 15, 21, 29),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Center(
-            child: Text(
-              widget.buttonText,
-              style: GoogleFonts.ubuntu(
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+    try {
+      final successfulSave = await _apiKeyHelper.storeKey(
+        modelSlugNotName: widget.modelSlug,
+        apiKey: _apiKeyController.text.trim(),
+      );
+
+      if (mounted) {
+        if (successfulSave) {
+          showCustomToast(
+            context,
+            message: 'Saved Key for ${widget.modelName}',
+            type: ToastMessageType.success,
+          );
+          Navigator.pop(context);
+        } else {
+          showCustomToast(
+            context,
+            message: 'Failed to save key for ${widget.modelName}',
+            type: ToastMessageType.error,
+          );
+        }
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
+    }
   }
 }
-     // color: const Color(0xFF1E2733),
