@@ -22,7 +22,6 @@ class MessageBubble extends StatefulWidget {
 }
 
 class _MessageBubbleState extends State<MessageBubble> {
-  @override
   bool isHovered = false;
   bool hasCopiedMessageText = false;
   Widget build(BuildContext context) {
@@ -180,7 +179,9 @@ class _MessageBubbleState extends State<MessageBubble> {
                           hasCopiedMessageText
                               ? Icons.check_circle
                               : Icons.copy_rounded,
-                          color: Colors.white,
+                          color: hasCopiedMessageText
+                              ? Color(0xFF60A5FA)
+                              : Colors.white,
                           size: 17,
                         ),
                       ),
