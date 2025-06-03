@@ -24,17 +24,7 @@ class _EnterApiKeyModalState extends State<EnterApiKeyModal> {
     final apikey = ApiKeyHelper();
     final rawApiKey = TextEditingController();
 
-    return Focus(
-      autofocus: true,
-      focusNode: focusNode,
-      onKey: (node, event) {
-        if (event.logicalKey == LogicalKeyboardKey.escape &&
-            event is KeyDownEvent) {
-          modalState.setModalToHidden();
-          return KeyEventResult.handled;
-        }
-        return KeyEventResult.ignored;
-      },
+    return Dialog(
       child: Container(
         width: 500,
         padding: const EdgeInsets.all(24),
@@ -86,10 +76,7 @@ class _EnterApiKeyModalState extends State<EnterApiKeyModal> {
                     final successfulSave = await apikey.storeKey(
                         modelSlugNotName: widget.modelSlug,
                         apiKey: rawApiKey.text.trim());
-                    if (successfulSave) {
-                      Provider.of<ApikeyModalState>(context, listen: false)
-                          .setModalToHidden();
-                    }
+                    if (successfulSave) {}
                   },
                 ),
               ],
@@ -147,3 +134,4 @@ class _ModalButtonState extends State<ModalButton> {
     );
   }
 }
+     // color: const Color(0xFF1E2733),
