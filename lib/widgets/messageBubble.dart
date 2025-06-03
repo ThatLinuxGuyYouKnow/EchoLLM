@@ -6,7 +6,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MessageBubble extends StatelessWidget {
+class MessageBubble extends StatefulWidget {
   final String messageText;
   final bool isModelResponse;
 
@@ -17,6 +17,12 @@ class MessageBubble extends StatelessWidget {
   });
 
   @override
+  State<MessageBubble> createState() => _MessageBubbleState();
+}
+
+class _MessageBubbleState extends State<MessageBubble> {
+  @override
+  bool isHovered = false;
   Widget build(BuildContext context) {
     final modelBubbleColor = const Color(0xFF2A3441);
     final userBubbleColor = const Color(0xFF427BBF);
@@ -77,55 +83,81 @@ class MessageBubble extends StatelessWidget {
       blockquotePadding: const EdgeInsets.all(10.0),
     );
 
-    return Align(
-      alignment: isModelResponse ? Alignment.centerLeft : Alignment.centerRight,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        constraints: const BoxConstraints(
-          maxWidth: 700,
-        ),
-        decoration: BoxDecoration(
-            color: isModelResponse ? modelBubbleColor : userBubbleColor,
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(16),
-              topRight: const Radius.circular(16),
-              bottomLeft: isModelResponse
-                  ? const Radius.circular(0)
-                  : const Radius.circular(16),
-              bottomRight: isModelResponse
-                  ? const Radius.circular(16)
-                  : const Radius.circular(0),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              )
-            ]),
-        child: isModelResponse
-            ? MarkdownBody(
-                data: messageText,
-                styleSheet: markdownStyleSheet,
-                selectable: true,
-                onTapLink: (text, href, title) async {
-                  if (href != null) {
-                    final uri = Uri.tryParse(href);
-                    if (uri != null && await canLaunchUrl(uri)) {
-                      await launchUrl(uri);
-                    } else {
-                      showCustomToast(context,
-                          message: "Couldn't launch this url",
-                          type: ToastMessageType.error);
-                    }
-                  }
-                },
-              )
-            : SelectableText(
-                messageText,
-                style: baseTextStyle,
+    return MouseRegion(
+      onEnter: (_) => setState(() {
+        isHovered = true;
+      }),
+      onExit: (_) => setState(() {
+        isHovered = false;
+      }),
+      child: ListTile(
+        title: Align(
+            alignment: widget.isModelResponse
+                ? Alignment.centerLeft
+                : Alignment.centerRight,
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              constraints: const BoxConstraints(
+                maxWidth: 700,
               ),
+              decoration: BoxDecoration(
+                  color: widget.isModelResponse
+                      ? modelBubbleColor
+                      : userBubbleColor,
+                  borderRadius: BorderRadius.only(
+                    topLeft: const Radius.circular(16),
+                    topRight: const Radius.circular(16),
+                    bottomLeft: widget.isModelResponse
+                        ? const Radius.circular(0)
+                        : const Radius.circular(16),
+                    bottomRight: widget.isModelResponse
+                        ? const Radius.circular(16)
+                        : const Radius.circular(0),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    )
+                  ]),
+              child: widget.isModelResponse
+                  ? MarkdownBody(
+                      data: widget.messageText,
+                      styleSheet: markdownStyleSheet,
+                      selectable: true,
+                      onTapLink: (text, href, title) async {
+                        if (href != null) {
+                          final uri = Uri.tryParse(href);
+                          if (uri != null && await canLaunchUrl(uri)) {
+                            await launchUrl(uri);
+                          } else {
+                            showCustomToast(context,
+                                message: "Couldn't launch this url",
+                                type: ToastMessageType.error);
+                          }
+                        }
+                      },
+                    )
+                  : SelectableText(
+                      widget.messageText,
+                      style: baseTextStyle,
+                    ),
+            )),
+        subtitle: isHovered
+            ? Row(
+                mainAxisAlignment: widget.isModelResponse
+                    ? MainAxisAlignment.start
+                    : MainAxisAlignment.end,
+                children: [
+                  Icon(
+                    Icons.copy,
+                    color: Colors.white,
+                  ),
+                ],
+              )
+            : SizedBox.shrink(),
       ),
     );
   }
