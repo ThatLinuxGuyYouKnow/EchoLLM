@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,8 +22,33 @@ class MessageBubble extends StatefulWidget {
 }
 
 class _MessageBubbleState extends State<MessageBubble> {
-  @override
   bool isHovered = false;
+  bool isCopied = false;
+  Timer? _copiedTimer;
+
+  @override
+  void dispose() {
+    _copiedTimer?.cancel();
+    super.dispose();
+  }
+
+  void _copyToClipboard() {
+    Clipboard.setData(ClipboardData(text: widget.messageText));
+    setState(() => isCopied = true);
+
+    _copiedTimer?.cancel();
+    _copiedTimer = Timer(const Duration(seconds: 2), () {
+      if (mounted) setState(() => isCopied = false);
+    });
+
+    showCustomToast(
+      context,
+      message: "Copied to clipboard",
+      type: ToastMessageType.success,
+      duration: const Duration(seconds: 1),
+    );
+  }
+
   Widget build(BuildContext context) {
     final modelBubbleColor = const Color(0xFF2A3441);
     final userBubbleColor = const Color(0xFF427BBF);
@@ -82,26 +108,20 @@ class _MessageBubbleState extends State<MessageBubble> {
       ),
       blockquotePadding: const EdgeInsets.all(10.0),
     );
-
     return MouseRegion(
-      onEnter: (_) => setState(() {
-        isHovered = true;
-      }),
-      onExit: (_) => setState(() {
-        isHovered = false;
-      }),
-      child: ListTile(
-        title: Align(
-            alignment: widget.isModelResponse
-                ? Alignment.centerLeft
-                : Alignment.centerRight,
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              constraints: const BoxConstraints(
-                maxWidth: 700,
-              ),
-              decoration: BoxDecoration(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: GestureDetector(
+        onTap: _copyToClipboard,
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+          child: Stack(
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                constraints: const BoxConstraints(maxWidth: 700),
+                decoration: BoxDecoration(
                   color: widget.isModelResponse
                       ? modelBubbleColor
                       : userBubbleColor,
@@ -121,43 +141,67 @@ class _MessageBubbleState extends State<MessageBubble> {
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     )
-                  ]),
-              child: widget.isModelResponse
-                  ? MarkdownBody(
-                      data: widget.messageText,
-                      styleSheet: markdownStyleSheet,
-                      selectable: true,
-                      onTapLink: (text, href, title) async {
-                        if (href != null) {
-                          final uri = Uri.tryParse(href);
-                          if (uri != null && await canLaunchUrl(uri)) {
-                            await launchUrl(uri);
-                          } else {
-                            showCustomToast(context,
-                                message: "Couldn't launch this url",
-                                type: ToastMessageType.error);
+                  ],
+                ),
+                child: widget.isModelResponse
+                    ? MarkdownBody(
+                        data: widget.messageText,
+                        styleSheet: markdownStyleSheet,
+                        selectable: true,
+                        onTapLink: (text, href, title) async {
+                          if (href != null) {
+                            final uri = Uri.tryParse(href);
+                            if (uri != null && await canLaunchUrl(uri)) {
+                              await launchUrl(uri);
+                            } else {
+                              showCustomToast(context,
+                                  message: "Couldn't launch this url",
+                                  type: ToastMessageType.error);
+                            }
                           }
-                        }
-                      },
-                    )
-                  : SelectableText(
-                      widget.messageText,
-                      style: baseTextStyle,
+                        },
+                      )
+                    : SelectableText(
+                        widget.messageText,
+                        style: baseTextStyle,
+                      ),
+              ),
+
+              // Copy button overlay
+              if (isHovered)
+                Positioned(
+                  top: 8,
+                  right: widget.isModelResponse ? 8 : null,
+                  left: widget.isModelResponse ? null : 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(20),
                     ),
-            )),
-        subtitle: isHovered
-            ? Row(
-                mainAxisAlignment: widget.isModelResponse
-                    ? MainAxisAlignment.start
-                    : MainAxisAlignment.end,
-                children: [
-                  Icon(
-                    Icons.copy,
-                    color: Colors.white,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          isCopied ? Icons.check : Icons.content_copy,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          isCopied ? "Copied!" : "Copy",
+                          style: GoogleFonts.ubuntu(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              )
-            : SizedBox.shrink(),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
