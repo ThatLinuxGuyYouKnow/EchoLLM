@@ -163,7 +163,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                     child: IgnorePointer(
                       ignoring: !isHovered,
                       child: Tooltip(
-                        message: 'Copy this message',
+                        message: 'Copy',
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
