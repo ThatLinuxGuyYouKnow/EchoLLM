@@ -1,4 +1,4 @@
-package com.example.echo_llm
+package com.production.echollm
 
 import io.flutter.embedding.android.FlutterActivity
 
