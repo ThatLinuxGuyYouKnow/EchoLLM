@@ -162,27 +162,30 @@ class _MessageBubbleState extends State<MessageBubble> {
                     duration: const Duration(milliseconds: 200),
                     child: IgnorePointer(
                       ignoring: !isHovered,
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            hasCopiedMessageText = true;
-                          });
-                          Timer(const Duration(seconds: 1), () {
+                      child: Tooltip(
+                        message: 'Copy this message',
+                        child: GestureDetector(
+                          onTap: () {
                             setState(() {
-                              hasCopiedMessageText = false;
+                              hasCopiedMessageText = true;
                             });
-                          });
-                          Clipboard.setData(
-                              ClipboardData(text: widget.messageText));
-                        },
-                        child: Icon(
-                          hasCopiedMessageText
-                              ? Icons.check_circle
-                              : Icons.copy_rounded,
-                          color: hasCopiedMessageText
-                              ? Color(0xFF60A5FA)
-                              : Colors.white,
-                          size: 17,
+                            Timer(const Duration(seconds: 1), () {
+                              setState(() {
+                                hasCopiedMessageText = false;
+                              });
+                            });
+                            Clipboard.setData(
+                                ClipboardData(text: widget.messageText));
+                          },
+                          child: Icon(
+                            hasCopiedMessageText
+                                ? Icons.check_circle
+                                : Icons.copy_rounded,
+                            color: hasCopiedMessageText
+                                ? Color(0xFF60A5FA)
+                                : Colors.white,
+                            size: 17,
+                          ),
                         ),
                       ),
                     ),
