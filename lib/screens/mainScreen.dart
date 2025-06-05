@@ -3,10 +3,12 @@ import 'package:echo_llm/state_management/sidebarState.dart';
 
 import 'package:echo_llm/widgets/appBar.dart';
 import 'package:echo_llm/widgets/collapsedSidebar.dart';
+import 'package:echo_llm/widgets/modals/firstTimeUserModal.dart';
 
 import 'package:echo_llm/widgets/sidebar.dart';
 
 import 'package:flutter/material.dart';
+import 'package:get/utils.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -21,6 +23,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => buildFirstTimeUserPrompt());
     final sidebarIsCollapsed =
         Provider.of<Sidebarstate>(context, listen: true).isCollapsed;
 
