@@ -23,9 +23,11 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) => buildFirstTimeUserPrompt());
+    if (mounted) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => buildFirstTimeUserPrompt());
+    }
     final sidebarIsCollapsed =
         Provider.of<Sidebarstate>(context, listen: true).isCollapsed;
 
