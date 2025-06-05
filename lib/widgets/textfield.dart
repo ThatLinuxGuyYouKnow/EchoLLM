@@ -5,6 +5,7 @@ import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
 import 'package:echo_llm/userConfig.dart';
 import 'package:echo_llm/widgets/buttons.dart';
+import 'package:echo_llm/widgets/modals/firstTimeUserModal.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
