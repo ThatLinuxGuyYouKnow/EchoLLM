@@ -2,6 +2,7 @@ import 'package:echo_llm/dataHandlers/hive/chatStrorage.dart';
 import 'package:echo_llm/inference/superHandler.dart';
 import 'package:echo_llm/logic/convertMessageState.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
+import 'package:echo_llm/state_management/screenState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
 import 'package:echo_llm/userConfig.dart';
 import 'package:echo_llm/widgets/buttons.dart';
@@ -34,9 +35,12 @@ class ChatTextField extends StatelessWidget {
 
       final messageState =
           Provider.of<Messagestreamstate>(context, listen: false);
+      final screenState = Provider.of<Screenstate>(context, listen: false);
       messageState.addMessage(message: userMessage);
       messageState.setProcessing(true);
-
+      if (screenState.isOnWelcomeScreen) {
+        screenState.chatScreen();
+      }
       try {
         chatController.clear();
         final response = await modelInference.runInference(userMessage);
