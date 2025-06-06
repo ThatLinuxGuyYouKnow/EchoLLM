@@ -58,6 +58,7 @@ icons_launcher:
     macos:
       enable: true
     linux:
+      generate: true
       enable: true
     ios:
       enable: true
