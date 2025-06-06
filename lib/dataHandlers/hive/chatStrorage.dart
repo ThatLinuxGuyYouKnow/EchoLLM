@@ -9,7 +9,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 saveChatLocally(
     {required List<Message> messages,
     required String chatTitle,
-    required BuildContext context,
     required String existingChatID}) async {
   final dateTimeRighNow = DateTime.now();
   final randomPart = List.generate(3, (_) => Random().nextInt(1000)).join('');
@@ -23,7 +22,6 @@ saveChatLocally(
 
   try {
     chatBox.put(chat.id, chat);
-    showCustomToast(context, message: 'saved chat ');
 
     return chat.id;
   } catch (Error) {

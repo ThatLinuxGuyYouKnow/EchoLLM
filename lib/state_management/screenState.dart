@@ -17,6 +17,11 @@ class Screenstate extends ChangeNotifier {
     notifyListeners();
   }
 
+  welcomeScreen() {
+    _currentScreen = WelcomeScreen();
+    notifyListeners();
+  }
+
   chatScreen() {
     _currentScreen = Messagelistwidget();
     notifyListeners();

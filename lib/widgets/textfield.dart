@@ -9,7 +9,7 @@ import 'package:echo_llm/widgets/buttons.dart';
 
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:provider/provider.dart';
 
 class ChatTextField extends StatelessWidget {
@@ -54,7 +54,6 @@ class ChatTextField extends StatelessWidget {
 
           final chatId = await saveChatLocally(
               existingChatID: existingID,
-              context: context,
               messages: hiveReadyMessages,
               chatTitle: title);
           if (existingID.isEmpty) {
