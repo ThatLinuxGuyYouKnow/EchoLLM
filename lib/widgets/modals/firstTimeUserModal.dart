@@ -40,7 +40,6 @@ Widget buildFirstTimeUserPrompt(
             children: [
               TextButton(
                 onPressed: () {
-                  print(' button 2');
                   onNegativeButtonPressed();
                 },
                 child: Text(
@@ -61,7 +60,6 @@ Widget buildFirstTimeUserPrompt(
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 ),
                 onPressed: () {
-                  print('elevated button');
                   onPositiveButtonPressed();
                 },
                 child: Text(
