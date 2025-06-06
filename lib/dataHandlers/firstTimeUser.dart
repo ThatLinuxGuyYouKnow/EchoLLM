@@ -15,5 +15,5 @@ storeUserFirstTimeEntry() async {
 
 bool isFirstTimeUser() {
   final box = GetStorage('preferences');
-  return true;
+  return box.read('isUserNew') ?? true;
 }
