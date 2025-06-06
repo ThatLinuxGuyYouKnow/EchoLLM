@@ -122,7 +122,17 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
                 children: [
                   _consentButton(
                     buttonText: 'Cancel',
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      if (isNewUser) {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return apiKeyReminder(
+                                  onDismissed: () => Navigator.pop(context));
+                            });
+                      }
+                    },
                     buttonColor: Colors.transparent,
                     textColor: Colors.grey[400]!,
                   ),
