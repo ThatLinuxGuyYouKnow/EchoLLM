@@ -92,7 +92,9 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
               onTap: () {
                 showDialog(
                   context: context,
-                  builder: (context) => const AddNewKeyModal(),
+                  builder: (context) => const AddNewKeyModal(
+                    isNewUser: false,
+                  ),
                 );
               },
               child: Padding(

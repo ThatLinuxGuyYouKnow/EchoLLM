@@ -1,3 +1,4 @@
+import 'package:echo_llm/dataHandlers/firstTimeUser.dart';
 import 'package:echo_llm/state_management/screenState.dart';
 import 'package:echo_llm/state_management/sidebarState.dart';
 import 'package:echo_llm/widgets/appBar.dart';
@@ -7,7 +8,7 @@ import 'package:echo_llm/widgets/modals/firstTimeUserModal.dart';
 
 import 'package:echo_llm/widgets/sidebar.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -19,24 +20,27 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final TextEditingController rawChat = TextEditingController();
-
+  bool isNewUser = false;
   @override
   void initState() {
     super.initState();
-
+    isNewUser = isFirstTimeUser();
     WidgetsBinding.instance.addPostFrameCallback((_) => _showFirstTimeDialog());
   }
 
   void _showFirstTimeDialog() {
-    if (mounted) {
+    if (mounted && isNewUser) {
       showDialog(
         barrierDismissible: false,
         context: context,
         builder: (BuildContext context) =>
             buildFirstTimeUserPrompt(onPositiveButtonPressed: () {
           showDialog(
+              barrierDismissible: isNewUser ? false : true,
               context: context,
-              builder: (BuildContext context) => AddNewKeyModal());
+              builder: (BuildContext context) => AddNewKeyModal(
+                    isNewUser: true,
+                  ));
         }, onNegativeButtonPressed: () {
           Navigator.pop(context);
         }),

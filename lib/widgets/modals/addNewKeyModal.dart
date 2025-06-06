@@ -1,9 +1,10 @@
+import 'package:echo_llm/mappings/modelClassMapping.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AddNewKeyModal extends StatelessWidget {
-  const AddNewKeyModal({super.key});
+  const AddNewKeyModal({super.key, required bool isNewUser});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class AddNewKeyModal extends StatelessWidget {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center, // Centered content
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -74,7 +75,7 @@ class AddNewKeyModal extends StatelessWidget {
 
               const SizedBox(height: 25),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center, // Centered buttons
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   _consentButton(
                     buttonText: 'Cancel',
@@ -158,16 +159,20 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
                   value: option,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(
-                      option,
-                      style: GoogleFonts.ubuntu(
-                        color:
-                            isSelected ? Colors.cyanAccent[100] : Colors.white,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 14,
+                    child: ListTile(
+                      leading: Image.asset(getModelIcon(modelName: option)),
+                      title: Text(
+                        option,
+                        style: GoogleFonts.ubuntu(
+                          color: isSelected
+                              ? Colors.cyanAccent[100]
+                              : Colors.white,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
                     ),
                   ),
                 );
@@ -210,7 +215,6 @@ class _ModaltextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      // Constrained width
       width: 450,
       child: Container(
         height: 50,
@@ -267,4 +271,15 @@ Widget _consentButton({
       ),
     ),
   );
+}
+
+String getModelIcon({required String modelName}) {
+  String model_family = modelClassMapping[onlineModels[modelName]]!;
+  if (model_family == 'gemini') {
+    return 'assets/model_icons/gemini-icon.png';
+  } else if (model_family == 'openai') {
+    return 'assets/model_icons/openai-icon.png';
+  } else {
+    return 'assets/model_icons/xai-icon.png';
+  }
 }

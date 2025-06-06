@@ -6,3 +6,8 @@ storeUserFirstTimeEntry() async {
   final box = GetStorage('preferences');
   box.write('isUserNew', false);
 }
+
+bool isFirstTimeUser() {
+  final box = GetStorage('preferences');
+  return box.read('isUserNew') ?? true;
+}
