@@ -1,4 +1,3 @@
-import 'package:echo_llm/dataHandlers/firstTimeUser.dart';
 import 'package:echo_llm/widgets/modals/apiKeyReminder.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
