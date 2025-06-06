@@ -147,6 +147,9 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
                           apiKey: apiKeyText,
                         );
                         Navigator.of(context).pop();
+                        showCustomToast(context,
+                            message: 'Saved Key for ${modelName}',
+                            type: ToastMessageType.success);
                       } else {
                         setState(() {
                           submitOnEmptyField = true;
