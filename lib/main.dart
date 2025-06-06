@@ -8,8 +8,9 @@ import 'package:echo_llm/state_management/textfieldState.dart';
 import 'package:echo_llm/userConfig.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:hive/hive.dart';
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,7 @@ Future<void> main() async {
   await GetStorage.init('preferences');
 
   await Hive.initFlutter();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
   await Hive.openBox('chatBox');
   Hive.registerAdapter(ChatAdapter());
