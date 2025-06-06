@@ -35,6 +35,7 @@ class _MainScreenState extends State<MainScreen> {
         context: context,
         builder: (BuildContext context) =>
             buildFirstTimeUserPrompt(onPositiveButtonPressed: () {
+          Navigator.pop(context);
           showDialog(
               barrierDismissible: isNewUser ? false : true,
               context: context,
