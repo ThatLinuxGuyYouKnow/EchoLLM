@@ -12,7 +12,8 @@ class WelcomeScreen extends StatelessWidget {
   final chatController = TextEditingController();
   final bool isNewUser = isFirstTimeUser();
   Widget build(BuildContext context) {
-    final String welcomeText = isNewUser ? 'Welcome to EchoLLM' : 'Welcome';
+    final String welcomeText =
+        isNewUser ? 'Welcome to EchoLLM' : 'Welcome Back';
 
     return Center(
       child: SingleChildScrollView(
