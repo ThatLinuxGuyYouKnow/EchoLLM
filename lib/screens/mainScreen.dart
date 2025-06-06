@@ -4,6 +4,7 @@ import 'package:echo_llm/state_management/sidebarState.dart';
 import 'package:echo_llm/widgets/appBar.dart';
 import 'package:echo_llm/widgets/collapsedSidebar.dart';
 import 'package:echo_llm/widgets/modals/addNewKeyModal.dart';
+import 'package:echo_llm/widgets/modals/apiKeyReminder.dart';
 import 'package:echo_llm/widgets/modals/firstTimeUserModal.dart';
 
 import 'package:echo_llm/widgets/sidebar.dart';
@@ -44,6 +45,13 @@ class _MainScreenState extends State<MainScreen> {
                   ));
         }, onNegativeButtonPressed: () {
           Navigator.pop(context);
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return apiKeyReminder(onDismissed: () {
+                  Navigator.pop(context);
+                });
+              });
         }),
       );
     }
