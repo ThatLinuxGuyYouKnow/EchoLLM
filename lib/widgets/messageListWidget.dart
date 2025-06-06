@@ -23,7 +23,10 @@ class Messagelistwidget extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: ListView.builder(
-              padding: const EdgeInsets.only(bottom: 200, top: 100),
+              padding: const EdgeInsets.only(
+                top: 50,
+                bottom: 200,
+              ),
               itemCount:
                   messageStream.length + (messageState.isProcessing ? 1 : 0),
               itemBuilder: (context, index) {

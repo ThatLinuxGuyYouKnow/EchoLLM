@@ -26,15 +26,16 @@ class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           const SizedBox(width: 16),
           ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxHeight: 150,
-              maxWidth: 200,
-            ),
-            child: Image.asset(
-              'assets/logo2.png',
-              fit: BoxFit.contain,
-            ),
-          ),
+              constraints: const BoxConstraints(
+                maxHeight: 150,
+                maxWidth: 200,
+              ),
+              child: isOnWelcomeScreen
+                  ? SizedBox.shrink()
+                  : Image.asset(
+                      'assets/logo2.png',
+                      fit: BoxFit.contain,
+                    )),
         ],
       ),
       actions: [

@@ -1,3 +1,4 @@
+import 'package:echo_llm/dataHandlers/firstTimeUser.dart';
 import 'package:echo_llm/widgets/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,7 +10,10 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   final chatController = TextEditingController();
+  final bool isNewUser = isFirstTimeUser();
   Widget build(BuildContext context) {
+    final String welcomeText = isNewUser ? 'Welcome to EchoLLM' : 'Welcome';
+
     return Center(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -20,11 +24,10 @@ class WelcomeScreen extends StatelessWidget {
               'assets/icon.png',
               width: 120,
               height: 120,
-              color: Colors.blue.withOpacity(0.7),
             ),
             const SizedBox(height: 30),
             Text(
-              'Welcome to EchoLLM',
+              welcomeText,
               style: GoogleFonts.ubuntu(
                 color: Colors.white,
                 fontSize: 32,
