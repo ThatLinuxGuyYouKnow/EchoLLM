@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Widget buildFirstTimeUserPrompt() {
+Widget buildFirstTimeUserPrompt(
+    {required Function() onPositiveButtonPressed,
+    required Function() onNegativeButtonPressed}) {
   return Dialog(
     backgroundColor: const Color(0xFF1E2733),
     shape: RoundedRectangleBorder(
@@ -10,14 +12,14 @@ Widget buildFirstTimeUserPrompt() {
     ),
     child: Container(
       padding: const EdgeInsets.all(20),
-      height: 200,
+      height: 190,
       width: 500,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'First Time',
+            'First Time?',
             style: GoogleFonts.ubuntu(
               color: Colors.white,
               fontSize: 20,
@@ -37,11 +39,35 @@ Widget buildFirstTimeUserPrompt() {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
-                onPressed: () => null,
+                onPressed: () {
+                  print(' button 2');
+                  onNegativeButtonPressed();
+                },
+                child: Text(
+                  "I'll do it later",
+                  style: GoogleFonts.ubuntu(
+                    color: Colors.grey[400],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF4C83D1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
+                onPressed: () {
+                  print('elevated button');
+                  onPositiveButtonPressed();
+                },
                 child: Text(
                   'Got it!',
                   style: GoogleFonts.ubuntu(
-                    color: Colors.cyanAccent[100],
+                    color: Colors.white,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
