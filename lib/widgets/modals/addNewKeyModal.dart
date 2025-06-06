@@ -60,10 +60,10 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
                       Navigator.of(context).pop();
                       if (isNewUser) {
                         showDialog(
+                            barrierDismissible: false,
                             context: context,
                             builder: (BuildContext context) {
-                              return apiKeyReminder(
-                                  onDismissed: () => Navigator.pop(context));
+                              return apiKeyReminder(context: context);
                             });
                       }
                     },
@@ -126,10 +126,10 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
                       Navigator.of(context).pop();
                       if (isNewUser) {
                         showDialog(
+                            barrierDismissible: false,
                             context: context,
                             builder: (BuildContext context) {
-                              return apiKeyReminder(
-                                  onDismissed: () => Navigator.pop(context));
+                              return apiKeyReminder(context: context);
                             });
                       }
                     },
@@ -141,15 +141,18 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
                     buttonText: 'Save Key',
                     onPressed: () {
                       if (apiKeyText.isNotEmpty && modelName.isNotEmpty) {
-                        final apiKey = ApiKeyHelper();
-                        apiKey.storeKey(
-                          modelSlugNotName: onlineModels[modelName]!,
-                          apiKey: apiKeyText,
-                        );
-                        Navigator.of(context).pop();
-                        showCustomToast(context,
-                            message: 'Saved Key for ${modelName}',
-                            type: ToastMessageType.success);
+                        try {
+                          final apiKey = ApiKeyHelper();
+                          apiKey.storeKey(
+                            modelSlugNotName: onlineModels[modelName]!,
+                            apiKey: apiKeyText,
+                          );
+                          Navigator.of(context).pop();
+                          showCustomToast(context,
+                              message: 'Saved Key for ${modelName}',
+                              type: ToastMessageType.success);
+                          storeUserFirstTimeEntry();
+                        } catch (error) {}
                       } else {
                         setState(() {
                           submitOnEmptyField = true;

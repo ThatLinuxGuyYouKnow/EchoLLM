@@ -1,7 +1,8 @@
+import 'package:echo_llm/dataHandlers/firstTimeUser.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Widget apiKeyReminder({required Function() onDismissed}) {
+Widget apiKeyReminder({required BuildContext context}) {
   return Dialog(
     backgroundColor: const Color(0xFF1E2733),
     shape: RoundedRectangleBorder(
@@ -56,7 +57,11 @@ Widget apiKeyReminder({required Function() onDismissed}) {
           ),
           const SizedBox(height: 30),
           ElevatedButton(
-            onPressed: onDismissed,
+            onPressed: () {
+              storeUserFirstTimeEntry();
+              Navigator.pop(context); // This closes the current dialog
+              print('oiiiiiiiiii');
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF4C83D1),
               padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
@@ -67,7 +72,7 @@ Widget apiKeyReminder({required Function() onDismissed}) {
               shadowColor: Colors.blue.withOpacity(0.4),
             ),
             child: Text(
-              'Got it!',
+              'Got It!',
               style: GoogleFonts.ubuntu(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
