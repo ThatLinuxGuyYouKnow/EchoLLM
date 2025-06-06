@@ -13,7 +13,9 @@ class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isOnMainScreen = context.watch<Screenstate>().isOnMainScreen;
+    final screenState = Provider.of<Screenstate>(context);
+    final isOnMainScreen = screenState.isOnMainScreen;
+    final isOnWelcomeScreen = screenState.isOnWelcomeScreen;
 
     return AppBar(
       toolbarHeight: 80,
@@ -36,7 +38,7 @@ class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       actions: [
-        if (isOnMainScreen)
+        if (isOnMainScreen || isOnWelcomeScreen)
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Modelselector(),

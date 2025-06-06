@@ -366,6 +366,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
   Widget build(BuildContext context) {
     final screenState = Provider.of<Screenstate>(context);
     final isOnChatScreen = screenState.isOnMainScreen;
+    final isOnWelcomeScreen = screenState.isOnWelcomeScreen;
     final messageState = Provider.of<Messagestreamstate>(context);
     final sidebarState = Provider.of<Sidebarstate>(context);
     selectedChatId = messageState.chatID;
@@ -382,7 +383,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
               MinimalCollapseIcon(onPressed: () {
                 sidebarState.collapse();
               }),
-              isOnChatScreen
+              isOnChatScreen || isOnWelcomeScreen
                   ? NewChatTile(
                       onTilePressed: () {
                         messageState.clear();
@@ -407,7 +408,8 @@ class _CustomSideBarState extends State<CustomSideBar> {
                   isActive: screenState.currentScreen is SettingsScreen,
                 )
               ],
-              if (screenState.isOnMainScreen && chatMetadata.isNotEmpty) ...[
+              if ((screenState.isOnMainScreen || isOnWelcomeScreen) &&
+                  chatMetadata.isNotEmpty) ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 8.0, vertical: 16.0),
