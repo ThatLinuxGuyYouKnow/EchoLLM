@@ -1,7 +1,9 @@
+import 'package:echo_llm/dataHandlers/firstTimeUser.dart';
 import 'package:echo_llm/dataHandlers/hive/ApikeyHelper.dart';
 import 'package:echo_llm/mappings/modelClassMapping.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
 import 'package:echo_llm/screens/keyManagementScreen.dart';
+import 'package:echo_llm/widgets/modals/apiKeyReminder.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,10 +19,11 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
   String apiKeyText = '';
   String modelName = '';
   bool submitOnEmptyField = false;
+  bool isNewUser = false;
   @override
   void initState() {
     super.initState();
-
+    isNewUser = isFirstTimeUser();
     modelName = onlineModels.keys.first;
   }
 
@@ -53,7 +56,17 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
                   ),
                   IconButton(
                     icon: Icon(Icons.close, color: Colors.grey[500]),
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      if (isNewUser) {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return apiKeyReminder(
+                                  onDismissed: () => Navigator.pop(context));
+                            });
+                      }
+                    },
                   ),
                 ],
               ),
@@ -118,8 +131,6 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
                     buttonText: 'Save Key',
                     onPressed: () {
                       if (apiKeyText.isNotEmpty && modelName.isNotEmpty) {
-                        print('model name: $modelName');
-                        print('api key length: ${apiKeyText.length}');
                         final apiKey = ApiKeyHelper();
                         apiKey.storeKey(
                           modelSlugNotName: onlineModels[modelName]!,
