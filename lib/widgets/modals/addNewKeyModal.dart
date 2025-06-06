@@ -1,10 +1,27 @@
+import 'package:echo_llm/dataHandlers/hive/ApikeyHelper.dart';
 import 'package:echo_llm/mappings/modelClassMapping.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
+import 'package:echo_llm/screens/keyManagementScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AddNewKeyModal extends StatelessWidget {
+class AddNewKeyModal extends StatefulWidget {
   const AddNewKeyModal({super.key, required bool isNewUser});
+
+  @override
+  State<AddNewKeyModal> createState() => _AddNewKeyModalState();
+}
+
+class _AddNewKeyModalState extends State<AddNewKeyModal> {
+  String apiKeyText = '';
+  String modelName = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    modelName = onlineModels.keys.first;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +57,6 @@ class AddNewKeyModal extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-
-              // Centered content container
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -57,7 +72,14 @@ class AddNewKeyModal extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    PlainModelSelector(),
+                    PlainModelSelector(
+                      initialValue: modelName,
+                      onChanged: (value) {
+                        setState(() {
+                          modelName = value;
+                        });
+                      },
+                    ),
                     const SizedBox(height: 20),
                     const Text(
                       'API Key',
@@ -68,11 +90,17 @@ class AddNewKeyModal extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    _ModaltextField(),
+                    _ModaltextField(
+                      initialValue: apiKeyText,
+                      onChanged: (value) {
+                        setState(() {
+                          apiKeyText = value;
+                        });
+                      },
+                    ),
                   ],
                 ),
               ),
-
               const SizedBox(height: 25),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -86,7 +114,23 @@ class AddNewKeyModal extends StatelessWidget {
                   const SizedBox(width: 20),
                   _consentButton(
                     buttonText: 'Save Key',
-                    onPressed: () {},
+                    onPressed: () {
+                      if (apiKeyText.isNotEmpty && modelName.isNotEmpty) {
+                        print('model name: $modelName');
+                        print('api key length: ${apiKeyText.length}');
+                        final apiKey = ApiKeyHelper();
+                        apiKey.storeKey(
+                          modelSlugNotName: onlineModels[modelName]!,
+                          apiKey: apiKeyText,
+                        );
+                        Navigator.of(context).pop();
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Please fill in all fields')),
+                        );
+                      }
+                    },
                     buttonColor: const Color(0xFF4C83D1),
                     textColor: Colors.white,
                   ),
@@ -101,7 +145,14 @@ class AddNewKeyModal extends StatelessWidget {
 }
 
 class PlainModelSelector extends StatefulWidget {
-  const PlainModelSelector({super.key});
+  final String initialValue;
+  final Function(String) onChanged;
+
+  const PlainModelSelector({
+    super.key,
+    required this.initialValue,
+    required this.onChanged,
+  });
 
   @override
   State<PlainModelSelector> createState() => _PlainModelSelectorState();
@@ -113,7 +164,7 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
   @override
   void initState() {
     super.initState();
-    _selectedValue = onlineModels.keys.first;
+    _selectedValue = widget.initialValue;
   }
 
   @override
@@ -121,7 +172,6 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
     final availableOptions = onlineModels.keys.toList();
 
     return SizedBox(
-      // Constrained width
       width: 450,
       child: Container(
         height: 50,
@@ -140,7 +190,7 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
             child: DropdownButton<String>(
               value: _selectedValue,
               isExpanded: true,
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_drop_down,
                 color: Color(0xFF4A90E2),
                 size: 28,
@@ -179,7 +229,10 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
               }).toList(),
               onChanged: (value) {
                 if (value == null || value == _selectedValue) return;
-                setState(() => _selectedValue = value);
+                setState(() {
+                  _selectedValue = value;
+                });
+                widget.onChanged(value);
               },
               selectedItemBuilder: (BuildContext context) {
                 return availableOptions.map<Widget>((String item) {
@@ -209,8 +262,33 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
   }
 }
 
-class _ModaltextField extends StatelessWidget {
-  const _ModaltextField();
+class _ModaltextField extends StatefulWidget {
+  final String initialValue;
+  final Function(String) onChanged;
+
+  const _ModaltextField({
+    required this.initialValue,
+    required this.onChanged,
+  });
+
+  @override
+  State<_ModaltextField> createState() => _ModaltextFieldState();
+}
+
+class _ModaltextFieldState extends State<_ModaltextField> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.initialValue);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,13 +304,17 @@ class _ModaltextField extends StatelessWidget {
             width: 1.5,
           ),
         ),
-        child: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12.0),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: TextField(
-            style: TextStyle(color: Colors.white, fontSize: 15),
+            controller: _controller,
+            onChanged: (value) {
+              widget.onChanged(value);
+            },
+            style: const TextStyle(color: Colors.white, fontSize: 15),
             obscureText: true,
             obscuringCharacter: '•',
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: InputBorder.none,
               hintText: 'Enter your API key...',
               hintStyle: TextStyle(color: Colors.grey),
