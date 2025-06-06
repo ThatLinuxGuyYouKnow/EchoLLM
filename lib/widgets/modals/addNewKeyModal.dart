@@ -2,6 +2,7 @@ import 'package:echo_llm/dataHandlers/hive/ApikeyHelper.dart';
 import 'package:echo_llm/mappings/modelClassMapping.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
 import 'package:echo_llm/screens/keyManagementScreen.dart';
+import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,7 +16,7 @@ class AddNewKeyModal extends StatefulWidget {
 class _AddNewKeyModalState extends State<AddNewKeyModal> {
   String apiKeyText = '';
   String modelName = '';
-
+  bool submitOnEmptyField = false;
   @override
   void initState() {
     super.initState();
@@ -91,6 +92,7 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
                     ),
                     const SizedBox(height: 8),
                     _ModaltextField(
+                      errored: submitOnEmptyField,
                       initialValue: apiKeyText,
                       onChanged: (value) {
                         setState(() {
@@ -125,10 +127,9 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
                         );
                         Navigator.of(context).pop();
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Please fill in all fields')),
-                        );
+                        setState(() {
+                          submitOnEmptyField = true;
+                        });
                       }
                     },
                     buttonColor: const Color(0xFF4C83D1),
@@ -179,7 +180,7 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
           color: const Color(0xFF2A3441),
           borderRadius: BorderRadius.circular(10.0),
           border: Border.all(
-            color: const Color(0xFF3A4A5F),
+            color: Color(0xFF3A4A5F),
             width: 1.5,
           ),
         ),
@@ -265,10 +266,11 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
 class _ModaltextField extends StatefulWidget {
   final String initialValue;
   final Function(String) onChanged;
-
-  const _ModaltextField({
+  bool errored;
+  _ModaltextField({
     required this.initialValue,
     required this.onChanged,
+    this.errored = false,
   });
 
   @override
@@ -300,7 +302,7 @@ class _ModaltextFieldState extends State<_ModaltextField> {
           borderRadius: BorderRadius.circular(10),
           color: const Color(0xFF2A3441),
           border: Border.all(
-            color: const Color(0xFF3A4A5F),
+            color: widget.errored ? Colors.red : Color(0xFF3A4A5F),
             width: 1.5,
           ),
         ),
