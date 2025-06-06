@@ -1,9 +1,11 @@
+import 'package:echo_llm/dataHandlers/firstTimeUser.dart';
+import 'package:echo_llm/widgets/modals/apiKeyReminder.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Widget buildFirstTimeUserPrompt(
     {required Function() onPositiveButtonPressed,
-    required Function() onNegativeButtonPressed}) {
+    required BuildContext context}) {
   return Dialog(
     backgroundColor: const Color(0xFF1E2733),
     shape: RoundedRectangleBorder(
@@ -41,7 +43,12 @@ Widget buildFirstTimeUserPrompt(
               children: [
                 TextButton(
                   onPressed: () {
-                    onNegativeButtonPressed();
+                    Navigator.pop(context);
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return apiKeyReminder(context: context);
+                        });
                   },
                   child: Text(
                     "I'll do it later",
@@ -64,7 +71,7 @@ Widget buildFirstTimeUserPrompt(
                     onPositiveButtonPressed();
                   },
                   child: Text(
-                    'Got it!',
+                    'Ok',
                     style: GoogleFonts.ubuntu(
                       color: Colors.white,
                       fontWeight: FontWeight.w500,

@@ -34,25 +34,17 @@ class _MainScreenState extends State<MainScreen> {
       showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (BuildContext context) =>
-            buildFirstTimeUserPrompt(onPositiveButtonPressed: () {
-          Navigator.pop(context);
-          showDialog(
-              barrierDismissible: isNewUser ? false : true,
-              context: context,
-              builder: (BuildContext context) => AddNewKeyModal(
-                    isNewUser: true,
-                  ));
-        }, onNegativeButtonPressed: () {
-          Navigator.pop(context);
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return apiKeyReminder(onDismissed: () {
-                  Navigator.pop(context);
-                });
-              });
-        }),
+        builder: (BuildContext context) => buildFirstTimeUserPrompt(
+            onPositiveButtonPressed: () {
+              Navigator.pop(context);
+              showDialog(
+                  barrierDismissible: isNewUser ? false : true,
+                  context: context,
+                  builder: (BuildContext context) => AddNewKeyModal(
+                        isNewUser: true,
+                      ));
+            },
+            context: context),
       );
     }
   }
