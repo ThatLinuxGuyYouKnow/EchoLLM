@@ -123,7 +123,7 @@ class WelcomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: Colors.cyanAccent[100], size: 28),
+            Icon(icon, color: Color(0xFF4A90E2), size: 28),
             const SizedBox(height: 12),
             Text(
               title,
