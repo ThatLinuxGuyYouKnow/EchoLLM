@@ -55,7 +55,7 @@ class _NewChatCollapsedTileState extends State<NewChatCollapsedTile> {
     return GestureDetector(
       onTap: () => screenState.isOnMainScreen
           ? messageState.clear()
-          : screenState.chatScreen(),
+          : screenState.welcomeScreen(),
       child: MouseRegion(
         onEnter: (event) => setState(() {
           isHovered = true;
