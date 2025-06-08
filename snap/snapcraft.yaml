@@ -1,0 +1,59 @@
+name: echollm
+version: '1.0.0'
+summary: A privacy-focused AI chat application
+description: |
+  EchoLLM is a desktop client for interacting with various AI models
+  with local API key management and chat history storage.
+
+base: core22
+confinement: strict
+grade: stable
+
+apps:
+  echollm:
+    command: desktop-launch $SNAP/echollm
+    extensions: [flutter-master]
+    plugs:
+      - network
+      - network-bind
+      - home
+      - x11
+      - wayland
+      - opengl
+      - pulseaudio
+      - gsettings
+      - removable-media
+    environment:
+      FLUTTER_CHANNEL: stable
+      SNAP_NAME: echollm
+      GTK_THEME: Adwaita
+
+parts:
+  echollm:
+    source: .
+    plugin: flutter
+    flutter-target: linux
+    build-packages:
+      - clang
+      - cmake
+      - ninja-build
+      - libgtk-3-dev
+      - liblzma-dev
+      - libstdc++6
+    stage-packages:
+      - libgl1
+      - libx11-6
+      - libxcb1
+      - libxkbcommon0
+      - libgtk-3-0
+      - libatomic1
+    build-environment:
+      - SNAPCRAFT_CMAKE_ARGS: -DCMAKE_INSTALL_RPATH=$CRAFT_PART_INSTALL/lib
+
+  flutter-extension:
+    plugin: nil
+    override-build: |
+      flutter config --enable-linux-desktop
+      flutter pub get
+    build-snaps:
+      - flutter/latest/stable
