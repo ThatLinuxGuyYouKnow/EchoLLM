@@ -12,7 +12,8 @@ grade: stable
 apps:
   echollm:
     command: desktop-launch $SNAP/echollm
-    extensions: [flutter-master]
+    extensions: [gnome]
+    desktop: usr/share/applications/echollm.desktop
     plugs:
       - network
       - network-bind
@@ -32,7 +33,7 @@ parts:
   echollm:
     source: .
     plugin: flutter
-    flutter-target: linux
+    flutter-target: lib/main.dart
     build-packages:
       - clang
       - cmake
