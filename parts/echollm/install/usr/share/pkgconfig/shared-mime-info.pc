@@ -1,0 +1,8 @@
+prefix=/home/alabi-ayobami/echo_llm/parts/echollm/install/usr
+
+Name: shared-mime-info
+Description: Freedesktop common MIME database
+Version: 2.4
+Requires:
+Libs:
+Cflags:
