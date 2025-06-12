@@ -2,7 +2,7 @@
 ## Application environment
 export SNAPCRAFT_PARALLEL_BUILD_COUNT="4"
 export SNAPCRAFT_PROJECT_VERSION="1.0.0"
-export SNAPCRAFT_PROJECT_GRADE="stable"
+export SNAPCRAFT_PROJECT_GRADE="devel"
 export SNAPCRAFT_PROJECT_DIR="/home/alabi-ayobami/echo_llm"
 export SNAPCRAFT_PROJECT_NAME="echollm"
 export SNAPCRAFT_STAGE="/home/alabi-ayobami/echo_llm/stage"
@@ -42,12 +42,3 @@ export PKG_CONFIG_PATH="/home/alabi-ayobami/echo_llm/parts/echollm/install/usr/s
 ## Plugin environment
 export PATH="/home/alabi-ayobami/echo_llm/parts/echollm/build/flutter-distro/bin:${PATH}"
 ## User environment
-export PATH="/snap/gnome-42-2204-sdk/current/usr/bin${PATH:+:$PATH}"
-export XDG_DATA_DIRS="/home/alabi-ayobami/echo_llm/stage/usr/share:/snap/gnome-42-2204-sdk/current/usr/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
-export LD_LIBRARY_PATH="/snap/gnome-42-2204-sdk/current/lib/x86_64-linux-gnu:/snap/gnome-42-2204-sdk/current/usr/lib/x86_64-linux-gnu:/snap/gnome-42-2204-sdk/current/usr/lib:/snap/gnome-42-2204-sdk/current/usr/lib/vala-current:/snap/gnome-42-2204-sdk/current/usr/lib/x86_64-linux-gnu/pulseaudio${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-export PKG_CONFIG_PATH="/snap/gnome-42-2204-sdk/current/usr/lib/x86_64-linux-gnu/pkgconfig:/snap/gnome-42-2204-sdk/current/usr/lib/pkgconfig:/snap/gnome-42-2204-sdk/current/usr/share/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
-export GETTEXTDATADIRS="/snap/gnome-42-2204-sdk/current/usr/share/gettext-current${GETTEXTDATADIRS:+:$GETTEXTDATADIRS}"
-export GDK_PIXBUF_MODULE_FILE="/snap/gnome-42-2204-sdk/current/usr/lib/x86_64-linux-gnu/gdk-pixbuf-current/loaders.cache"
-export ACLOCAL_PATH="/snap/gnome-42-2204-sdk/current/usr/share/aclocal${ACLOCAL_PATH:+:$ACLOCAL_PATH}"
-export PYTHONPATH="/snap/gnome-42-2204-sdk/current/usr/lib/python3.10:/snap/gnome-42-2204-sdk/current/usr/lib/python3/dist-packages:/snap/gnome-42-2204-sdk/current/usr/lib/x86_64-linux-gnu/gobject-introspection${PYTHONPATH:+:$PYTHONPATH}"
-export GI_TYPELIB_PATH="/snap/gnome-42-2204-sdk/current/usr/lib/girepository-1.0:/snap/gnome-42-2204-sdk/current/usr/lib/x86_64-linux-gnu/girepository-1.0${GI_TYPELIB_PATH:+:$GI_TYPELIB_PATH}"
