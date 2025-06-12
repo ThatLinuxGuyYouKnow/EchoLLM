@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=EchoLLM
+Comment=The best AI models, all in one place
+Exec=env BAMF_DESKTOP_FILE_HINT=/var/lib/snapd/desktop/applications/echollm_echollm.desktop /snap/bin/echollm
+Icon=${SNAP}/meta/gui/echo_llm.png
+Terminal=false
+Type=Application
+Categories=Utility;Development;AI;
+StartupWMClass=echollm
+Keywords=ai;chatbot;llm;gpt;assistant;
+X-SnapInstanceName=echollm
