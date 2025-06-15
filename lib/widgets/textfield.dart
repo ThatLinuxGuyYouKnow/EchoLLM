@@ -39,7 +39,7 @@ class ChatTextField extends StatelessWidget {
       messageState.addMessage(message: userMessage);
       messageState.setProcessing(true);
       if (screenState.isOnWelcomeScreen) {
-        screenState.chatScreen();
+        screenState.chatScreen(); // i route them to a different screen
       }
       try {
         chatController.clear();
@@ -91,7 +91,7 @@ class ChatTextField extends StatelessWidget {
                         decoration: BoxDecoration(
                           border: Border.all(
                               color: isExpanded
-                                  ? Colors.cyan
+                                  ? Color(0xFF4C83D1)
                                   : Colors.transparent),
                           color: const Color(0xFF1E2733),
                           borderRadius: BorderRadius.circular(10),
