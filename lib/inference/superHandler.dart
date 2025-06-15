@@ -3,6 +3,7 @@ import 'package:echo_llm/inference/geminiHelper.dart';
 import 'package:echo_llm/inference/openaiHelper.dart';
 import 'package:echo_llm/inference/x-ai_helper.dart';
 import 'package:echo_llm/mappings/modelClassMapping.dart';
+import 'package:echo_llm/services/messenger_service.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 
 import 'package:echo_llm/userConfig.dart';
@@ -22,6 +23,7 @@ class InferenceSuperClass {
   Future<String?> runInference(String prompt) async {
     final messageState =
         Provider.of<Messagestreamstate>(context, listen: false);
+    final MessengerService _messenger = MessengerService();
     try {
       final CONFIG config = Provider.of<CONFIG>(context, listen: false);
       final String modelSlug = config.modelSlug;
@@ -89,7 +91,8 @@ class InferenceSuperClass {
       }
     } catch (e) {
       messageState.deleteUserLastMessage();
-      showCustomToast(context, message: 'Error $e');
+      _messenger.showToast('Unexpected Error Ocurred, do you have internet ?',
+          type: ToastMessageType.error);
       return null;
     }
   }
