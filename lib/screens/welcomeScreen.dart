@@ -1,7 +1,9 @@
 import 'package:echo_llm/dataHandlers/firstTimeUser.dart';
+import 'package:echo_llm/state_management/textfieldState.dart';
 import 'package:echo_llm/widgets/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class WelcomeScreen extends StatelessWidget {
   WelcomeScreen({
@@ -12,41 +14,41 @@ class WelcomeScreen extends StatelessWidget {
   final chatController = TextEditingController();
   final bool isNewUser = isFirstTimeUser();
   Widget build(BuildContext context) {
+    final textfieldState = Provider.of<Textfieldstate>(context);
     final String welcomeText =
         isNewUser ? 'Welcome to EchoLLM' : 'Welcome Back';
 
     return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/icon.png',
-              width: 120,
-              height: 120,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/icon.png',
+            width: 120,
+            height: 120,
+          ),
+          const SizedBox(height: 30),
+          Text(
+            welcomeText,
+            style: GoogleFonts.ubuntu(
+              color: Colors.white,
+              fontSize: 32,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.5,
             ),
-            const SizedBox(height: 30),
-            Text(
-              welcomeText,
-              style: GoogleFonts.ubuntu(
-                color: Colors.white,
-                fontSize: 32,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.5,
-              ),
+          ),
+          const SizedBox(height: 15),
+          Text(
+            'What would you like to know today?',
+            style: GoogleFonts.ubuntu(
+              color: Colors.grey[400],
+              fontSize: 18,
+              height: 1.4,
             ),
-            const SizedBox(height: 15),
-            Text(
-              'What would you like to know today?',
-              style: GoogleFonts.ubuntu(
-                color: Colors.grey[400],
-                fontSize: 18,
-                height: 1.4,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 40),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 40),
+          if (!textfieldState.isExpanded) ...[
             Container(
               constraints: const BoxConstraints(maxWidth: 700),
               child: Column(
@@ -88,22 +90,22 @@ class WelcomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 50),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 700),
-              child: ChatTextField(chatController: chatController),
-            ),
-            const SizedBox(height: 30),
-            Text(
-              'Or select a chat from the sidebar to continue',
-              style: GoogleFonts.ubuntu(
-                color: Colors.grey[500],
-                fontSize: 14,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
           ],
-        ),
+          const SizedBox(height: 50),
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 700),
+            child: ChatTextField(chatController: chatController),
+          ),
+          const SizedBox(height: 30),
+          Text(
+            'Or select a chat from the sidebar to continue',
+            style: GoogleFonts.ubuntu(
+              color: Colors.grey[500],
+              fontSize: 14,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ],
       ),
     );
   }
