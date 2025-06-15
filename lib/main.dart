@@ -1,5 +1,6 @@
 import 'package:echo_llm/models/chats.dart';
 import 'package:echo_llm/screens/mainScreen.dart';
+import 'package:echo_llm/services/messenger_service.dart';
 import 'package:echo_llm/state_management/apikeyModalState.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/screenState.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
     config.loadPreferences();
 
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         platform: TargetPlatform.macOS,
