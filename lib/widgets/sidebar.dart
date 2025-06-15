@@ -294,6 +294,7 @@ class _ChatTileState extends State<ChatTile> {
           dense: true,
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           title: Text(
+            maxLines: 1,
             widget.chatEntry.value,
             style: GoogleFonts.ubuntu(
               color: isHighlighted ? Color(0xFF4A90E2) : Colors.white,
