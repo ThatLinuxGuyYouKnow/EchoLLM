@@ -29,8 +29,6 @@ class ChatTextField extends StatelessWidget {
     final _shouldSendOnEnter = Provider.of<CONFIG>(context).shouldSendOnEnter;
     final FocusNode textFieldFocusNode = FocusNode();
 
-// inside ChatTextField widget
-
     Future<void> sendMessage() async {
       final userMessage = chatController.text.trim();
       if (userMessage.isEmpty) return;
