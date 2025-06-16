@@ -59,11 +59,12 @@ class ChatTextField extends StatelessWidget {
         if (existingID.isEmpty) {
           messageState.setCurrentChatID(chatId);
         }
-      } else if (response != null && response.isEmpty) {
+      } else if (response == null || response.isEmpty) {
         chatController.value = TextEditingValue(text: userMessage);
+        if (messageState.chatID.isEmpty) {
+          screenState.welcomeScreen();
+        }
       }
-
-      screenState.welcomeScreen();
 
       messageState.setProcessing(false);
     }
