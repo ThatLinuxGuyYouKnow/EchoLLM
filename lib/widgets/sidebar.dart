@@ -399,7 +399,13 @@ class _CustomSideBarState extends State<CustomSideBar> {
                   : SpecialDrawerTile(
                       tileTitle: 'Back to chat',
                       tileIcon: Icons.chat_bubble,
-                      onTilePressed: () => screenState.welcomeScreen(),
+                      onTilePressed: () {
+                        if (messageState.chatID.isEmpty) {
+                          screenState.welcomeScreen();
+                        } else {
+                          screenState.chatScreen();
+                        }
+                      },
                       isActive: isOnChatScreen,
                     ),
               if (!screenState.isOnSettingsScreen) ...[
