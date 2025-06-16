@@ -29,6 +29,8 @@ class ChatTextField extends StatelessWidget {
     final _shouldSendOnEnter = Provider.of<CONFIG>(context).shouldSendOnEnter;
     final FocusNode textFieldFocusNode = FocusNode();
 
+// inside ChatTextField widget
+
     Future<void> sendMessage() async {
       final userMessage = chatController.text.trim();
       if (userMessage.isEmpty) return;
@@ -36,16 +38,21 @@ class ChatTextField extends StatelessWidget {
       final messageState =
           Provider.of<Messagestreamstate>(context, listen: false);
       final screenState = Provider.of<Screenstate>(context, listen: false);
+
+      // Keep track of whether this is the first message
+      final bool isFirstMessage = screenState.isOnWelcomeScreen;
+
       messageState.addMessage(message: userMessage);
       messageState.setProcessing(true);
-      if (screenState.isOnWelcomeScreen) {
-        screenState.chatScreen();
-      }
+      chatController.clear(); // Clear the textfield immediately for better UX
 
-      chatController.clear();
       final response = await modelInference.runInference(userMessage);
 
       if (response != null && response.isNotEmpty) {
+        if (isFirstMessage) {
+          screenState.chatScreen();
+        }
+
         messageState.addMessage(message: response);
 
         final hiveReadyMessages =
@@ -59,11 +66,8 @@ class ChatTextField extends StatelessWidget {
         if (existingID.isEmpty) {
           messageState.setCurrentChatID(chatId);
         }
-      } else if (response == null || response.isEmpty) {
-        chatController.value = TextEditingValue(text: userMessage);
-        if (messageState.chatID.isEmpty) {
-          screenState.welcomeScreen();
-        }
+      } else {
+        chatController.text = userMessage;
       }
 
       messageState.setProcessing(false);
