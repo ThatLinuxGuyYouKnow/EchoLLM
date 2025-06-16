@@ -32,6 +32,10 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+/parts/
+/snap/
+/prime/
+/stage/
 
 # Symbolication related
 app.*.symbols
