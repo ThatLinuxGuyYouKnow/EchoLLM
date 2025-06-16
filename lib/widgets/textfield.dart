@@ -39,34 +39,33 @@ class ChatTextField extends StatelessWidget {
       messageState.addMessage(message: userMessage);
       messageState.setProcessing(true);
       if (screenState.isOnWelcomeScreen) {
-        screenState.chatScreen(); // i route them to a different screen
+        screenState.chatScreen();
       }
-      try {
-        chatController.clear();
-        final response = await modelInference.runInference(userMessage);
 
-        if (response != null && response.isNotEmpty) {
-          messageState.addMessage(message: response);
+      chatController.clear();
+      final response = await modelInference.runInference(userMessage);
 
-          final hiveReadyMessages =
-              convertIndexedMessagesToHive(messageState.messages);
-          final title = titleFromFirstMessage(messageState.messages);
+      if (response != null && response.isNotEmpty) {
+        messageState.addMessage(message: response);
 
-          final chatId = await saveChatLocally(
-              existingChatID: existingID,
-              messages: hiveReadyMessages,
-              chatTitle: title);
-          if (existingID.isEmpty) {
-            messageState.setCurrentChatID(chatId);
-          }
-        } else if (response != null && response.isEmpty) {
-          chatController.value = TextEditingValue(text: userMessage);
+        final hiveReadyMessages =
+            convertIndexedMessagesToHive(messageState.messages);
+        final title = titleFromFirstMessage(messageState.messages);
+
+        final chatId = await saveChatLocally(
+            existingChatID: existingID,
+            messages: hiveReadyMessages,
+            chatTitle: title);
+        if (existingID.isEmpty) {
+          messageState.setCurrentChatID(chatId);
         }
-      } catch (e) {
-        showCustomToast(context, message: 'Error $e');
-      } finally {
-        messageState.setProcessing(false);
+      } else if (response != null && response.isEmpty) {
+        chatController.value = TextEditingValue(text: userMessage);
       }
+
+      screenState.welcomeScreen();
+
+      messageState.setProcessing(false);
     }
 
     return Container(
