@@ -19,9 +19,10 @@ class Claudehelper {
     ];
 
     final response = await http.post(
-      Uri.parse('https://api.openai.com/v1/chat/completions'),
+      Uri.parse('https://api.anthropic.com/v1/messages'),
       headers: {
-        'Content-Type': 'application/json',
+        "anthropic-version: 2023-06-01"
+            'Content-Type': 'application/json',
         'x-api-key': '$apiKey',
       },
       body: jsonEncode({
