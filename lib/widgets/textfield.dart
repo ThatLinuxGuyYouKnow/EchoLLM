@@ -45,12 +45,10 @@ class ChatTextField extends StatelessWidget {
       chatController.clear(); // Clear the textfield immediately for better UX
 
       final response = await modelInference.runInference(userMessage);
-
+      if (isFirstMessage) {
+        screenState.chatScreen();
+      }
       if (response != null && response.isNotEmpty) {
-        if (isFirstMessage) {
-          screenState.chatScreen();
-        }
-
         messageState.addMessage(message: response);
 
         final hiveReadyMessages =
@@ -66,6 +64,7 @@ class ChatTextField extends StatelessWidget {
         }
       } else {
         chatController.text = userMessage;
+        screenState.welcomeScreen();
       }
 
       messageState.setProcessing(false);
