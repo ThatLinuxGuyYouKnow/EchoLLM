@@ -18,7 +18,15 @@ Map<String, bool> onlineModelAvailability = {
   "grok-2-1212": keyHandler.readKey(modelSlugNotName: "grok-2-1212").length > 1,
   'grok-3-beta': keyHandler.readKey(modelSlugNotName: 'grok-3-beta').length > 1,
   'grok-3-mini-beta':
-      keyHandler.readKey(modelSlugNotName: 'grok-3-mini-beta').length > 1
+      keyHandler.readKey(modelSlugNotName: 'grok-3-mini-beta').length > 1,
+  "claude-3-7-sonnet":
+      keyHandler.readKey(modelSlugNotName: 'claude-3-7-sonnet').length > 1,
+  "claude-3-5-sonnet":
+      keyHandler.readKey(modelSlugNotName: 'claude-3-5-sonnet').length > 1,
+  "claude-3-7-Opus":
+      keyHandler.readKey(modelSlugNotName: 'claude-3-7-Opus').length > 1,
+  "clause 3-5 Opus":
+      keyHandler.readKey(modelSlugNotName: 'clause 3-5 Opus').length > 1
 };
 bool isAtleastOneModelAvailable() {
   List models = onlineModelAvailability.keys.toList();
