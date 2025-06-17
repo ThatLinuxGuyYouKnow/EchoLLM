@@ -7,5 +7,9 @@ Map<String, String> onlineModels = {
   "GPT 4o": "gtp-4.1",
   "Grok 2": "grok-2-1212",
   "Grok 3(beta)": "grok-3-beta",
-  "Grok 3 mini(beta)": "grok-3-mini-beta"
+  "Grok 3 mini(beta)": "grok-3-mini-beta",
+  "Claude 3.7 Sonnet": "claude-3-7-sonnet",
+  "Claude 3.5 Sonnet": "claude-3-5-sonnet",
+  // "Claude 3.7 Opus": "claude-3-7-Opus",
+  //"Claude 3.5 Opus": "clause 3-7 Opus"
 };
