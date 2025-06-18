@@ -10,7 +10,6 @@ class WelcomeScreen extends StatelessWidget {
     super.key,
   });
 
-  @override
   final chatController = TextEditingController();
   final bool isNewUser = isFirstTimeUser();
   Widget build(BuildContext context) {
