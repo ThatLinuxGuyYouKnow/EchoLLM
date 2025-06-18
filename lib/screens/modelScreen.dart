@@ -174,6 +174,6 @@ String getModelIcon({required String modelSlug}) {
   } else if (model_family == 'claude') {
     return 'assets/model_icons/claude-icon.png';
   } else {
-    return 'assets/model/claude-icon.png';
+    return 'assets/model_icons/xai-icon.png';
   }
 }

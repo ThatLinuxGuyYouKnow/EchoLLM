@@ -390,6 +390,8 @@ String getModelIcon({required String modelName}) {
     return 'assets/model_icons/gemini-icon.png';
   } else if (model_family == 'openai') {
     return 'assets/model_icons/openai-icon.png';
+  } else if (model_family == 'claude') {
+    return 'assets/model_icons/claude-icon.png';
   } else {
     return 'assets/model_icons/xai-icon.png';
   }
