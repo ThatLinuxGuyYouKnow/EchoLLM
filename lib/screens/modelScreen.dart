@@ -138,9 +138,9 @@ class _ModelTileState extends State<ModelTile> {
                         showDialog(
                           context: context,
                           builder: (_) => EnterApiKeyModal(
-                            modelName: widget.tileTitle,
-                            modelSlug: widget.modelSlug,
-                          ),
+                              modelName: widget.tileTitle,
+                              modelSlug: widget.modelSlug,
+                              context: context),
                         );
                       }
                     },
