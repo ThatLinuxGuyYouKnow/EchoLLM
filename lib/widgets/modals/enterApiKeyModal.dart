@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Widget EnterApiKeyModal(
-    {required String modelSlug, required String modelName}) {
+    {required String modelSlug,
+    required String modelName,
+    required BuildContext context}) {
   final TextEditingController _apiKeyController = TextEditingController();
   return Dialog(
     backgroundColor: const Color(0xFF1E2733),
@@ -50,7 +52,7 @@ Widget EnterApiKeyModal(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: null,
+                  onPressed: () => Navigator.pop(context),
                   child: Text(
                     'Cancel',
                     style: GoogleFonts.ubuntu(
