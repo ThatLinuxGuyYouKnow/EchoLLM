@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        platform: TargetPlatform.macOS,
+        platform: TargetPlatform.linux,
         useMaterial3: true,
       ),
       home: MainScreen(),
