@@ -11,7 +11,7 @@ import 'package:echo_llm/userConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
-
+import 'package:flutter_fullscreen/flutter_fullscreen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -20,8 +20,8 @@ Future<void> main() async {
   await GetStorage.init('preferences');
 
   await Hive.initFlutter();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-
+  WidgetsFlutterBinding.ensureInitialized();
+  await FullScreen.ensureInitialized();
   await Hive.openBox('chatBox');
   Hive.registerAdapter(ChatAdapter());
   Hive.registerAdapter(MessageAdapter());
@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FullScreen.setFullScreen(true);
     final config = Provider.of<CONFIG>(context, listen: false);
     config.loadPreferences();
 
