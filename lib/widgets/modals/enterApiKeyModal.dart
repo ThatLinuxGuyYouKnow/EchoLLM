@@ -1,3 +1,5 @@
+import 'package:echo_llm/dataHandlers/hive/ApikeyHelper.dart';
+import 'package:echo_llm/mappings/modelSlugMappings.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -6,6 +8,8 @@ Widget EnterApiKeyModal(
     required String modelName,
     required BuildContext context}) {
   final TextEditingController _apiKeyController = TextEditingController();
+  final ApiKeyHelper keyHelper = ApiKeyHelper();
+
   return Dialog(
     backgroundColor: const Color(0xFF1E2733),
     shape: RoundedRectangleBorder(
@@ -71,7 +75,11 @@ Widget EnterApiKeyModal(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24, vertical: 12),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    keyHelper.storeKey(
+                        modelSlugNotName: modelSlug,
+                        apiKey: _apiKeyController.text.trim());
+                  },
                   child: Text(
                     'Save Key',
                     style: GoogleFonts.ubuntu(
