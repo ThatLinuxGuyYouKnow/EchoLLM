@@ -21,7 +21,7 @@ Future<void> main() async {
 
   await Hive.initFlutter();
   WidgetsFlutterBinding.ensureInitialized();
-  await FullScreen.ensureInitialized();
+
   await Hive.openBox('chatBox');
   Hive.registerAdapter(ChatAdapter());
   Hive.registerAdapter(MessageAdapter());
@@ -45,7 +45,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FullScreen.setFullScreen(true);
     final config = Provider.of<CONFIG>(context, listen: false);
     config.loadPreferences();
 
