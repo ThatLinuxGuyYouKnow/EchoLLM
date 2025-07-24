@@ -42,11 +42,11 @@ class ChatTextField extends StatelessWidget {
       messageState.addMessage(message: userMessage);
       messageState.setProcessing(true);
       chatController.clear(); // Clear the textfield immediately for better UX
-
-      final response = await modelInference.runInference(userMessage);
       if (isFirstMessage) {
         screenState.chatScreen();
       }
+      final response = await modelInference.runInference(userMessage);
+
       if (response != null && response.isNotEmpty) {
         messageState.addMessage(message: response);
 
