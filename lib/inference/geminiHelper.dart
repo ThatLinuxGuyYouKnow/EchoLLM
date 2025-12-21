@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:echo_llm/services/messenger_service.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -6,12 +7,10 @@ import 'package:http/http.dart' as http;
 class Geminihelper {
   final String modelSlug;
   final String apiKey;
-  final BuildContext context;
 
   Geminihelper({
     required this.modelSlug,
     required this.apiKey,
-    required this.context,
   });
 
   Future<String?> getResponse({
@@ -65,34 +64,36 @@ class Geminihelper {
         return parts.first['text'] as String?;
 
       case 400:
-        showCustomToast(
-          context,
-          message: "Bad request - check your input",
+        debugPrint('Error 400: Bad request - ${response.body}');
+        MessengerService().showToast(
+          "Bad request - check your input",
           type: ToastMessageType.error,
         );
         return null;
 
       case 403:
-        showCustomToast(
-          context,
-          message: "Invalid API key for Gemini",
+        debugPrint('Error 403: Forbidden - ${response.body}');
+        MessengerService().showToast(
+          "Invalid API key for Gemini",
           type: ToastMessageType.error,
         );
         return null;
 
       case 500:
       case 504:
-        showCustomToast(
-          context,
-          message: "Server error - try shortening your prompt",
+        debugPrint(
+            'Error ${response.statusCode}: Server error - ${response.body}');
+        MessengerService().showToast(
+          "Server error - try shortening your prompt",
           type: ToastMessageType.error,
         );
         return null;
 
       default:
-        showCustomToast(
-          context,
-          message: 'Unexpected error: ${response.statusCode}',
+        debugPrint(
+            'Error ${response.statusCode}: Unexpected error - ${response.body}');
+        MessengerService().showToast(
+          'Unexpected error: ${response.statusCode}',
           type: ToastMessageType.error,
         );
         return null;
