@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:echo_llm/services/messenger_service.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -7,9 +7,7 @@ import 'package:http/http.dart' as http;
 class Openaihelper {
   final String apikey;
   final String modelSlug;
-  final BuildContext context;
-  Openaihelper(
-      {required this.apikey, required this.modelSlug, required this.context});
+  Openaihelper({required this.apikey, required this.modelSlug});
 
   Future<String?> getResponse(
       {required String prompt,
@@ -53,9 +51,8 @@ class Openaihelper {
       case 400:
         debugPrint(
             'OpenAI API Error: ${response.statusCode}\n${response.body}');
-        showCustomToast(
-          context,
-          message: "Bad request ${response.body} - check your input please",
+        MessengerService().showToast(
+          "Bad request ${response.body} - check your input please",
           type: ToastMessageType.error,
         );
         return null;
@@ -63,9 +60,8 @@ class Openaihelper {
       case 401:
         debugPrint(
             'OpenAI API Error: ${response.statusCode}\n${response.body}');
-        showCustomToast(
-          context,
-          message: "Invalid API key for OpenAI",
+        MessengerService().showToast(
+          "Invalid API key for OpenAI",
           type: ToastMessageType.error,
         );
         return null;
@@ -73,9 +69,8 @@ class Openaihelper {
       case 429:
         debugPrint(
             'OpenAI API Error: ${response.statusCode}\n${response.body}');
-        showCustomToast(
-          context,
-          message: "Rate limit exceeded",
+        MessengerService().showToast(
+          "Rate limit exceeded",
           type: ToastMessageType.error,
         );
         return null;
@@ -85,9 +80,8 @@ class Openaihelper {
       case 504:
         debugPrint(
             'OpenAI API Error: ${response.statusCode}\n${response.body}');
-        showCustomToast(
-          context,
-          message: "Server error - try again later",
+        MessengerService().showToast(
+          "Server error - try again later",
           type: ToastMessageType.error,
         );
         return null;
@@ -95,9 +89,8 @@ class Openaihelper {
       default:
         debugPrint(
             'OpenAI API Error: ${response.statusCode}\n${response.body}');
-        showCustomToast(
-          context,
-          message: 'API Error: ${response.statusCode}',
+        MessengerService().showToast(
+          'API Error: ${response.statusCode}',
           type: ToastMessageType.error,
         );
         return null;

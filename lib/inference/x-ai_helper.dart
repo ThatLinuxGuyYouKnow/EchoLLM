@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
+import 'package:echo_llm/services/messenger_service.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -8,12 +8,10 @@ import 'package:http/http.dart' as http;
 class XaiHelper {
   final String apiKey;
   final String modelSlug;
-  final BuildContext context;
 
   XaiHelper({
     required this.apiKey,
     required this.modelSlug,
-    required this.context,
   });
 
   Future<String?> getResponse({required String prompt}) async {
@@ -38,9 +36,8 @@ class XaiHelper {
 
       return _handleResponse(response);
     } catch (e) {
-      showCustomToast(
-        context,
-        message: 'Network error: ${e.toString()}',
+      MessengerService().showToast(
+        'Network error: ${e.toString()}',
         type: ToastMessageType.error,
       );
       return null;
@@ -68,9 +65,8 @@ class XaiHelper {
       case 400:
         debugPrint(
             'OpenAI API Error: ${response.statusCode}\n${response.body}');
-        showCustomToast(
-          context,
-          message: 'Invalid API Key for ${onlineModels.entries.firstWhere(
+        MessengerService().showToast(
+          'Invalid API Key for ${onlineModels.entries.firstWhere(
                 (entry) => entry.value == modelSlug,
                 orElse: () => const MapEntry('Unknown Model', ''),
               ).key}',
@@ -81,9 +77,8 @@ class XaiHelper {
 
       case 401:
       case 403:
-        showCustomToast(
-          context,
-          message: 'Authentication failed – invalid API key',
+        MessengerService().showToast(
+          'Authentication failed – invalid API key',
           type: ToastMessageType.error,
         );
         return null;
@@ -94,9 +89,8 @@ class XaiHelper {
       case 504:
         debugPrint(
             'OpenAI API Error: ${response.statusCode}\n${response.body}');
-        showCustomToast(
-          context,
-          message: 'Server error – please try again later',
+        MessengerService().showToast(
+          'Server error – please try again later',
           type: ToastMessageType.error,
         );
         return null;

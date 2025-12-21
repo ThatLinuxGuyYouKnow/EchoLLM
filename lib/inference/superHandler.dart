@@ -8,24 +8,21 @@ import 'package:echo_llm/state_management/messageStreamState.dart';
 
 import 'package:echo_llm/userConfig.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class InferenceSuperClass {
-  final BuildContext context;
   final List<Map<int, String>> conversationHistory;
+  final Messagestreamstate messageState;
+  final CONFIG config;
 
   InferenceSuperClass({
-    required this.context,
     required this.conversationHistory,
+    required this.messageState,
+    required this.config,
   });
 
   Future<String?> runInference(String prompt) async {
-    final messageState =
-        Provider.of<Messagestreamstate>(context, listen: false);
     final MessengerService _messenger = MessengerService();
     try {
-      final CONFIG config = Provider.of<CONFIG>(context, listen: false);
       final String modelSlug = config.modelSlug;
       final apikey = ApiKeyHelper();
 
@@ -43,9 +40,8 @@ class InferenceSuperClass {
       final apiKey = apikey.readKey(modelSlugNotName: modelSlug);
       String modelResponse = '';
       if (apiKey.isEmpty) {
-        showCustomToast(
-          context,
-          message: "API key not found for ${config.model}",
+        _messenger.showToast(
+          "API key not found for ${config.model}",
           type: ToastMessageType.error,
         );
         return null;
@@ -56,7 +52,6 @@ class InferenceSuperClass {
           final gemini = Geminihelper(
             modelSlug: modelSlug,
             apiKey: apiKey,
-            context: context,
           );
           modelResponse = await gemini.getResponse(
                 prompt: prompt,
@@ -66,11 +61,14 @@ class InferenceSuperClass {
           if (modelResponse.isEmpty) {
             messageState.deleteUserLastMessage();
           }
+          print(modelResponse);
           return modelResponse;
 
         case 'openai':
           final openai = Openaihelper(
-              apikey: apiKey, modelSlug: modelSlug, context: context);
+            apikey: apiKey,
+            modelSlug: modelSlug,
+          );
           modelResponse = await openai.getResponse(
                   prompt: prompt, history: formattedHistory) ??
               '';
@@ -79,8 +77,10 @@ class InferenceSuperClass {
           }
           return modelResponse;
         case 'x-ai':
-          final xai =
-              XaiHelper(apiKey: apiKey, modelSlug: modelSlug, context: context);
+          final xai = XaiHelper(
+            apiKey: apiKey,
+            modelSlug: modelSlug,
+          );
           modelResponse = await xai.getResponse(prompt: prompt) ?? '';
           if (modelResponse.isEmpty) {
             messageState.deleteUserLastMessage();
@@ -90,6 +90,7 @@ class InferenceSuperClass {
           throw Exception('Unknown model type: $modelType');
       }
     } catch (e) {
+      print('error' + e.toString());
       messageState.deleteUserLastMessage();
       _messenger.showToast('Unexpected Error Ocurred, do you have internet ?',
           type: ToastMessageType.error);

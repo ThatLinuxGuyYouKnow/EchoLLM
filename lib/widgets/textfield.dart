@@ -22,8 +22,11 @@ class ChatTextField extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final isPhoneScreen = screenWidth <= 900;
     bool isExpanded = textfieldState.isExpanded;
+    final config = Provider.of<CONFIG>(context);
     final modelInference = InferenceSuperClass(
-        context: context, conversationHistory: messageState.messages);
+        conversationHistory: messageState.messages,
+        messageState: messageState,
+        config: config);
     final existingID = messageState.chatID;
     final _shouldSendOnEnter = Provider.of<CONFIG>(context).shouldSendOnEnter;
     final FocusNode textFieldFocusNode = FocusNode();
