@@ -2,8 +2,7 @@ name: echollm
 version: '1.0.0'
 summary: A privacy-focused AI chat application
 description: |
-  EchoLLM is a desktop client for interacting with various AI models
-  with local API key management and chat history storage.
+  EchoLLM is a desktop client for interacting with various AI models.
 
 base: core22
 confinement: devmode
@@ -15,26 +14,22 @@ architectures:
 apps:
   echollm:
     command: echo_llm
+    extensions: [gnome] # This is the "magic" line
     desktop: snap/gui/echo_llm.desktop
     plugs:
       - network
       - network-bind
       - home
-      - x11
-      - wayland
       - opengl
       - pulseaudio
       - gsettings
       - removable-media
-    
-    environment:
-      XDG_DATA_DIRS: "$SNAP/usr/share:$XDG_DATA_DIRS"
-      GTK_PATH: "$SNAP/usr/lib/x86_64-linux-gnu/gtk-3.0"
+    # DELETE the "environment:" block entirely. 
+    # The gnome extension sets those variables correctly for you.
 
 parts:
   echollm:
     source: .
-    source-type: git
     plugin: flutter
     flutter-target: lib/main.dart
     build-snaps:
@@ -47,13 +42,5 @@ parts:
       - liblzma-dev
     stage-packages:
       - libgtk-3-0
-      - libcolord2
-    
-      - gnome-themes-extra
-      - adwaita-icon-theme
-      - hicolor-icon-theme
-      - gtk2-engines-murrine
-      - librsvg2-common
-      - libgdk-pixbuf2.0-0
-      - libgdk-pixbuf2.0-bin
-      - shared-mime-info
+    # I removed the long list of icon-themes and pixbuf packages. 
+    # The gnome extension includes them automatically in a more compatible way.
