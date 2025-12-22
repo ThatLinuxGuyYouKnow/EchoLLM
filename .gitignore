@@ -36,7 +36,6 @@ migrate_working_dir/
 /snap/
 /prime/
 /stage/
-/linux/
 /dist/
 # Symbolication related
 app.*.symbols
