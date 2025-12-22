@@ -5,7 +5,7 @@ description: |
   EchoLLM is a desktop client for interacting with various AI models
   with local API key management and chat history storage.
 
-base: core24
+base: core22
 confinement: devmode
 grade: devel
 
