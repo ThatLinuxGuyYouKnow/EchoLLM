@@ -1,0 +1,52 @@
+https://launchpad.net/~tlxgyk/tlxgyk-craft-remote-build/+snap/snapcraft-echollm-b38c943a0be88c639820ffb0470b60a4/+build/3000881
+[Mon Dec 22 20:01:51 2025]
+RUN: /usr/share/launchpad-buildd/bin/builder-prep 
+Kernel version: Linux lcy02-amd64-061 6.8.0-90-generic #91-Ubuntu SMP PREEMPT_DYNAMIC Tue Nov 18 14:14:30 UTC 2025 x86_64
+Buildd toolchain package versions: launchpad-buildd_260~778~ubuntu24.04.1 python3-lpbuildd_260~778~ubuntu24.04.1 sbuild_0.85.10ubuntu0.2 git-build-recipe_0.3.7 git_1:2.43.0-1ubuntu7.3 dpkg-dev_1.22.6ubuntu6.5 python3-debian_0.1.49ubuntu2.
+Syncing the system clock with the buildd NTP service...
+2025-12-22 20:01:51.942265 (+0000) -0.000035 +/- 0.001536 ntp.buildd 10.131.248.1 s3 no-leap
+[Mon Dec 22 20:01:51 2025]
+RUN: /usr/share/launchpad-buildd/bin/in-target unpack-chroot --backend=lxd --series=noble --abi-tag=amd64 --isa-tag=amd64 SNAPBUILD-3000881 --image-type lxd /home/buildd/filecache-default/6cd112a2bb5d1e8144251bee5a46f78094ce8d47
+Creating target for build SNAPBUILD-3000881
+To start your first container, try: lxc launch ubuntu:24.04
+Or for a virtual machine: lxc launch ubuntu:24.04 --vm
+
+/usr/lib/python3/dist-packages/pylxd/models/operation.py:76: UserWarning: Attempted to set unknown attribute "location" on instance of "Operation"
+  warnings.warn(
+[Mon Dec 22 20:02:07 2025]
+RUN: /usr/share/launchpad-buildd/bin/in-target mount-chroot --backend=lxd --series=noble --abi-tag=amd64 --isa-tag=amd64 SNAPBUILD-3000881
+Starting target for build SNAPBUILD-3000881
+/usr/lib/python3/dist-packages/pylxd/models/_model.py:134: UserWarning: Attempted to set unknown attribute "project" on instance of "Profile"
+  warnings.warn(
+/usr/lib/python3/dist-packages/pylxd/models/operation.py:76: UserWarning: Attempted to set unknown attribute "location" on instance of "Operation"
+  warnings.warn(
+Error: Instance is not running
+/usr/lib/python3/dist-packages/pylxd/models/_model.py:134: UserWarning: Attempted to set unknown attribute "type" on instance of "Container"
+  warnings.warn(
+/usr/lib/python3/dist-packages/pylxd/models/_model.py:134: UserWarning: Attempted to set unknown attribute "project" on instance of "Container"
+  warnings.warn(
+Error: Instance is not running
+Error: Instance is not running
+Error: Instance is not running
+[Mon Dec 22 20:02:20 2025]
+RUN: /usr/share/launchpad-buildd/bin/in-target override-sources-list --backend=lxd --series=noble --abi-tag=amd64 --isa-tag=amd64 SNAPBUILD-3000881 'deb http://ftpmaster.internal/ubuntu noble main restricted universe multiverse' 'deb http://ftpmaster.internal/ubuntu noble-security main restricted universe multiverse' 'deb http://ftpmaster.internal/ubuntu noble-updates main restricted universe multiverse'
+Overriding sources.list in build-SNAPBUILD-3000881
+cannot confirm that parent process is alive: Operation not permitted
+cannot send command 0 to helper process: Broken pipe
+Traceback (most recent call last):
+  File "/usr/share/launchpad-buildd/bin/in-target", line 20, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/share/launchpad-buildd/bin/in-target", line 16, in main
+    return args.operation.run()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/lpbuildd/target/apt.py", line 49, in run
+    self.backend.run(
+  File "/usr/lib/python3/dist-packages/lpbuildd/target/lxd.py", line 736, in run
+    subprocess.check_call(cmd, **kwargs)
+  File "/usr/lib/python3.12/subprocess.py", line 413, in check_call
+    raise CalledProcessError(retcode, cmd)
+subprocess.CalledProcessError: Command '['lxc', 'exec', 'lp-noble-amd64', '--', 'linux64', 'rm', '-f', '/etc/apt/sources.list.d/ubuntu.sources']' returned non-zero exit status 1.
+[Mon Dec 22 20:02:25 2025]
+RUN: /usr/share/launchpad-buildd/bin/in-target scan-for-processes --backend=lxd --series=noble --abi-tag=amd64 --isa-tag=amd64 SNAPBUILD-3000881
+Scanning for processes to kill in build SNAPBUILD-3000881

@@ -9,8 +9,8 @@ base: core24
 confinement: devmode
 grade: devel
 
-platforms:
-  amd64:
+architectures:
+  - build-on: amd64
 
 apps:
   echollm:
