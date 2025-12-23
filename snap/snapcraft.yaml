@@ -2,11 +2,15 @@ name: echollm
 version: '1.0.0'
 summary: A privacy-focused AI chat application
 description: |
-  EchoLLM is a desktop client for interacting with various AI models.
+  EchoLLM is a desktop client for interacting with various AI models
+  with local API key management and chat history storage.
+
+ 
+license: Apache-2.0   
 
 base: core22
-confinement: devmode
-grade: devel
+confinement: strict  
+grade: stable        
 
 architectures:
   - build-on: amd64
@@ -14,7 +18,7 @@ architectures:
 apps:
   echollm:
     command: echo_llm
-    extensions: [gnome] # This is the "magic" line
+    extensions: [gnome]
     desktop: snap/gui/echo_llm.desktop
     plugs:
       - network
@@ -24,8 +28,6 @@ apps:
       - pulseaudio
       - gsettings
       - removable-media
-    # DELETE the "environment:" block entirely. 
-    # The gnome extension sets those variables correctly for you.
 
 parts:
   echollm:
@@ -42,5 +44,3 @@ parts:
       - liblzma-dev
     stage-packages:
       - libgtk-3-0
-    # I removed the long list of icon-themes and pixbuf packages. 
-    # The gnome extension includes them automatically in a more compatible way.
