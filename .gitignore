@@ -47,3 +47,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+
+# ignore local remote builds
+
+.echollm_1.0.0_amd64.snap
