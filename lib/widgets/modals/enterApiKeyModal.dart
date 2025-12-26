@@ -2,13 +2,14 @@ import 'package:echo_llm/dataHandlers/hive/ApikeyHelper.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:echo_llm/state_management/keysState.dart';
 
 Widget EnterApiKeyModal(
     {required String modelSlug,
     required String modelName,
     required BuildContext context}) {
   final TextEditingController _apiKeyController = TextEditingController();
-  final ApiKeyHelper keyHelper = ApiKeyHelper();
 
   return Dialog(
     backgroundColor: const Color(0xFF1E2733),
@@ -76,9 +77,11 @@ Widget EnterApiKeyModal(
                         horizontal: 24, vertical: 12),
                   ),
                   onPressed: () {
-                    keyHelper.storeKey(
-                        modelSlugNotName: modelSlug,
-                        apiKey: _apiKeyController.text.trim());
+                    // Use Provider to add key
+                    Provider.of<KeysState>(context, listen: false).addKey(
+                        modelSlug: modelSlug,
+                        key: _apiKeyController.text.trim());
+                    Navigator.pop(context);
                   },
                   child: Text(
                     'Save Key',
