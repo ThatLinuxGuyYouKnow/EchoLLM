@@ -28,25 +28,9 @@ class _ModelselectorState extends State<Modelselector> {
     final keysState = context.watch<KeysState>();
     List<String> availableOptions = keysState.availableModelNames;
     
-    // Handle case where no models are available (or keys not loaded yet)
-    // If no keys are set, maybe we want to show all models? 
-    // The previous implementation fell back to all list if empty.
-    // Let's check KeysState implementation. It populates availableModelNames based on keys.
-    // Use KeysState behavior. If empty, maybe show "No models available" or stick to config?
-    // User requested "dropdowns need to update".
-    
     if (availableOptions.isEmpty) {
-        // Fallback or empty state?
-        // Original code: if (availableModelNames.isEmpty) availableModelNames = onlineModels.keys.toList();
-        // I should probably ask KeysState to do this fallback or do it here.
-        // Let's implement the fallback here to match previous behavior if desired, 
-        // OR if the user intends to lock it down, we should respect emptiness.
-        // Given the instructions, if I delete a key, it should disappear. 
-        // If I delete ALL keys, presumably the list is empty. 
-        // BUT, maybe the app allows selecting a model even if key is missing (and prompting later)?
-        // No, current logic seems to enforce "Available".
-        // However, let's stick to what KeysState provides.
-        // If KeysState provides empty list, so be it.
+       // If no keys are set, the dropdown handles this via the hint text.
+       // We do not fallback to all models because we want to enforce key availability.
     }
 
     // Ensure _selectedValue is valid
