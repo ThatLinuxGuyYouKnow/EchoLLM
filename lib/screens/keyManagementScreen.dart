@@ -1,10 +1,11 @@
-import 'package:echo_llm/dataHandlers/hive/ApikeyHelper.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
 import 'package:echo_llm/widgets/modals/addNewKeyModal.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:echo_llm/state_management/keysState.dart';
 
 class ApiKey {
   final String id;
@@ -30,7 +31,6 @@ class KeyManagementScreen extends StatefulWidget {
 }
 
 class _KeyManagementScreenState extends State<KeyManagementScreen> {
-  final apikey = ApiKeyHelper();
   final Color _cardBackgroundColor = const Color(0xFF1C1C1E);
   bool _isFabHovered = false;
 
@@ -41,90 +41,95 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ModelKeyMap = apikey.getAvailableModelKeyMap();
-    final modelKeyEntries = ModelKeyMap.entries.toList();
-    String _deriveServiceName(String modelSlug) {
-      final reversed = {for (var e in onlineModels.entries) e.value: e.key};
-      return reversed[modelSlug] ?? "Unknown Service";
-    }
+    return Consumer<KeysState>(
+      builder: (context, keysState, child) {
+        final modelKeyMap = keysState.modelKeys;
+        final modelKeyEntries = modelKeyMap.entries.toList();
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: ModelKeyMap.isEmpty
-          ? _buildEmptyState()
-          : ListView.builder(
-              padding: const EdgeInsets.only(bottom: 80),
-              itemCount: modelKeyEntries.length,
-              itemBuilder: (context, index) {
-                final entry = modelKeyEntries[index];
-                final apiKey = ApiKey(
-                  id: entry.key,
-                  name: entry.key,
-                  serviceName: _deriveServiceName(entry.key),
-                  modelSlug: entry.key,
-                  keyValue: entry.value,
-                );
-                return _buildApiKeyCard(apikey: apiKey);
-              }),
-      floatingActionButton: MouseRegion(
-        onEnter: (_) => setState(() => _isFabHovered = true),
-        onExit: (_) => setState(() => _isFabHovered = false),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          decoration: BoxDecoration(
-            color:
-                const Color(0xFF4C83D1).withOpacity(_isFabHovered ? 1.0 : 0.8),
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: _isFabHovered
-                ? [
-                    BoxShadow(
-                      color: const Color(0xFF4C83D1).withOpacity(0.3),
-                      blurRadius: 8,
-                      spreadRadius: 1,
-                    )
-                  ]
-                : [],
-          ),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(10),
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const AddNewKeyModal(
-                    isNewUser: false,
-                  ),
-                );
-              },
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.add,
-                      color: Colors.white,
-                      size: _isFabHovered ? 22 : 20,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Add New Key',
-                      style: GoogleFonts.ubuntu(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: _isFabHovered ? 15 : 14,
+        String _deriveServiceName(String modelSlug) {
+          final reversed = {for (var e in onlineModels.entries) e.value: e.key};
+          return reversed[modelSlug] ?? "Unknown Service";
+        }
+
+        return Scaffold(
+          backgroundColor: Colors.black,
+          body: modelKeyMap.isEmpty
+              ? _buildEmptyState()
+              : ListView.builder(
+                  padding: const EdgeInsets.only(bottom: 80),
+                  itemCount: modelKeyEntries.length,
+                  itemBuilder: (context, index) {
+                    final entry = modelKeyEntries[index];
+                    final apiKey = ApiKey(
+                      id: entry.key,
+                      name: entry.key,
+                      serviceName: _deriveServiceName(entry.key),
+                      modelSlug: entry.key,
+                      keyValue: entry.value,
+                    );
+                    return _buildApiKeyCard(apikey: apiKey);
+                  }),
+          floatingActionButton: MouseRegion(
+            onEnter: (_) => setState(() => _isFabHovered = true),
+            onExit: (_) => setState(() => _isFabHovered = false),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              decoration: BoxDecoration(
+                color: const Color(0xFF4C83D1)
+                    .withOpacity(_isFabHovered ? 1.0 : 0.8),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: _isFabHovered
+                    ? [
+                        BoxShadow(
+                          color: const Color(0xFF4C83D1).withOpacity(0.3),
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                        )
+                      ]
+                    : [],
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => const AddNewKeyModal(
+                        isNewUser: false,
                       ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: _isFabHovered ? 22 : 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Add New Key',
+                          style: GoogleFonts.ubuntu(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: _isFabHovered ? 15 : 14,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        );
+      },
     );
   }
 
@@ -242,7 +247,7 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Are you sure you want to delete the key for${modelName}?',
+                Text('Are you sure you want to delete the key for $modelName?',
                     style: GoogleFonts.ubuntu(color: Colors.grey[300])),
                 Text('This action cannot be undone.',
                     style: GoogleFonts.ubuntu(
@@ -270,7 +275,7 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
               onPressed: () {
                 Navigator.of(dialogContext).pop();
                 try {
-                  deleteKeyForModel(modelSlug: apiKey.modelSlug);
+                  Provider.of<KeysState>(context, listen: false).deleteKey(modelSlug: apiKey.modelSlug);
                   showCustomToast(context,
                       message: 'Deleted Key for $modelName');
                 } catch (error) {

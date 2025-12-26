@@ -1,5 +1,4 @@
 import 'package:echo_llm/dataHandlers/firstTimeUser.dart';
-import 'package:echo_llm/dataHandlers/hive/ApikeyHelper.dart';
 import 'package:echo_llm/mappings/modelClassMapping.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
 
@@ -7,6 +6,8 @@ import 'package:echo_llm/widgets/modals/apiKeyReminder.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:echo_llm/state_management/keysState.dart';
 
 class AddNewKeyModal extends StatefulWidget {
   const AddNewKeyModal({super.key, required bool isNewUser});
@@ -142,10 +143,10 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
                     onPressed: () {
                       if (apiKeyText.isNotEmpty && modelName.isNotEmpty) {
                         try {
-                          final apiKey = ApiKeyHelper();
-                          apiKey.storeKey(
-                            modelSlugNotName: onlineModels[modelName]!,
-                            apiKey: apiKeyText,
+                          // Use Provider to add key
+                          Provider.of<KeysState>(context, listen: false).addKey(
+                            modelSlug: onlineModels[modelName]!,
+                            key: apiKeyText,
                           );
                           Navigator.of(context).pop();
                           showCustomToast(context,

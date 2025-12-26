@@ -7,10 +7,7 @@ class ApiKeyHelper {
   storeKey({required String modelSlugNotName, required String apiKey}) async {
     try {
       await box.write(modelSlugNotName, apiKey);
-      return true;
-    } catch (error) {
-      return false;
-    }
+    } catch (error) {}
   }
 
   String readKey({required String modelSlugNotName}) {
