@@ -1,10 +1,11 @@
-import 'package:echo_llm/mappings/modelAvailabilityMapping.dart';
 import 'package:echo_llm/mappings/modelClassMapping.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
 
 import 'package:echo_llm/widgets/modals/enterApiKeyModal.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:echo_llm/state_management/keysState.dart';
 
 class ModelScreen extends StatelessWidget {
   const ModelScreen({super.key});
@@ -13,29 +14,33 @@ class ModelScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: GridView.builder(
-          itemCount: onlineModels.length,
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 200,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 1.2,
-          ),
-          itemBuilder: (context, index) {
-            final modelName = onlineModels.keys.elementAt(index);
-            final slug = onlineModels[modelName] ?? '';
-            final isAvailable = onlineModelAvailability[slug] ?? false;
-            String modelIcon = getModelIcon(modelSlug: slug);
-            return ModelTile(
-              modelFamilyIconPath: modelIcon,
-              modelSlug: slug,
-              tileTitle: modelName,
-              isAvailable: isAvailable,
-            );
-          },
-        ),
+      body: Consumer<KeysState>(
+        builder: (context, keysState, child) {
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: GridView.builder(
+              itemCount: onlineModels.length,
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 1.2,
+              ),
+              itemBuilder: (context, index) {
+                final modelName = onlineModels.keys.elementAt(index);
+                final slug = onlineModels[modelName] ?? '';
+                final isAvailable = keysState.isModelAvailable(slug);
+                String modelIcon = getModelIcon(modelSlug: slug);
+                return ModelTile(
+                  modelFamilyIconPath: modelIcon,
+                  modelSlug: slug,
+                  tileTitle: modelName,
+                  isAvailable: isAvailable,
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }

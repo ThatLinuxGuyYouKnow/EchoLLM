@@ -6,6 +6,7 @@ import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/screenState.dart';
 import 'package:echo_llm/state_management/sidebarState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
+import 'package:echo_llm/state_management/keysState.dart';
 import 'package:echo_llm/userConfig.dart';
 
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => Screenstate()),
         ChangeNotifierProvider(create: (_) => ApikeyModalState()),
         ChangeNotifierProvider(create: (_) => CONFIG()),
+        ChangeNotifierProvider(create: (_) => KeysState()),
       ],
       child: const MyApp(),
     ),
