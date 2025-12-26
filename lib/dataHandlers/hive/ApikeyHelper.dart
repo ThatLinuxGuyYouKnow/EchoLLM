@@ -1,5 +1,4 @@
-import 'package:echo_llm/mappings/modelAvailabilityMapping.dart';
-
+import 'package:echo_llm/mappings/modelSlugMappings.dart';
 import 'package:get_storage/get_storage.dart';
 
 class ApiKeyHelper {
@@ -19,15 +18,14 @@ class ApiKeyHelper {
 
   Map<String, String> getAvailableModelKeyMap() {
     final result = <String, String>{};
+    final uniqueSlugs = onlineModels.values.toSet();
 
-    onlineModelAvailability.forEach((modelSlug, isAvailable) {
-      if (isAvailable) {
-        final key = readKey(modelSlugNotName: modelSlug);
-        if (key.isNotEmpty) {
-          result[modelSlug] = key;
-        }
+    for (var modelSlug in uniqueSlugs) {
+      final key = readKey(modelSlugNotName: modelSlug);
+      if (key.isNotEmpty) {
+        result[modelSlug] = key;
       }
-    });
+    }
 
     return result;
   }
