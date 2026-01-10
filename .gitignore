@@ -33,7 +33,6 @@ migrate_working_dir/
 .pub/
 /build/
 /parts/
-/snap/
 /prime/
 /stage/
 /dist/
@@ -52,4 +51,3 @@ app.*.map.json
 # ignore local remote builds
 
 .echollm_1.0.0_amd64.snap
-/linux/
