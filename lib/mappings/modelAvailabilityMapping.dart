@@ -10,8 +10,8 @@ Map<String, bool> onlineModelAvailability = {
   "gemini-2.5-flash":
       keyHandler.readKey(modelSlugNotName: 'gemini-2.5-flash').length > 1,
   "gpt-4.1": keyHandler.readKey(modelSlugNotName: 'gpt-4.1').length > 1,
-  "gpt-4o": keyHandler.readKey(modelSlugNotName: 'gpt-4o').length > 1,
-  "grok-2-1212": keyHandler.readKey(modelSlugNotName: "grok-2-1212").length > 1,
+  "gpt-4o":
+      keyHandler.readKey(modelSlugNotName: 'chatgpt-4o-latest').length > 1,
   'grok-3-beta': keyHandler.readKey(modelSlugNotName: 'grok-3-beta').length > 1,
   'grok-3-mini-beta':
       keyHandler.readKey(modelSlugNotName: 'grok-3-mini-beta').length > 1,
