@@ -1,6 +1,5 @@
 import 'package:echo_llm/dataHandlers/firstTimeUser.dart';
-
-import 'package:echo_llm/mappings/modelSlugMappings.dart';
+import 'package:echo_llm/mappings/modelDataService.dart';
 
 import 'package:echo_llm/widgets/modals/apiKeyReminder.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';

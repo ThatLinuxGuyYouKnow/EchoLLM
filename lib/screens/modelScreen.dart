@@ -1,5 +1,4 @@
-import 'package:echo_llm/mappings/modelSlugMappings.dart';
-
+import 'package:echo_llm/mappings/modelDataService.dart';
 import 'package:echo_llm/widgets/modals/enterApiKeyModal.dart';
 import 'package:echo_llm/widgets/modals/modelPreviewCard.dart';
 import 'package:flutter/material.dart';

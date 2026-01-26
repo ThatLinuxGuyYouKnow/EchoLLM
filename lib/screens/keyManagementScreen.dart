@@ -1,4 +1,4 @@
-import 'package:echo_llm/mappings/modelSlugMappings.dart';
+import 'package:echo_llm/mappings/modelDataService.dart';
 import 'package:echo_llm/widgets/modals/addNewKeyModal.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
@@ -275,7 +275,8 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
               onPressed: () {
                 Navigator.of(dialogContext).pop();
                 try {
-                  Provider.of<KeysState>(context, listen: false).deleteKey(modelSlug: apiKey.modelSlug);
+                  Provider.of<KeysState>(context, listen: false)
+                      .deleteKey(modelSlug: apiKey.modelSlug);
                   showCustomToast(context,
                       message: 'Deleted Key for $modelName');
                 } catch (error) {
