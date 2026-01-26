@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 class ModelPreviewCard extends StatelessWidget {
   // These will be provided by the parent widget
   final String modelName;
+  final String modelCompany;
+  final String modelType;
   final String subtitle;
   final String description;
   final String knowledgeCutoff;
@@ -25,6 +27,7 @@ class ModelPreviewCard extends StatelessWidget {
     required this.modelName,
     required this.isAvailable,
     required this.provider,
+    required this.modelType,
     this.subtitle = '',
     this.description = '',
     this.knowledgeCutoff = '',
@@ -38,6 +41,7 @@ class ModelPreviewCard extends StatelessWidget {
     this.onSelectModel,
     this.onCompare,
     this.onClose,
+    required this.modelCompany,
   });
 
   @override
@@ -149,43 +153,36 @@ class ModelPreviewCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         // Branding area - will be replaced with actual image
-        brandingImagePath != null
-            ? Image.asset(
-                brandingImagePath!,
-                height: 32,
-                fit: BoxFit.contain,
-              )
-            : Row(
-                children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    'GOOGLE',
-                    style: GoogleFonts.roboto(
-                      color: Colors.white.withOpacity(0.9),
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                modelCompany,
+                style: GoogleFonts.roboto(
+                  color: Colors.white.withOpacity(0.9),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.5,
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  provider,
-                  style: GoogleFonts.roboto(
-                    color: Colors.white.withOpacity(0.5),
-                    fontSize: 11,
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ],
+              ),
             ),
+            const SizedBox(width: 8),
+            Text(
+              modelType,
+              style: GoogleFonts.roboto(
+                color: Colors.white.withOpacity(0.5),
+                fontSize: 11,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 0.5,
+              ),
+            ),
+          ],
+        ),
         // Close button
         GestureDetector(
           onTap: onClose,

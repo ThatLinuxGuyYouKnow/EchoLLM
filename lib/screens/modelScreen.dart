@@ -1,4 +1,3 @@
-import 'package:echo_llm/mappings/modelClassMapping.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
 
 import 'package:echo_llm/widgets/modals/enterApiKeyModal.dart';
@@ -82,14 +81,31 @@ class _ModelTileState extends State<ModelTile> {
       },
       child: GestureDetector(
         onTap: () {
+          final modelData =
+              ModelDataService().getModelAsMapBySlug(widget.modelSlug) ?? {};
           showDialog(
               context: context,
-              builder: (_) => ModelPreviewCard(
+              builder: (modalContext) => ModelPreviewCard(
                     brandingImagePath: ModelDataService()
                         .getModelBrandingBySlug(widget.modelSlug),
                     provider: ModelDataService().getModelType(widget.modelSlug),
                     isAvailable: widget.isAvailable,
                     modelName: widget.tileTitle,
+                    modelType: (modelData['type'] ?? '').toString(),
+                    description: (modelData['description'] ?? '').toString(),
+                    subtitle: (modelData['subtitle'] ?? '').toString(),
+                    contextWindow:
+                        (modelData['context_window'] ?? '').toString(),
+                    modelCompany: (modelData['company'] ?? '').toString(),
+                    knowledgeCutoff:
+                        (modelData['knowledge_cutoff'] ?? '').toString(),
+                    speed: (modelData['speed'] ?? '').toString(),
+                    inputCost: (modelData['Cost_input'] ?? '').toString(),
+                    params: (modelData['params'] ?? '').toString(),
+                    onClose: () => Navigator.of(modalContext).pop(),
+                    onSelectModel: () {
+                      Navigator.of(modalContext).pop();
+                    },
                   ));
         },
         child: AnimatedContainer(

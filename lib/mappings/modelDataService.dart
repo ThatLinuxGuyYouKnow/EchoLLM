@@ -12,6 +12,13 @@ class ModelInfo {
   final double costOutputInt;
   final String brandingImage;
   final String contextWindow;
+  final String company;
+  final String type;
+  final String subtitle;
+  final String description;
+  final String knowledgeCutoff;
+  final String speed;
+  final String params;
 
   ModelInfo({
     required this.name,
@@ -23,20 +30,57 @@ class ModelInfo {
     required this.costOutputInt,
     required this.brandingImage,
     required this.contextWindow,
+    required this.company,
+    required this.type,
+    required this.subtitle,
+    required this.description,
+    required this.knowledgeCutoff,
+    required this.speed,
+    required this.params,
   });
 
   factory ModelInfo.fromJson(Map<String, dynamic> json) {
     return ModelInfo(
-      name: json['name'] ?? '',
-      slug: json['slug'] ?? '',
-      provider: json['Provider'] ?? '',
-      costInput: json['Cost_input'] ?? '',
-      costInputInt: (json['Cost_int'] ?? 0).toDouble(),
-      costOutput: json['Cost_output'] ?? '',
-      costOutputInt: (json['Cost_output_int'] ?? 0).toDouble(),
-      brandingImage: json['branding_image'] ?? '',
-      contextWindow: json['context_window'] ?? '',
+      name: (json['name'] ?? '').toString(),
+      slug: (json['slug'] ?? '').toString(),
+      provider: (json['Provider'] ?? '').toString(),
+      costInput: (json['Cost_input'] ?? '').toString(),
+      costInputInt: double.tryParse((json['Cost_int'] ?? 0).toString()) ?? 0.0,
+      costOutput: (json['Cost_output'] ?? '').toString(),
+      costOutputInt:
+          double.tryParse((json['Cost_output_int'] ?? 0).toString()) ?? 0.0,
+      brandingImage: (json['branding_image'] ?? '').toString(),
+      contextWindow: (json['context_window'] ?? '').toString(),
+      company: (json['company'] ?? '').toString(),
+      type: (json['type'] ?? '').toString(),
+      subtitle: (json['subtitle'] ?? '').toString(),
+      description: (json['description'] ?? '').toString(),
+      knowledgeCutoff: (json['knowledge_cutoff'] ?? '').toString(),
+      speed: (json['speed'] ?? '').toString(),
+      params: (json['params'] ?? '').toString(),
     );
+  }
+
+  // Added: serialize ModelInfo back to Map
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'slug': slug,
+      'Provider': provider,
+      'Cost_input': costInput,
+      'Cost_int': costInputInt,
+      'Cost_output': costOutput,
+      'Cost_output_int': costOutputInt,
+      'branding_image': brandingImage,
+      'context_window': contextWindow,
+      'company': company,
+      'type': type,
+      'subtitle': subtitle,
+      'description': description,
+      'knowledge_cutoff': knowledgeCutoff,
+      'speed': speed,
+      'params': params,
+    };
   }
 }
 
@@ -58,7 +102,12 @@ class ModelDataService {
 
   /// Map of model name -> slug (backwards compatible with onlineModels)
   Map<String, String> get onlineModels {
-    return {for (var m in _models) m.name: m.slug};
+    try {
+      return {for (var m in _models) m.name: m.slug};
+    } catch (e) {
+      print('Error in onlineModels getter: $e');
+      return {};
+    }
   }
 
   /// Map of slug -> model name (reverse lookup)
@@ -119,21 +168,54 @@ class ModelDataService {
     return getModelBySlug(slug)?.name;
   }
 
-  modelDatafromSlug({required String slug}) {
-    return _models.firstWhere((m) => m.slug == slug,
-        orElse: () => ModelInfo(
-            name: '',
-            slug: '',
-            provider: '',
-            costInput: '',
-            costInputInt: 0.0,
-            costOutput: '',
-            costOutputInt: 0.0,
-            brandingImage: '',
-            contextWindow: ''));
+  // Fixed: return ModelInfo and avoid undefined variable 'name'
+  ModelInfo modelDataFromSlug({required String slug}) {
+    return _models.firstWhere(
+      (m) => m.slug == slug,
+      orElse: () => ModelInfo(
+        name: '',
+        slug: '',
+        provider: '',
+        costInput: '',
+        costInputInt: 0.0,
+        costOutput: '',
+        costOutputInt: 0.0,
+        brandingImage: '',
+        contextWindow: '',
+        company: '',
+        type: '',
+        subtitle: '',
+        description: '',
+        knowledgeCutoff: '',
+        speed: '',
+        params: '',
+      ),
+    );
   }
 
-  String getModelProvider(slug) {
+  // Added: return all models as a list of maps
+  List<Map<String, dynamic>> allModelsAsMap() {
+    return _models.map((m) => m.toJson()).toList();
+  }
+
+  // Added: return all models as a JSON string (same structure as the asset)
+  String allModelsAsJson() {
+    return json.encode({'models': allModelsAsMap()});
+  }
+
+  /// Return a single model as a Map given its slug, or null if not found.
+  Map<String, dynamic>? getModelAsMapBySlug(String slug) {
+    final model = getModelBySlug(slug);
+    return model?.toJson();
+  }
+
+  /// Return a single model as a JSON string given its slug, or null if not found.
+  String? getModelAsJsonBySlug(String slug) {
+    final map = getModelAsMapBySlug(slug);
+    return map == null ? null : json.encode(map);
+  }
+
+  String getModelProvider(String slug) {
     final provider = _models
         .firstWhere((m) => m.slug == slug,
             orElse: () => ModelInfo(
@@ -145,7 +227,14 @@ class ModelDataService {
                 costOutput: '',
                 costOutputInt: 0.0,
                 brandingImage: '',
-                contextWindow: ''))
+                contextWindow: '',
+                company: '',
+                type: '',
+                subtitle: '',
+                description: '',
+                knowledgeCutoff: '',
+                speed: '',
+                params: ''))
         .provider
         .toLowerCase();
 
@@ -164,7 +253,14 @@ class ModelDataService {
                 costOutput: '',
                 costOutputInt: 0.0,
                 brandingImage: '',
-                contextWindow: ''))
+                contextWindow: '',
+                company: '',
+                type: '',
+                subtitle: '',
+                description: '',
+                knowledgeCutoff: '',
+                speed: '',
+                params: ''))
         .provider
         .toLowerCase();
 
@@ -186,7 +282,7 @@ class ModelDataService {
     return provider;
   }
 
-  getModelBrandingBySlug(String slug) {
+  String getModelBrandingBySlug(String slug) {
     return _models
         .firstWhere((m) => m.slug == slug,
             orElse: () => ModelInfo(
@@ -198,7 +294,14 @@ class ModelDataService {
                 costOutput: '',
                 costOutputInt: 0.0,
                 brandingImage: '',
-                contextWindow: ''))
+                contextWindow: '',
+                company: '',
+                type: '',
+                subtitle: '',
+                description: '',
+                knowledgeCutoff: '',
+                speed: '',
+                params: ''))
         .brandingImage;
   }
 }
