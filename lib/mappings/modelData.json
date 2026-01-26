@@ -1,0 +1,114 @@
+{
+    "models": [
+        {
+            "name": "Gemini 3 pro",
+            "slug": "gemini-3-pro-preview",
+            "Provider": "Google / DeepMind",
+            "Cost_input": "$2",
+            "Cost_int": 2,
+            "Cost_output": "$12",
+            "Cost_output_int": 12,
+            "branding_image": "assets/branding/gemini.png",
+            "context_window": "1m"
+        },
+        {
+            "name": "Gemini 3.0 Flash",
+            "slug": "gemini-3-flash-preview",
+            "Provider": "Google / DeepMind",
+            "Cost_input": "$0.50",
+            "Cost_int": 0.5,
+            "Cost_output": "$4",
+            "Cost_output_int": 4,
+            "branding_image": "assets/branding/gemini.png",
+            "context_window": "1m"
+        },
+        {
+            "name": "Gemini 2.5 pro",
+            "slug": "gemini-2.5-pro",
+            "Provider": "Google / DeepMind",
+            "Cost_input": "$1.20",
+            "Cost_int": 1.2,
+            "Cost_output": "$8",
+            "Cost_output_int": 8,
+            "branding_image": "assets/branding/gemini.png",
+            "context_window": "1m"
+        },
+        {
+            "name": "Gemini 2.5 Flash",
+            "slug": "gemini-2.5-flash",
+            "Provider": "Google / DeepMind",
+            "Cost_input": "$0.40",
+            "Cost_int": 0.4,
+            "Cost_output": "$3",
+            "Cost_output_int": 3,
+            "branding_image": "assets/branding/gemini.png",
+            "context_window": "1m"
+        },
+        {
+            "name": "GPT 4.1",
+            "slug": "gpt-4.1",
+            "Provider": "OpenAI",
+            "Cost_input": "$3",
+            "Cost_int": 3,
+            "Cost_output": "$18",
+            "Cost_output_int": 18,
+            "branding_image": "assets/branding/openai.png",
+            "context_window": "128k"
+        },
+        {
+            "name": "GPT 4o (ChatGPT 4o)",
+            "slug": "chatgpt-4o-latest",
+            "Provider": "OpenAI",
+            "Cost_input": "$2",
+            "Cost_int": 2,
+            "Cost_output": "$15",
+            "Cost_output_int": 15,
+            "branding_image": "assets/branding/openai.png",
+            "context_window": "128k"
+        },
+        {
+            "name": "Grok 3 (beta)",
+            "slug": "grok-3-beta",
+            "Provider": "xAI",
+            "Cost_input": "$0.80",
+            "Cost_int": 0.8,
+            "Cost_output": "$6",
+            "Cost_output_int": 6,
+            "branding_image": "assets/branding/xai.png",
+            "context_window": "512k"
+        },
+        {
+            "name": "Grok 3 mini (beta)",
+            "slug": "grok-3-mini-beta",
+            "Provider": "xAI",
+            "Cost_input": "$0.20",
+            "Cost_int": 0.2,
+            "Cost_output": "$1.50",
+            "Cost_output_int": 1.5,
+            "branding_image": "assets/branding/xai.png",
+            "context_window": "64k"
+        },
+        {
+            "name": "Claude 3.7 Sonnet",
+            "slug": "claude-3-7-sonnet",
+            "Provider": "Anthropic",
+            "Cost_input": "$2.50",
+            "Cost_int": 2.5,
+            "Cost_output": "$14",
+            "Cost_output_int": 14,
+            "branding_image": "assets/branding/claude-branding.png",
+            "context_window": "2m"
+        },
+        {
+            "name": "Claude 3.5 Sonnet",
+            "slug": "claude-3-5-sonnet",
+            "Provider": "Anthropic",
+            "Cost_input": "$1.50",
+            "Cost_int": 1.5,
+            "Cost_output": "$9",
+            "Cost_output_int": 9,
+            "branding_image": "assets/branding/claude-branding.png",
+            "context_window": "1m"
+        }
+    ]
+}

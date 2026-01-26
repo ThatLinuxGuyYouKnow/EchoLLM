@@ -2,6 +2,7 @@ import 'package:echo_llm/mappings/modelClassMapping.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
 
 import 'package:echo_llm/widgets/modals/enterApiKeyModal.dart';
+import 'package:echo_llm/widgets/modals/modelPreviewCard.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -79,90 +80,110 @@ class _ModelTileState extends State<ModelTile> {
           isHovered = false;
         });
       },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 100),
-        height: 100,
-        width: 100,
-        constraints: BoxConstraints(
-            minWidth: 100, minHeight: 100, maxHeight: 200, maxWidth: 200),
-        decoration: BoxDecoration(
-          boxShadow: isHovered
-              ? [
-                  BoxShadow(
-                    color: const Color(0xFF4C83D1).withOpacity(0.2),
-                    blurRadius: 8,
-                    spreadRadius: 1,
-                    offset: const Offset(0, 1),
-                  )
-                ]
-              : [],
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: isHovered
-                ? const Color(0xFF4C83D1).withOpacity(0.3)
-                : Colors.transparent,
-            width: 1.0,
+      child: GestureDetector(
+        onTap: () {
+          if (!widget.isAvailable) {
+            showDialog(
+                context: context,
+                builder: (_) => ModelPreviewCard(
+                      modelName: widget.tileTitle,
+                      brandingImage: Image(
+                        height: 200,
+                        width: 300,
+                        image: AssetImage(
+                          'assets/branding/grok-branding.png',
+                        ),
+                        fit: BoxFit.contain,
+                      ),
+                    ));
+          }
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 100),
+          height: 100,
+          width: 100,
+          constraints: BoxConstraints(
+              minWidth: 100, minHeight: 100, maxHeight: 200, maxWidth: 200),
+          decoration: BoxDecoration(
+            boxShadow: isHovered
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFF4C83D1).withOpacity(0.2),
+                      blurRadius: 8,
+                      spreadRadius: 1,
+                      offset: const Offset(0, 1),
+                    )
+                  ]
+                : [],
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: isHovered
+                  ? const Color(0xFF4C83D1).withOpacity(0.3)
+                  : Colors.transparent,
+              width: 1.0,
+            ),
+            color:
+                isHovered ? const Color(0xFF1A1F25) : const Color(0xFF1C1C1D),
           ),
-          color: isHovered ? const Color(0xFF1A1F25) : const Color(0xFF1C1C1D),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          widget.modelFamilyIconPath,
-                          width: 25,
-                        ),
-                        const SizedBox(width: 5),
-                        Expanded(
-                          child: Text(
-                            widget.tileTitle,
-                            style: GoogleFonts.ubuntu(
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            widget.modelFamilyIconPath,
+                            width: 25,
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: Text(
+                              widget.tileTitle,
+                              style: GoogleFonts.ubuntu(
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      if (!widget.isAvailable) {
-                        showDialog(
-                          context: context,
-                          builder: (_) => EnterApiKeyModal(
-                              modelName: widget.tileTitle,
-                              modelSlug: widget.modelSlug,
-                              context: context),
-                        );
-                      }
-                    },
-                    child: Icon(
-                      widget.isAvailable
-                          ? Icons.check_circle
-                          : Icons.add_circle,
-                      color: widget.isAvailable
-                          ? const Color(0xFF4C83D1)
-                          : Colors.white.withOpacity(isHovered ? 0.9 : 0.7),
-                      size: isHovered ? 22 : 20,
+                    GestureDetector(
+                      onTap: () {
+                        if (!widget.isAvailable) {
+                          showDialog(
+                            context: context,
+                            builder: (_) => EnterApiKeyModal(
+                                modelName: widget.tileTitle,
+                                modelSlug: widget.modelSlug,
+                                context: context),
+                          );
+                        }
+                      },
+                      child: Icon(
+                        widget.isAvailable
+                            ? Icons.check_circle
+                            : Icons.add_circle,
+                        color: widget.isAvailable
+                            ? const Color(0xFF4C83D1)
+                            : Colors.white.withOpacity(isHovered ? 0.9 : 0.7),
+                        size: isHovered ? 22 : 20,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const Spacer(),
-            ],
+                  ],
+                ),
+                const Spacer(),
+              ],
+            ),
           ),
         ),
       ),

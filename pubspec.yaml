@@ -83,6 +83,7 @@ flutter:
   assets:
     - assets/
     - assets/model_icons/
+    - assets/branding/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -110,3 +111,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
