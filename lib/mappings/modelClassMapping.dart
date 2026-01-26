@@ -8,6 +8,7 @@ Map<String, String> modelClassMapping = {
   "grok-3-beta": "x-ai",
   "grok-3-mini-beta": "x-ai",
   "Grok 3 mini(beta)": "grok-3-mini-beta",
+  "grok-4-fast": "x-ai",
   "claude-3-7-sonnet": "claude",
   "claude-3-5-sonnet": "claude",
   "claude-3-7-Opus": "claude",

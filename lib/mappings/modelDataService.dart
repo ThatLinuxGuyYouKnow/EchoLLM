@@ -119,6 +119,39 @@ class ModelDataService {
     return getModelBySlug(slug)?.name;
   }
 
+  modelDatafromSlug({required String slug}) {
+    return _models.firstWhere((m) => m.slug == slug,
+        orElse: () => ModelInfo(
+            name: '',
+            slug: '',
+            provider: '',
+            costInput: '',
+            costInputInt: 0.0,
+            costOutput: '',
+            costOutputInt: 0.0,
+            brandingImage: '',
+            contextWindow: ''));
+  }
+
+  String getModelProvider(slug) {
+    final provider = _models
+        .firstWhere((m) => m.slug == slug,
+            orElse: () => ModelInfo(
+                name: '',
+                slug: '',
+                provider: '',
+                costInput: '',
+                costInputInt: 0.0,
+                costOutput: '',
+                costOutputInt: 0.0,
+                brandingImage: '',
+                contextWindow: ''))
+        .provider
+        .toLowerCase();
+
+    return provider;
+  }
+
   String getModelType(String slug) {
     final provider = _models
         .firstWhere((m) => m.slug == slug,
@@ -151,6 +184,22 @@ class ModelDataService {
 
     // Fallback to the lowercase provider string if no mapping matched
     return provider;
+  }
+
+  getModelBrandingBySlug(String slug) {
+    return _models
+        .firstWhere((m) => m.slug == slug,
+            orElse: () => ModelInfo(
+                name: '',
+                slug: '',
+                provider: '',
+                costInput: '',
+                costInputInt: 0.0,
+                costOutput: '',
+                costOutputInt: 0.0,
+                brandingImage: '',
+                contextWindow: ''))
+        .brandingImage;
   }
 }
 

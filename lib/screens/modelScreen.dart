@@ -82,21 +82,15 @@ class _ModelTileState extends State<ModelTile> {
       },
       child: GestureDetector(
         onTap: () {
-          if (!widget.isAvailable) {
-            showDialog(
-                context: context,
-                builder: (_) => ModelPreviewCard(
-                      modelName: widget.tileTitle,
-                      brandingImage: Image(
-                        height: 200,
-                        width: 300,
-                        image: AssetImage(
-                          'assets/branding/grok-branding.png',
-                        ),
-                        fit: BoxFit.contain,
-                      ),
-                    ));
-          }
+          showDialog(
+              context: context,
+              builder: (_) => ModelPreviewCard(
+                    brandingImagePath: ModelDataService()
+                        .getModelBrandingBySlug(widget.modelSlug),
+                    provider: ModelDataService().getModelType(widget.modelSlug),
+                    isAvailable: widget.isAvailable,
+                    modelName: widget.tileTitle,
+                  ));
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 100),
