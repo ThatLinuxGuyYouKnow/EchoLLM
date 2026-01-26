@@ -12,15 +12,19 @@ class ModelPreviewCard extends StatelessWidget {
   final String inputCost;
   final String params;
   final bool isNew;
-  final Widget? brandingImage;
+  final String? brandingImagePath; // Changed from Widget? brandingImage
   final Widget? backgroundImage;
   final VoidCallback? onSelectModel;
   final VoidCallback? onCompare;
   final VoidCallback? onClose;
+  final bool isAvailable;
+  final String provider;
 
   const ModelPreviewCard({
     super.key,
     required this.modelName,
+    required this.isAvailable,
+    required this.provider,
     this.subtitle = '',
     this.description = '',
     this.knowledgeCutoff = '',
@@ -29,7 +33,7 @@ class ModelPreviewCard extends StatelessWidget {
     this.inputCost = '',
     this.params = '',
     this.isNew = false,
-    this.brandingImage,
+    this.brandingImagePath,
     this.backgroundImage,
     this.onSelectModel,
     this.onCompare,
@@ -40,7 +44,7 @@ class ModelPreviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        width: 460,
+        width: 500,
         decoration: BoxDecoration(
           color: const Color(0xFF0D1117),
           borderRadius: BorderRadius.circular(16),
@@ -65,23 +69,45 @@ class ModelPreviewCard extends StatelessWidget {
                 top: 0,
                 left: 0,
                 right: 0,
-                height: 180,
-                child: backgroundImage ??
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            const Color(0xFF1A2744),
-                            const Color(0xFF0D1520),
-                          ],
+                height: 200,
+                child: brandingImagePath != null
+                    ? ShaderMask(
+                        shaderCallback: (rect) {
+                          return LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.black.withOpacity(0.3),
+                              Colors.black.withOpacity(0.6),
+                              const Color(0xFF0D1117),
+                            ],
+                            stops: const [0.0, 0.6, 1.0],
+                          ).createShader(rect);
+                        },
+                        blendMode: BlendMode.srcOver,
+                        child: Image.asset(
+                          brandingImagePath!,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: 200,
                         ),
-                      ),
-                      child: CustomPaint(
-                        painter: _BackgroundPatternPainter(),
-                      ),
-                    ),
+                      )
+                    : backgroundImage ??
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                const Color(0xFF1A2744),
+                                const Color(0xFF0D1520),
+                              ],
+                            ),
+                          ),
+                          child: CustomPaint(
+                            painter: _BackgroundPatternPainter(),
+                          ),
+                        ),
               ),
               // Content
               Padding(
@@ -90,9 +116,10 @@ class ModelPreviewCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    const SizedBox(height: 20),
                     // Header row with branding and close button
                     _buildHeader(),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 50),
                     // Model name with NEW badge
                     _buildModelName(),
                     const SizedBox(height: 8),
@@ -106,7 +133,7 @@ class ModelPreviewCard extends StatelessWidget {
                     _buildStatsRow(),
                     const SizedBox(height: 24),
                     // Action buttons
-                    _buildActionButtons(),
+                    _buildActionButtons(isAvailable: isAvailable),
                   ],
                 ),
               ),
@@ -122,12 +149,17 @@ class ModelPreviewCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         // Branding area - will be replaced with actual image
-        brandingImage ??
-            Row(
-              children: [
+        brandingImagePath != null
+            ? Image.asset(
+                brandingImagePath!,
+                height: 32,
+                fit: BoxFit.contain,
+              )
+            : Row(
+                children: [
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(4),
@@ -144,7 +176,7 @@ class ModelPreviewCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'GOOGLE DEEPMIND',
+                  provider,
                   style: GoogleFonts.roboto(
                     color: Colors.white.withOpacity(0.5),
                     fontSize: 11,
@@ -350,7 +382,7 @@ class ModelPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons({required bool isAvailable}) {
     return Row(
       children: [
         // Select Model button
@@ -375,7 +407,7 @@ class ModelPreviewCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Select Model',
+                    isAvailable ? 'Manage this model' : 'Setup this model',
                     style: GoogleFonts.inter(
                       color: Colors.white,
                       fontSize: 14,
