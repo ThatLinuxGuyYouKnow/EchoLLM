@@ -121,6 +121,23 @@
             "description": "Compact Grok model with a 64K context window; ideal for budget-conscious deployments and moderate-complexity tasks."
         },
         {
+            "name": "Grok 4 fast",
+            "slug": "grok-4-fast-non-reasoning",
+            "Provider": "xAI",
+            "Cost_input": "$0.20",
+            "params": "1.7 T",
+            "Cost_int": 0.5,
+            "Cost_output": "$3",
+            "Cost_output_int": 3,
+            "speed": "140",
+            "branding_image": "assets/branding/grok-branding.png",
+            "context_window": "2M",
+            "company": "X-AI",
+            "type": "Grok",
+            "subtitle": "Blazingly fast Grok 4 model",
+            "description": "Optimized for speed and efficiency; Grok 4 fast provides rapid responses for high-volume tasks while maintaining strong reasoning capabilities."
+        },
+        {
             "name": "Claude 3.7 Sonnet",
             "slug": "claude-3-7-sonnet",
             "Provider": "Anthropic",
@@ -134,21 +151,6 @@
             "type": "Sonnet",
             "subtitle": "Anthropic's most capable model",
             "description": "Top-tier Sonnet model with a 2M context window; designed for nuanced analysis, long-context understanding, and high-reliability outputs."
-        },
-        {
-            "name": "Grok 4 fast",
-            "slug": "grok-4-fast",
-            "Provider": "xAI",
-            "Cost_input": "$0.50",
-            "Cost_int": 0.5,
-            "Cost_output": "$3",
-            "Cost_output_int": 3,
-            "branding_image": "assets/branding/grok-branding.png",
-            "context_window": "128k",
-            "company": "X-AI",
-            "type": "Grok",
-            "subtitle": "Blazingly fast Grok 4 model",
-            "description": "Optimized for speed and efficiency; Grok 4 fast provides rapid responses for high-volume tasks while maintaining strong reasoning capabilities."
         }
     ]
 }
