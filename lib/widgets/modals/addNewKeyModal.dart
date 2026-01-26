@@ -386,7 +386,9 @@ Widget _consentButton({
 }
 
 String getModelIcon({required String modelName}) {
-  String model_family = modelClassMapping[onlineModels[modelName]]!;
+  String model_family = ModelDataService().getModelType(
+    onlineModels[modelName]!,
+  );
   if (model_family == 'gemini') {
     return 'assets/model_icons/gemini-icon.png';
   } else if (model_family == 'openai') {

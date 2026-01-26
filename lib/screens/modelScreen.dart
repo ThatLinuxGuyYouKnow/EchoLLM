@@ -192,7 +192,7 @@ class _ModelTileState extends State<ModelTile> {
 }
 
 String getModelIcon({required String modelSlug}) {
-  String model_family = modelClassMapping[modelSlug]!;
+  String model_family = ModelDataService().getModelType(modelSlug);
   if (model_family == 'gemini') {
     return 'assets/model_icons/gemini-icon.png';
   } else if (model_family == 'openai') {

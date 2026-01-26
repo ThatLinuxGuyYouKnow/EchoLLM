@@ -3,6 +3,7 @@ import 'package:echo_llm/inference/geminiHelper.dart';
 import 'package:echo_llm/inference/openaiHelper.dart';
 import 'package:echo_llm/inference/x-ai_helper.dart';
 import 'package:echo_llm/mappings/modelClassMapping.dart';
+import 'package:echo_llm/mappings/modelDataService.dart';
 import 'package:echo_llm/services/messenger_service.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 
@@ -36,7 +37,7 @@ class InferenceSuperClass {
         });
       }
 
-      final modelType = modelClassMapping[modelSlug];
+      final modelType = ModelDataService().getModelType(modelSlug);
       final apiKey = apikey.readKey(modelSlugNotName: modelSlug);
       String modelResponse = '';
       if (apiKey.isEmpty) {

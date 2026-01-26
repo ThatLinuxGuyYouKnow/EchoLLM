@@ -1,4 +1,5 @@
 import 'package:echo_llm/dataHandlers/hive/ApikeyHelper.dart';
+import 'package:echo_llm/mappings/modelDataService.dart';
 
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
 
@@ -46,10 +47,7 @@ List<String> getAvailableModelsForUser() {
 
   // Reverse lookup: get model names from slugs
   for (var slug in availableSlugs) {
-    final modelName = onlineModels.entries
-        .firstWhere((entry) => entry.value == slug,
-            orElse: () => const MapEntry('', ''))
-        .key;
+    final modelName = ModelDataService().getNameBySlug(slug) ?? '';
 
     if (modelName.isNotEmpty) {
       availableModelNames.add(modelName);
