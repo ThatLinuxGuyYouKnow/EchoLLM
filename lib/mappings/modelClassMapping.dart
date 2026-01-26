@@ -12,5 +12,7 @@ Map<String, String> modelClassMapping = {
   "claude-3-7-sonnet": "claude",
   "claude-3-5-sonnet": "claude",
   "claude-3-7-Opus": "claude",
-  "clause 3-5 Opus": "claude"
+  "clause 3-5 Opus": "claude",
+  "gpt-5-2": "openai",
+  "claude-4-0-sonnet": "claude"
 };

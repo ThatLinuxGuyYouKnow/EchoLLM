@@ -15,7 +15,7 @@
             "company": "GOOGLE",
             "type": "Gemini",
             "subtitle": "Latest SOTA model from Google - DeepMind",
-            "description": "Most capable Gemini model with a 1M context window; ideal for complex reasoning, long-document analysis, and multimodal tasks. Offers balanced speed and accuracy for enterprise applications."
+            "description": "Top Gemini model with 1M context. Best for complex reasoning, long documents, and multimodal tasks."
         },
         {
             "name": "Gemini 3.0 Flash",
@@ -32,7 +32,7 @@
             "company": "GOOGLE",
             "type": "Gemini",
             "subtitle": "Near 3.0 pro performance at a fraction of the cost",
-            "description": "Low-latency, cost-efficient variant that offers strong performance for real-time applications and high-volume inference. Optimized for speed without significant quality trade-offs."
+            "description": "Fast, cost-efficient variant for real-time apps and high-volume tasks. Strong performance with low latency."
         },
         {
             "name": "Gemini 2.5 pro",
@@ -49,7 +49,7 @@
             "company": "GOOGLE",
             "type": "Gemini",
             "subtitle": "Balanced performance and affordability",
-            "description": "Reliable mid-tier Gemini with strong reasoning and generation at a moderate cost; suitable for production workloads requiring consistent quality and reasonable latency."
+            "description": "Reliable mid-tier Gemini for production workloads. Good reasoning at moderate cost."
         },
         {
             "name": "Gemini 2.5 Flash",
@@ -66,7 +66,24 @@
             "company": "GOOGLE",
             "type": "Gemini",
             "subtitle": "Cost-effective fast responses",
-            "description": "Optimized for quick responses and simple tasks; great for chatbots, classification, and lightweight inference. Provides the best cost-to-speed ratio in the Gemini lineup."
+            "description": "Optimized for speed and simple tasks. Great for chatbots and lightweight inference."
+        },
+        {
+            "name": "GPT-5.2",
+            "slug": "gpt-5-2",
+            "Provider": "OpenAI",
+            "Cost_input": "$5",
+            "Cost_int": 5,
+            "Cost_output": "$25",
+            "Cost_output_int": 25,
+            "params": "N/A",
+            "speed": "Medium",
+            "branding_image": "assets/branding/openai.png",
+            "context_window": "400K",
+            "company": "OPENAI",
+            "type": "GPT",
+            "subtitle": "OpenAI's SOTA model for professional knowledge work",
+            "description": "The most advanced frontier model, excelling at long-running agents, professional tasks (coding, spreadsheets), and long-context reasoning. Sets new SOTA across key benchmarks."
         },
         {
             "name": "GPT 4.1",
@@ -83,7 +100,7 @@
             "company": "OPENAI",
             "type": "GPT",
             "subtitle": "OpenAI's advanced reasoning model",
-            "description": "High-performing GPT variant with enhanced reasoning capabilities; excels at coding, complex analysis, and technical tasks. Offers improved accuracy over previous versions with moderate inference speed."
+            "description": "High-performance GPT variant. Excellent for coding, complex analysis, and technical tasks."
         },
         {
             "name": "GPT 4o (ChatGPT 4o)",
@@ -100,7 +117,7 @@
             "company": "OPENAI",
             "type": "GPT",
             "subtitle": "Fast and capable general-purpose model",
-            "description": "Balanced model with strong speed and general-purpose capabilities; optimized for real-time interactions with broad competence across domains. Features improved multimodal understanding."
+            "description": "Balanced speed and capability for real-time interactions. Good general-purpose performance."
         },
         {
             "name": "Grok 3",
@@ -117,7 +134,7 @@
             "company": "X-AI",
             "type": "Grok",
             "subtitle": "xAI's advanced model with massive context",
-            "description": "High-context model (512K) suited for very large documents, deep context reasoning, and research-oriented tasks. Offers strong mathematical and scientific capabilities with comprehensive analysis."
+            "description": "512K context model for large documents and research. Strong math and science capabilities."
         },
         {
             "name": "Grok 3 mini",
@@ -134,7 +151,7 @@
             "company": "X-AI",
             "type": "Grok",
             "subtitle": "Lightweight and affordable Grok variant",
-            "description": "Compact Grok model with a 64K context window; ideal for budget-conscious deployments and moderate-complexity tasks. Provides good performance for conversational applications and basic reasoning."
+            "description": "Compact model for budget deployments. Good for conversations and basic reasoning."
         },
         {
             "name": "Grok 4 fast",
@@ -146,29 +163,29 @@
             "Cost_output": "$3",
             "Cost_output_int": 3,
             "speed": "Very Fast",
-            "branding_image": "assets/branding/grok-branding.png",
+            "branding_image": "assets/branding/grok4.png",
             "context_window": "2M",
             "company": "X-AI",
             "type": "Grok",
             "subtitle": "Blazingly fast Grok 4 model",
-            "description": "Optimized for speed and efficiency; Grok 4 fast provides rapid responses for high-volume tasks while maintaining strong reasoning capabilities. Features an expansive 2M context window for massive document processing."
+            "description": "Speed-optimized for high-volume tasks. 2M context for massive document processing."
         },
         {
-            "name": "Claude 3.7 Sonnet",
-            "slug": "claude-3-7-sonnet",
+            "name": "Claude 4.5 Sonnet",
+            "slug": "claude-4-5-sonnet",
             "Provider": "Anthropic",
-            "Cost_input": "$2.50",
-            "Cost_int": 2.5,
-            "Cost_output": "$14",
-            "Cost_output_int": 14,
-            "params": "65B",
-            "speed": "Medium",
+            "Cost_input": "$3",
+            "Cost_int": 3,
+            "Cost_output": "$15",
+            "Cost_output_int": 15,
+            "params": "N/A",
+            "speed": "Medium-Fast",
             "branding_image": "assets/branding/claude-branding.png",
             "context_window": "200K",
             "company": "ANTHROPIC",
             "type": "Sonnet",
-            "subtitle": "Anthropic's balanced intelligence model",
-            "description": "Versatile Sonnet model offering the ideal balance of intelligence, speed, and cost. Excels at complex reasoning, coding, and creative tasks while maintaining strong safety alignment and reliability."
+            "subtitle": "Best-in-class model for coding and long-running agents",
+            "description": "Anthropic's top model for coding and agentic tasks. Excels in software engineering, computer use, and maintains focus on complex tasks for 30+ hours"
         },
         {
             "name": "Claude 4.0 Sonnet",
@@ -185,7 +202,7 @@
             "company": "ANTHROPIC",
             "type": "Sonnet",
             "subtitle": "Next-generation intelligence from Anthropic",
-            "description": "Advanced Sonnet model with significant improvements in reasoning, coding, and creative capabilities. Features enhanced safety measures, better instruction following, and superior long-context understanding with expanded 400K window."
+            "description": "Advanced reasoning and coding capabilities. 400K context with enhanced safety measures."
         }
     ]
 }

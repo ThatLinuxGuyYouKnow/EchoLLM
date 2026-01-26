@@ -16,9 +16,10 @@ class ModelPreviewCard extends StatelessWidget {
   final bool isNew;
   final String? brandingImagePath; // Changed from Widget? brandingImage
   final Widget? backgroundImage;
-  final VoidCallback? onSelectModel;
+
   final VoidCallback? onCompare;
   final VoidCallback? onClose;
+  final VoidCallback? onSelectModel;
   final bool isAvailable;
   final String provider;
 
@@ -38,9 +39,9 @@ class ModelPreviewCard extends StatelessWidget {
     this.isNew = false,
     this.brandingImagePath,
     this.backgroundImage,
-    this.onSelectModel,
     this.onCompare,
     this.onClose,
+    this.onSelectModel,
     required this.modelCompany,
   });
 
@@ -48,7 +49,7 @@ class ModelPreviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        width: 500,
+        width: 550,
         decoration: BoxDecoration(
           color: const Color(0xFF0D1117),
           borderRadius: BorderRadius.circular(16),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:echo_llm/state_management/keysState.dart';
+import 'package:echo_llm/state_management/screenState.dart';
 
 class ModelScreen extends StatelessWidget {
   const ModelScreen({super.key});
@@ -104,6 +105,18 @@ class _ModelTileState extends State<ModelTile> {
                     onClose: () => Navigator.of(modalContext).pop(),
                     onSelectModel: () {
                       Navigator.of(modalContext).pop();
+                      if (widget.isAvailable) {
+                        Provider.of<Screenstate>(context, listen: false)
+                            .keyManagementScreen();
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (_) => EnterApiKeyModal(
+                              modelName: widget.tileTitle,
+                              modelSlug: widget.modelSlug,
+                              context: context),
+                        );
+                      }
                     },
                   ));
         },
