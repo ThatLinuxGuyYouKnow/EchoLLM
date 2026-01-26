@@ -1,3 +1,4 @@
+import 'package:echo_llm/mappings/modelDataService.dart';
 import 'package:echo_llm/mappings/modelSlugMappings.dart';
 import 'package:get_storage/get_storage.dart';
 
