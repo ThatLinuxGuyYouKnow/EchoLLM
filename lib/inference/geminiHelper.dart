@@ -55,7 +55,7 @@ class Geminihelper {
 
         final firstCandidate = candidates.first as Map<String, dynamic>;
         final content = firstCandidate['content'] as Map<String, dynamic>;
-        final parts = content['parts'] as List;
+        final parts = (content['parts'] as List?) ?? [];
 
         if (parts.isEmpty) {
           throw Exception('No content parts found');

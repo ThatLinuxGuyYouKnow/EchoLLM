@@ -172,7 +172,7 @@
         },
         {
             "name": "Claude 4.5 Sonnet",
-            "slug": "claude-4-5-sonnet",
+            "slug": "claude-sonnet-4-5",
             "Provider": "Anthropic",
             "Cost_input": "$3",
             "Cost_int": 3,
@@ -189,7 +189,7 @@
         },
         {
             "name": "Claude 4.0 Sonnet",
-            "slug": "claude-4-0-sonnet",
+            "slug": "claude-sonnet-4-0",
             "Provider": "Anthropic",
             "Cost_input": "$4",
             "Cost_int": 4,
