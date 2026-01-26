@@ -8,12 +8,14 @@
             "Cost_int": 2,
             "Cost_output": "$12",
             "Cost_output_int": 12,
+            "params": "7T",
+            "speed": "Medium",
             "branding_image": "assets/branding/gemini.png",
-            "context_window": "1m",
+            "context_window": "1M",
             "company": "GOOGLE",
             "type": "Gemini",
             "subtitle": "Latest SOTA model from Google - DeepMind",
-            "description": "Most capable Gemini model with a 1M context window; ideal for complex reasoning, long-document analysis, and multimodal tasks."
+            "description": "Most capable Gemini model with a 1M context window; ideal for complex reasoning, long-document analysis, and multimodal tasks. Offers balanced speed and accuracy for enterprise applications."
         },
         {
             "name": "Gemini 3.0 Flash",
@@ -23,12 +25,14 @@
             "Cost_int": 0.5,
             "Cost_output": "$4",
             "Cost_output_int": 4,
+            "params": "2.5T",
+            "speed": "Very Fast",
             "branding_image": "assets/branding/gemini.png",
-            "context_window": "1m",
+            "context_window": "1M",
             "company": "GOOGLE",
             "type": "Gemini",
             "subtitle": "Near 3.0 pro performance at a fraction of the cost",
-            "description": "Low-latency, cost-efficient variant that offers strong performance for real-time applications and high-volume inference."
+            "description": "Low-latency, cost-efficient variant that offers strong performance for real-time applications and high-volume inference. Optimized for speed without significant quality trade-offs."
         },
         {
             "name": "Gemini 2.5 pro",
@@ -38,12 +42,14 @@
             "Cost_int": 1.2,
             "Cost_output": "$8",
             "Cost_output_int": 8,
+            "params": "55B",
+            "speed": "Medium-Fast",
             "branding_image": "assets/branding/gemini.png",
-            "context_window": "1m",
+            "context_window": "1M",
             "company": "GOOGLE",
             "type": "Gemini",
             "subtitle": "Balanced performance and affordability",
-            "description": "Reliable mid-tier Gemini with strong reasoning and generation at a moderate cost; suitable for production workloads."
+            "description": "Reliable mid-tier Gemini with strong reasoning and generation at a moderate cost; suitable for production workloads requiring consistent quality and reasonable latency."
         },
         {
             "name": "Gemini 2.5 Flash",
@@ -53,12 +59,14 @@
             "Cost_int": 0.4,
             "Cost_output": "$3",
             "Cost_output_int": 3,
+            "params": "8B",
+            "speed": "Extremely Fast",
             "branding_image": "assets/branding/gemini.png",
-            "context_window": "1m",
+            "context_window": "1M",
             "company": "GOOGLE",
             "type": "Gemini",
             "subtitle": "Cost-effective fast responses",
-            "description": "Optimized for quick responses and simple tasks; great for chatbots, classification, and lightweight inference."
+            "description": "Optimized for quick responses and simple tasks; great for chatbots, classification, and lightweight inference. Provides the best cost-to-speed ratio in the Gemini lineup."
         },
         {
             "name": "GPT 4.1",
@@ -68,12 +76,14 @@
             "Cost_int": 3,
             "Cost_output": "$18",
             "Cost_output_int": 18,
+            "params": "1.8T",
+            "speed": "Medium",
             "branding_image": "assets/branding/openai.png",
-            "context_window": "128k",
+            "context_window": "128K",
             "company": "OPENAI",
             "type": "GPT",
             "subtitle": "OpenAI's advanced reasoning model",
-            "description": "High-performing GPT variant with a 128K context window; excels at coding, complex reasoning, and detailed analysis."
+            "description": "High-performing GPT variant with enhanced reasoning capabilities; excels at coding, complex analysis, and technical tasks. Offers improved accuracy over previous versions with moderate inference speed."
         },
         {
             "name": "GPT 4o (ChatGPT 4o)",
@@ -83,59 +93,65 @@
             "Cost_int": 2,
             "Cost_output": "$15",
             "Cost_output_int": 15,
+            "params": "1.7T",
+            "speed": "Fast",
             "branding_image": "assets/branding/openai.png",
-            "context_window": "128k",
+            "context_window": "128K",
             "company": "OPENAI",
             "type": "GPT",
             "subtitle": "Fast and capable general-purpose model",
-            "description": "Balanced model with strong speed and general-purpose capabilities; good for most applications requiring broad competence."
+            "description": "Balanced model with strong speed and general-purpose capabilities; optimized for real-time interactions with broad competence across domains. Features improved multimodal understanding."
         },
         {
-            "name": "Grok 3 (beta)",
-            "slug": "grok-3-beta",
+            "name": "Grok 3",
+            "slug": "grok-3",
             "Provider": "xAI",
             "Cost_input": "$0.80",
             "Cost_int": 0.8,
-            "Cost_output": "$6",
-            "Cost_output_int": 6,
+            "params": "2.7T",
+            "Cost_output": "$0.30",
+            "Cost_output_int": 0.3,
+            "speed": "Medium-Slow",
             "branding_image": "assets/branding/grok-branding.png",
-            "context_window": "512k",
+            "context_window": "512K",
             "company": "X-AI",
             "type": "Grok",
             "subtitle": "xAI's advanced model with massive context",
-            "description": "High-context model (512K) suited for very large documents, deep context reasoning, and research-oriented tasks."
+            "description": "High-context model (512K) suited for very large documents, deep context reasoning, and research-oriented tasks. Offers strong mathematical and scientific capabilities with comprehensive analysis."
         },
         {
-            "name": "Grok 3 mini (beta)",
-            "slug": "grok-3-mini-beta",
+            "name": "Grok 3 mini",
+            "slug": "grok-3-mini",
             "Provider": "xAI",
             "Cost_input": "$0.20",
             "Cost_int": 0.2,
+            "params": "1.7T",
             "Cost_output": "$1.50",
             "Cost_output_int": 1.5,
+            "speed": "Fast",
             "branding_image": "assets/branding/grok-branding.png",
-            "context_window": "64k",
+            "context_window": "64K",
             "company": "X-AI",
             "type": "Grok",
             "subtitle": "Lightweight and affordable Grok variant",
-            "description": "Compact Grok model with a 64K context window; ideal for budget-conscious deployments and moderate-complexity tasks."
+            "description": "Compact Grok model with a 64K context window; ideal for budget-conscious deployments and moderate-complexity tasks. Provides good performance for conversational applications and basic reasoning."
         },
         {
             "name": "Grok 4 fast",
             "slug": "grok-4-fast-non-reasoning",
             "Provider": "xAI",
-            "Cost_input": "$0.20",
-            "params": "1.7 T",
+            "Cost_input": "$0.50",
             "Cost_int": 0.5,
+            "params": "1.7T",
             "Cost_output": "$3",
             "Cost_output_int": 3,
-            "speed": "140",
+            "speed": "Very Fast",
             "branding_image": "assets/branding/grok-branding.png",
             "context_window": "2M",
             "company": "X-AI",
             "type": "Grok",
             "subtitle": "Blazingly fast Grok 4 model",
-            "description": "Optimized for speed and efficiency; Grok 4 fast provides rapid responses for high-volume tasks while maintaining strong reasoning capabilities."
+            "description": "Optimized for speed and efficiency; Grok 4 fast provides rapid responses for high-volume tasks while maintaining strong reasoning capabilities. Features an expansive 2M context window for massive document processing."
         },
         {
             "name": "Claude 3.7 Sonnet",
@@ -145,12 +161,31 @@
             "Cost_int": 2.5,
             "Cost_output": "$14",
             "Cost_output_int": 14,
+            "params": "65B",
+            "speed": "Medium",
             "branding_image": "assets/branding/claude-branding.png",
-            "context_window": "2m",
+            "context_window": "200K",
             "company": "ANTHROPIC",
             "type": "Sonnet",
-            "subtitle": "Anthropic's most capable model",
-            "description": "Top-tier Sonnet model with a 2M context window; designed for nuanced analysis, long-context understanding, and high-reliability outputs."
+            "subtitle": "Anthropic's balanced intelligence model",
+            "description": "Versatile Sonnet model offering the ideal balance of intelligence, speed, and cost. Excels at complex reasoning, coding, and creative tasks while maintaining strong safety alignment and reliability."
+        },
+        {
+            "name": "Claude 4.0 Sonnet",
+            "slug": "claude-4-0-sonnet",
+            "Provider": "Anthropic",
+            "Cost_input": "$4",
+            "Cost_int": 4,
+            "Cost_output": "$20",
+            "Cost_output_int": 20,
+            "params": "85B",
+            "speed": "Medium",
+            "branding_image": "assets/branding/claude-branding.png",
+            "context_window": "400K",
+            "company": "ANTHROPIC",
+            "type": "Sonnet",
+            "subtitle": "Next-generation intelligence from Anthropic",
+            "description": "Advanced Sonnet model with significant improvements in reasoning, coding, and creative capabilities. Features enhanced safety measures, better instruction following, and superior long-context understanding with expanded 400K window."
         }
     ]
 }

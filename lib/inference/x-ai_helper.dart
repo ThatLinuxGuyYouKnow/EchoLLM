@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:echo_llm/mappings/modelSlugMappings.dart';
+import 'package:echo_llm/mappings/modelDataService.dart';
+
 import 'package:echo_llm/services/messenger_service.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';

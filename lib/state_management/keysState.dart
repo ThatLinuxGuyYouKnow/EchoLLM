@@ -1,6 +1,6 @@
+import 'package:echo_llm/mappings/modelDataService.dart';
 import 'package:flutter/material.dart';
 import 'package:echo_llm/dataHandlers/hive/ApikeyHelper.dart';
-import 'package:echo_llm/mappings/modelSlugMappings.dart';
 
 class KeysState extends ChangeNotifier {
   final ApiKeyHelper _apiKeyHelper = ApiKeyHelper();
