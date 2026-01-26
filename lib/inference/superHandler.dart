@@ -1,4 +1,5 @@
 import 'package:echo_llm/dataHandlers/hive/ApikeyHelper.dart';
+import 'package:echo_llm/inference/claudeHelper.dart';
 import 'package:echo_llm/inference/geminiHelper.dart';
 import 'package:echo_llm/inference/openaiHelper.dart';
 import 'package:echo_llm/inference/x-ai_helper.dart';
@@ -82,6 +83,20 @@ class InferenceSuperClass {
             modelSlug: modelSlug,
           );
           modelResponse = await xai.getResponse(prompt: prompt) ?? '';
+          if (modelResponse.isEmpty) {
+            messageState.deleteUserLastMessage();
+          }
+          return modelResponse;
+        case 'claude':
+          final claude = Claudehelper(
+            modelSlug: modelSlug,
+            apiKey: apiKey,
+          );
+          modelResponse = await claude.getResponse(
+                prompt: prompt,
+                history: formattedHistory,
+              ) ??
+              '';
           if (modelResponse.isEmpty) {
             messageState.deleteUserLastMessage();
           }
