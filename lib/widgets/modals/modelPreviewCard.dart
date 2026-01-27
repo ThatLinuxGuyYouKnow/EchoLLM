@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ModelPreviewCard extends StatelessWidget {
   // These will be provided by the parent widget
@@ -428,7 +429,9 @@ class ModelPreviewCard extends StatelessWidget {
         Expanded(
           flex: 1,
           child: GestureDetector(
-            onTap: onCompare,
+            onTap: () {
+              launchUrl(Uri.parse('https://www.vellum.ai/llm-leaderboard'));
+            },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 14),
               decoration: BoxDecoration(
