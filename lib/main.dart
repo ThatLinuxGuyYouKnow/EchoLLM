@@ -27,6 +27,7 @@ Future<void> main() async {
   await GetStorage.init('preferences');
 
   await Hive.initFlutter();
+  WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.openBox('chatBox');
   Hive.registerAdapter(ChatAdapter());
