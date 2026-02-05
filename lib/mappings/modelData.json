@@ -203,6 +203,23 @@
             "type": "Sonnet",
             "subtitle": "Next-generation intelligence from Anthropic",
             "description": "Advanced reasoning and coding capabilities. 400K context with enhanced safety measures."
+        },
+        {
+            "name": "Claude Opus 4.6",
+            "slug": "claude-opus-4-6",
+            "Provider": "Anthropic",
+            "Cost_input": "$5",
+            "Cost_int": 5,
+            "Cost_output": "$25",
+            "Cost_output_int": 25,
+            "params": "N/A",
+            "speed": "Medium-Fast",
+            "branding_image": "assets/branding/claude-branding.png",
+            "context_window": "1M (beta)",
+            "company": "ANTHROPIC",
+            "type": "Opus",
+            "subtitle": "State-of-the-art Opus model with 1M context (beta)",
+            "description": "Opus 4.6 improves coding, planning, long-running agentic tasks and code-review/debugging capabilities. It offers a 1M-token context window in beta and achieves top results on evaluations "
         }
     ]
 }

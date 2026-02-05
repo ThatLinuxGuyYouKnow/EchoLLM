@@ -15,11 +15,12 @@ class Claudehelper {
     required String prompt,
     required List<Map<String, String>> history,
   }) async {
+    // Map any custom "model" role to the standard "assistant" role.
     final messages = [
-      ...history.map((entry) => {
-            'role': entry['role'],
-            'content': entry['content'],
-          }),
+      ...history.map((entry) {
+        final role = (entry['role'] == 'model') ? 'assistant' : entry['role'];
+        return {'role': role, 'content': entry['content']};
+      }),
       {'role': 'user', 'content': prompt}
     ];
 
@@ -51,6 +52,7 @@ class Claudehelper {
       final firstContent = content.first as Map<String, dynamic>;
       return firstContent['text'] as String?;
     } else {
+      print(response.body);
       switch (response.statusCode) {
         case 400:
           MessengerService().showToast(
