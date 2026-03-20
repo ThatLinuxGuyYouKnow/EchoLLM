@@ -23,6 +23,7 @@ class ChatTextField extends StatelessWidget {
     final isPhoneScreen = screenWidth <= 900;
     bool isExpanded = textfieldState.isExpanded;
     final config = Provider.of<CONFIG>(context);
+    final fontScale = config.fontScale;
     final modelInference = InferenceSuperClass(
         conversationHistory: messageState.messages,
         messageState: messageState,
@@ -125,10 +126,10 @@ class ChatTextField extends StatelessWidget {
                                   scrollPadding:
                                       EdgeInsets.only(top: isExpanded ? 20 : 0),
                                   controller: chatController,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       color: Colors.white,
-                                      fontSize: 15),
+                                      fontSize: 15 * fontScale),
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: 'Type a message',
