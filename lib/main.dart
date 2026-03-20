@@ -13,16 +13,15 @@ import 'package:echo_llm/userConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:flutter_fullscreen/flutter_fullscreen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Load model data from JSON
   await ModelDataService().loadModels();
-  
+
   await GetStorage.init('api-keys');
   await GetStorage.init('preferences');
 
