@@ -11,11 +11,14 @@ class CONFIG extends ChangeNotifier {
   final preferencesBox = GetStorage('preferences');
   bool get shouldSendOnEnter => _shouldSendOnEnter;
   bool _shouldSendOnEnter = false;
+  double get fontScale => _fontScale;
+  double _fontScale = 1.0;
   loadPreferences() {
     String modelName = preferencesBox.read('preferredModel');
     _shouldSendOnEnter = preferencesBox.read('sendOnEnter');
     _model = modelName;
     _modelSlug = onlineModels[model] ?? '';
+    _fontScale = preferencesBox.read('fontScale') ?? 1.0;
   }
 
   setToSendonEnter() {
@@ -34,6 +37,12 @@ class CONFIG extends ChangeNotifier {
     preferencesBox.write('preferredModel', modelName);
     _model = modelName;
     _modelSlug = onlineModels[modelName] ?? '';
+  }
+
+  setFontScale(double scale) {
+    _fontScale = scale;
+    preferencesBox.write('fontScale', scale);
+    notifyListeners();
   }
 
   getPreferreModel() {

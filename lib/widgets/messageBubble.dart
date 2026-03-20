@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:echo_llm/userConfig.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MessageBubble extends StatefulWidget {
@@ -25,6 +27,8 @@ class _MessageBubbleState extends State<MessageBubble> {
   bool isHovered = false;
   bool hasCopiedMessageText = false;
   Widget build(BuildContext context) {
+    final config = Provider.of<CONFIG>(context);
+    final fontScale = config.fontScale;
     final modelBubbleColor = const Color(0xFF2A3441);
     final userBubbleColor = const Color(0xFF427BBF);
 
@@ -32,7 +36,7 @@ class _MessageBubbleState extends State<MessageBubble> {
     final baseTextStyle = TextStyle(
       fontFamily: GoogleFonts.ubuntu().fontFamily,
       color: textColor,
-      fontSize: 15,
+      fontSize: 15 * fontScale,
       height: 1.4,
     );
 
@@ -53,15 +57,15 @@ class _MessageBubbleState extends State<MessageBubble> {
         decorationColor: const Color(0xFF60A5FA).withOpacity(0.7),
       ),
       h1: baseTextStyle.copyWith(
-          fontSize: 24,
+          fontSize: 24 * fontScale,
           fontWeight: FontWeight.bold,
           color: const Color(0xFF60A5FA).withOpacity(0.8)),
       h2: baseTextStyle.copyWith(
-          fontSize: 20,
+          fontSize: 20 * fontScale,
           fontWeight: FontWeight.bold,
           color: const Color(0xFF60A5FA).withOpacity(0.7)),
       h3: baseTextStyle.copyWith(
-          fontSize: 18,
+          fontSize: 18 * fontScale,
           fontWeight: FontWeight.w600,
           color: const Color(0xFF60A5FA).withOpacity(0.6)),
       listBullet: baseTextStyle.copyWith(color: textColor.withOpacity(0.8)),
@@ -75,7 +79,7 @@ class _MessageBubbleState extends State<MessageBubble> {
         fontFamily: GoogleFonts.sourceCodePro().fontFamily,
         backgroundColor: Colors.black.withOpacity(0.25),
         color: Colors.orangeAccent[100],
-        fontSize: 14,
+        fontSize: 14 * fontScale,
       ),
       blockquoteDecoration: BoxDecoration(
         color: Colors.black.withOpacity(0.1),

@@ -171,6 +171,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
               _buildDivider(),
+              _buildSliderListTile(
+                title: 'Font Size',
+                icon: Icons.text_fields,
+                value: config.fontScale,
+                min: 0.8,
+                max: 1.5,
+                divisions: 7,
+                label: '${(config.fontScale * 100).round()}%',
+                onChanged: (value) {
+                  config.setFontScale(value);
+                },
+              ),
+              _buildDivider(),
               _buildNavigationListTile(
                 title: 'Message Bubble Style',
                 subtitle: 'Customize the look of chat messages',
@@ -322,6 +335,57 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       contentPadding:
           const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+    );
+  }
+
+  Widget _buildSliderListTile({
+    required String title,
+    required IconData icon,
+    required double value,
+    required double min,
+    required double max,
+    int? divisions,
+    required String label,
+    required ValueChanged<double> onChanged,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+      child: Row(
+        children: [
+          Icon(icon, color: _iconColor),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: _settingTitleStyle),
+                SliderTheme(
+                  data: SliderThemeData(
+                    activeTrackColor: const Color.fromARGB(255, 58, 91, 134),
+                    inactiveTrackColor: Colors.grey[700],
+                    thumbColor: Colors.white,
+                    overlayColor:
+                        const Color.fromARGB(255, 58, 91, 134).withOpacity(0.2),
+                    valueIndicatorColor: const Color(0xFF2A3441),
+                    valueIndicatorTextStyle:
+                        GoogleFonts.ubuntu(color: Colors.white),
+                  ),
+                  child: Slider(
+                    value: value,
+                    min: min,
+                    max: max,
+                    divisions: divisions,
+                    label: label,
+                    onChanged: onChanged,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text(label, style: _settingSubtitleStyle),
+        ],
+      ),
     );
   }
 
