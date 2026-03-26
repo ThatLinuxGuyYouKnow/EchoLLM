@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   get: ^4.7.2
   provider: ^6.1.5
-  google_fonts:
+  google_fonts: ^6.3.0
   http: ^1.4.0
   get_storage:
   flutter_markdown: ^0.7.7+1
@@ -44,7 +44,12 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   path_provider: ^2.1.5
+  archive: ^3.6.1
+  permission_handler: ^10.2.0
+  vosk_flutter: any
 
+dependency_overrides:
+  http: ^1.4.0
     
 dev_dependencies:
   flutter_test:
@@ -83,6 +88,7 @@ flutter:
     - assets/
     - assets/model_icons/
     - assets/branding/
+    - assets/models/vosk-model-small-en-us-0.15.zip
     - lib/mappings/
   #   - images/a_dot_ham.jpeg
 
