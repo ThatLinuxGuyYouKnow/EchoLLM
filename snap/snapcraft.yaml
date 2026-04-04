@@ -18,6 +18,7 @@ architectures:
 apps:
   echollm:
     command: echo_llm
+    common-id: com.production.echo_llm
     extensions: [gnome]
     plugs:
       - network

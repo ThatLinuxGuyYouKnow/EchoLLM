@@ -6,6 +6,6 @@ Icon=${SNAP}/meta/gui/echo_llm.png
 Terminal=false
 Type=Application
 Categories=Utility;Development;AI;
-StartupWMClass=echollm
+StartupWMClass=com.production.echo_llm
 Keywords=ai;chatbot;llm;gpt;assistant;
 X-SnapInstanceName=echollm
