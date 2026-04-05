@@ -1,5 +1,5 @@
+import 'package:echo_llm/dataHandlers/hive/hiveManager.dart';
 import 'package:echo_llm/mappings/modelDataService.dart';
-import 'package:echo_llm/models/chats.dart';
 import 'package:echo_llm/screens/mainScreen.dart';
 import 'package:echo_llm/services/messenger_service.dart';
 import 'package:echo_llm/state_management/apikeyModalState.dart';
@@ -19,18 +19,14 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load model data from JSON
   await ModelDataService().loadModels();
 
   await GetStorage.init('api-keys');
   await GetStorage.init('preferences');
 
   await Hive.initFlutter();
-  WidgetsFlutterBinding.ensureInitialized();
+  await HiveManager.init();
 
-  await Hive.openBox('chatBox');
-  Hive.registerAdapter(ChatAdapter());
-  Hive.registerAdapter(MessageAdapter());
   runApp(
     MultiProvider(
       providers: [
