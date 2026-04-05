@@ -35,6 +35,8 @@ class Messagestreamstate extends ChangeNotifier {
   }
 
   deleteUserLastMessage() {
-    _messages.removeLast();
+    if (_messages.isNotEmpty) {
+      _messages.removeLast();
+    }
   }
 }

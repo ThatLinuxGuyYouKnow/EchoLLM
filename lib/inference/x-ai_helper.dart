@@ -15,8 +15,19 @@ class XaiHelper {
     required this.modelSlug,
   });
 
-  Future<String?> getResponse({required String prompt}) async {
+  Future<String?> getResponse({
+    required String prompt,
+    required List<Map<String, String>> history,
+  }) async {
     try {
+      final messages = [
+        ...history.map((entry) => {
+              'role': entry['role'] == 'model' ? 'assistant' : entry['role'],
+              'content': entry['content'],
+            }),
+        {'role': 'user', 'content': prompt},
+      ];
+
       final uri = Uri.parse('https://api.x.ai/v1/chat/completions');
       final response = await http.post(
         uri,
@@ -26,12 +37,7 @@ class XaiHelper {
         },
         body: jsonEncode({
           'model': modelSlug,
-          'messages': [
-            {
-              'role': 'user',
-              'content': prompt,
-            }
-          ],
+          'messages': messages,
         }),
       );
 
@@ -64,8 +70,6 @@ class XaiHelper {
 
         return content;
       case 400:
-        debugPrint(
-            'OpenAI API Error: ${response.statusCode}\n${response.body}');
         MessengerService().showToast(
           'Invalid API Key for ${onlineModels.entries.firstWhere(
                 (entry) => entry.value == modelSlug,
@@ -88,8 +92,6 @@ class XaiHelper {
       case 502:
       case 503:
       case 504:
-        debugPrint(
-            'OpenAI API Error: ${response.statusCode}\n${response.body}');
         MessengerService().showToast(
           'Server error – please try again later',
           type: ToastMessageType.error,
@@ -97,8 +99,6 @@ class XaiHelper {
         return null;
 
       default:
-        debugPrint(
-            'OpenAI API Error: ${response.statusCode}\n${response.body}');
         return null;
     }
   }

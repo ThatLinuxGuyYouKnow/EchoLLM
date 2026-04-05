@@ -62,7 +62,6 @@ class InferenceSuperClass {
           if (modelResponse.isEmpty) {
             messageState.deleteUserLastMessage();
           }
-          print(modelResponse);
           return modelResponse;
 
         case 'openai':
@@ -82,7 +81,11 @@ class InferenceSuperClass {
             apiKey: apiKey,
             modelSlug: modelSlug,
           );
-          modelResponse = await xai.getResponse(prompt: prompt) ?? '';
+          modelResponse = await xai.getResponse(
+                prompt: prompt,
+                history: formattedHistory,
+              ) ??
+              '';
           if (modelResponse.isEmpty) {
             messageState.deleteUserLastMessage();
           }
@@ -105,7 +108,6 @@ class InferenceSuperClass {
           throw Exception('Unknown model type: $modelType');
       }
     } catch (e) {
-      print('error' + e.toString());
       messageState.deleteUserLastMessage();
       _messenger.showToast('Unexpected Error Ocurred, do you have internet ?',
           type: ToastMessageType.error);

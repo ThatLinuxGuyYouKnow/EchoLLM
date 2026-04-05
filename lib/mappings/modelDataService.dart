@@ -105,7 +105,6 @@ class ModelDataService {
     try {
       return {for (var m in _models) m.name: m.slug};
     } catch (e) {
-      print('Error in onlineModels getter: $e');
       return {};
     }
   }
@@ -134,7 +133,6 @@ class ModelDataService {
       _models = modelsJson.map((m) => ModelInfo.fromJson(m)).toList();
       _isLoaded = true;
     } catch (e) {
-      print('Error loading model data: $e');
       _models = [];
       _isLoaded = false;
     }

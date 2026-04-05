@@ -1,15 +1,9 @@
-import 'package:echo_llm/models/chats.dart';
-import 'package:hive/hive.dart';
+import 'package:echo_llm/dataHandlers/hive/hiveManager.dart';
 
 Future<List<MapEntry<String, String>>> getChatLabelsAndIds() async {
-  final chatBox = await Hive.openBox<Chat>('chats');
+  final chatBox = HiveManager.getChatBox();
 
   return chatBox.values
       .map((chat) => MapEntry(chat.id, chat.chatTitle))
       .toList();
-}
-
-Future<List<String>> getAllChatTitles() async {
-  final box = await Hive.openBox('chatBox');
-  return box.keys.cast<String>().toList();
 }
