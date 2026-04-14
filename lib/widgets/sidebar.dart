@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:echo_llm/dataHandlers/hive/getChats.dart';
+import 'package:echo_llm/dataHandlers/hive/hiveManager.dart';
 import 'package:echo_llm/logic/convertMessageState.dart';
 import 'package:echo_llm/models/chats.dart';
 
@@ -327,8 +328,7 @@ class CustomSideBar extends StatefulWidget {
 
 class _CustomSideBarState extends State<CustomSideBar> {
   List<MapEntry<String, String>> chatMetadata = [];
-  late final Box<Chat> chatBox;
-  late final StreamSubscription<BoxEvent> chatBoxListener;
+  StreamSubscription<BoxEvent>? chatBoxListener;
   String? selectedChatId;
 
   @override
@@ -338,7 +338,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
   }
 
   Future<void> initHiveListener() async {
-    chatBox = await Hive.openBox<Chat>('chats');
+    final chatBox = HiveManager.getChatBox();
 
     // Load existing chat metadata
     loadChatTitles();
@@ -351,7 +351,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
 
   @override
   void dispose() {
-    chatBoxListener.cancel();
+    chatBoxListener?.cancel();
     super.dispose();
   }
 
@@ -451,7 +451,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
 
                           messageState.setCurrentChatID(entry.key);
 
-                          final chatBox = await Hive.openBox<Chat>('chats');
+                          final chatBox = HiveManager.getChatBox();
                           final selectedChat = chatBox.get(entry.key);
 
                           if (selectedChat != null) {

@@ -49,8 +49,6 @@ class Openaihelper {
         return message['content'] as String?;
 
       case 400:
-        debugPrint(
-            'OpenAI API Error: ${response.statusCode}\n${response.body}');
         MessengerService().showToast(
           "Bad request ${response.body} - check your input please",
           type: ToastMessageType.error,
@@ -58,8 +56,6 @@ class Openaihelper {
         return null;
 
       case 401:
-        debugPrint(
-            'OpenAI API Error: ${response.statusCode}\n${response.body}');
         MessengerService().showToast(
           "Invalid API key for OpenAI",
           type: ToastMessageType.error,
@@ -67,8 +63,6 @@ class Openaihelper {
         return null;
 
       case 429:
-        debugPrint(
-            'OpenAI API Error: ${response.statusCode}\n${response.body}');
         MessengerService().showToast(
           "Rate limit exceeded",
           type: ToastMessageType.error,
@@ -78,8 +72,6 @@ class Openaihelper {
       case 500:
       case 503:
       case 504:
-        debugPrint(
-            'OpenAI API Error: ${response.statusCode}\n${response.body}');
         MessengerService().showToast(
           "Server error - try again later",
           type: ToastMessageType.error,
@@ -87,8 +79,6 @@ class Openaihelper {
         return null;
 
       default:
-        debugPrint(
-            'OpenAI API Error: ${response.statusCode}\n${response.body}');
         MessengerService().showToast(
           'API Error: ${response.statusCode}',
           type: ToastMessageType.error,

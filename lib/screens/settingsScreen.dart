@@ -1,4 +1,4 @@
-import 'package:echo_llm/models/chats.dart';
+import 'package:echo_llm/dataHandlers/hive/hiveManager.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/screenState.dart';
 import 'package:echo_llm/userConfig.dart';
@@ -6,7 +6,6 @@ import 'package:echo_llm/userConfig.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 class DrawerTile extends StatefulWidget {
@@ -443,7 +442,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onPressed: () async {
                 Navigator.of(dialogContext).pop();
                 try {
-                  final chatBox = await Hive.openBox<Chat>('chats');
+                  final chatBox = HiveManager.getChatBox();
                   chatBox.clear();
                   messageState.clear();
                   showCustomToast(context,

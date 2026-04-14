@@ -19,9 +19,12 @@ class Geminihelper {
   }) async {
     final response = await http.post(
       Uri.parse(
-        'https://generativelanguage.googleapis.com/v1beta/models/$modelSlug:generateContent?key=$apiKey',
+        'https://generativelanguage.googleapis.com/v1beta/models/$modelSlug:generateContent',
       ),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey,
+      },
       body: jsonEncode({
         'contents': [
           ...history.map((entry) => {
@@ -64,7 +67,6 @@ class Geminihelper {
         return parts.first['text'] as String?;
 
       case 400:
-        debugPrint('Error 400: Bad request - ${response.body}');
         MessengerService().showToast(
           "Bad request - check your input",
           type: ToastMessageType.error,
@@ -72,7 +74,6 @@ class Geminihelper {
         return null;
 
       case 403:
-        debugPrint('Error 403: Forbidden - ${response.body}');
         MessengerService().showToast(
           "Invalid API key for Gemini",
           type: ToastMessageType.error,
@@ -81,8 +82,6 @@ class Geminihelper {
 
       case 500:
       case 504:
-        debugPrint(
-            'Error ${response.statusCode}: Server error - ${response.body}');
         MessengerService().showToast(
           "Server error - try shortening your prompt",
           type: ToastMessageType.error,
@@ -90,8 +89,6 @@ class Geminihelper {
         return null;
 
       default:
-        debugPrint(
-            'Error ${response.statusCode}: Unexpected error - ${response.body}');
         MessengerService().showToast(
           'Unexpected error: ${response.statusCode}',
           type: ToastMessageType.error,

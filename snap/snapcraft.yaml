@@ -18,8 +18,8 @@ architectures:
 apps:
   echollm:
     command: echo_llm
+    common-id: com.production.echo_llm
     extensions: [gnome]
-    desktop: snap/gui/echo_llm.desktop
     plugs:
       - network
       - network-bind

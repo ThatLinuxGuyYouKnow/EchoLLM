@@ -11,10 +11,15 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-class ChatTextField extends StatelessWidget {
+class ChatTextField extends StatefulWidget {
   final TextEditingController chatController;
   const ChatTextField({super.key, required this.chatController});
 
+  @override
+  State<ChatTextField> createState() => _ChatTextFieldState();
+}
+
+class _ChatTextFieldState extends State<ChatTextField> {
   @override
   Widget build(BuildContext context) {
     final messageState = Provider.of<Messagestreamstate>(context, listen: true);
@@ -29,23 +34,22 @@ class ChatTextField extends StatelessWidget {
         messageState: messageState,
         config: config);
     final existingID = messageState.chatID;
-    final _shouldSendOnEnter = Provider.of<CONFIG>(context).shouldSendOnEnter;
+    final shouldSendOnEnter = Provider.of<CONFIG>(context).shouldSendOnEnter;
     final FocusNode textFieldFocusNode = FocusNode();
 
     Future<void> sendMessage() async {
-      final userMessage = chatController.text.trim();
+      final userMessage = widget.chatController.text.trim();
       if (userMessage.isEmpty) return;
 
       final messageState =
           Provider.of<Messagestreamstate>(context, listen: false);
       final screenState = Provider.of<Screenstate>(context, listen: false);
 
-      // Keep track of whether this is the first message
       final bool isFirstMessage = screenState.isOnWelcomeScreen;
 
       messageState.addMessage(message: userMessage);
       messageState.setProcessing(true);
-      chatController.clear(); // Clear the textfield immediately for better UX
+      widget.chatController.clear();
       if (isFirstMessage) {
         screenState.chatScreen();
       }
@@ -66,7 +70,7 @@ class ChatTextField extends StatelessWidget {
           messageState.setCurrentChatID(chatId);
         }
       } else {
-        chatController.text = userMessage;
+        widget.chatController.text = userMessage;
         screenState.welcomeScreen();
       }
 
@@ -95,7 +99,7 @@ class ChatTextField extends StatelessWidget {
                         decoration: BoxDecoration(
                           border: Border.all(
                               color: isExpanded
-                                  ? Color(0xFF4C83D1)
+                                  ? const Color(0xFF4C83D1)
                                   : Colors.transparent),
                           color: const Color(0xFF1E2733),
                           borderRadius: BorderRadius.circular(10),
@@ -112,34 +116,32 @@ class ChatTextField extends StatelessWidget {
                                 },
                                 autofocus: true,
                                 child: TextField(
-                                  textInputAction: _shouldSendOnEnter
+                                  textInputAction: shouldSendOnEnter
                                       ? TextInputAction.send
                                       : TextInputAction.newline,
                                   onSubmitted: (string) {
-                                    if (_shouldSendOnEnter) {
+                                    if (shouldSendOnEnter) {
                                       sendMessage();
-                                    } else {}
+                                    }
                                   },
                                   maxLines: null,
                                   minLines: null,
                                   expands: isExpanded,
                                   scrollPadding:
                                       EdgeInsets.only(top: isExpanded ? 20 : 0),
-                                  controller: chatController,
+                                  controller: widget.chatController,
                                   style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       color: Colors.white,
                                       fontSize: 15 * fontScale),
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     border: InputBorder.none,
                                     hintText: 'Type a message',
-                                    contentPadding: const EdgeInsets.only(
+                                    contentPadding: EdgeInsets.only(
                                         left: 12.0,
-                                        right: 40,
+                                        right: 60,
                                         bottom: 10,
                                         top: 10),
-                                    hintStyle: const TextStyle(
-                                        fontWeight: FontWeight.normal),
                                   ),
                                   onChanged: (text) {
                                     if (text.length > 200 && !isExpanded) {

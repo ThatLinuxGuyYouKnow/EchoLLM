@@ -59,8 +59,7 @@ Widget apiKeyReminder({required BuildContext context}) {
           ElevatedButton(
             onPressed: () {
               storeUserFirstTimeEntry();
-              Navigator.pop(context); // This closes the current dialog
-              print('oiiiiiiiiii');
+              Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF4C83D1),
