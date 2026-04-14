@@ -7,7 +7,6 @@ class ApiKeyHelper {
   storeKey({required String modelSlugNotName, required String apiKey}) async {
     try {
       await box.write(modelSlugNotName, apiKey);
-      print('Stored API key for $modelSlugNotName');
     } catch (error) {}
   }
 

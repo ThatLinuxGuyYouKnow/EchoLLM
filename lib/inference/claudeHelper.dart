@@ -52,7 +52,6 @@ class Claudehelper {
       final firstContent = content.first as Map<String, dynamic>;
       return firstContent['text'] as String?;
     } else {
-      print(response.body);
       switch (response.statusCode) {
         case 400:
           MessengerService().showToast(

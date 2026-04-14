@@ -1,8 +1,7 @@
 import 'dart:math';
 
+import 'package:echo_llm/dataHandlers/hive/hiveManager.dart';
 import 'package:echo_llm/models/chats.dart';
-
-import 'package:hive_flutter/hive_flutter.dart';
 
 saveChatLocally(
     {required List<Message> messages,
@@ -16,11 +15,10 @@ saveChatLocally(
     ..id = existingChatID.isNotEmpty ? existingChatID : chatID
     ..lastModified = dateTimeRighNow
     ..messages = messages;
-  final chatBox = await Hive.openBox<Chat>('chats');
+  final chatBox = HiveManager.getChatBox();
 
   try {
     chatBox.put(chat.id, chat);
-
     return chat.id;
   } catch (Error) {
     return false;
