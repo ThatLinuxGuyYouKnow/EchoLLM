@@ -34,23 +34,21 @@ EchoLLM is a privacy-focused desktop client for chatting with multiple AI provid
 
 | Model | Provider | Context | Input | Output |
 |-------|----------|---------|-------|--------|
-| **Gemini 3 Pro** | Google / DeepMind | 1M | $2/M | $12/M |
-| **Gemini 3.0 Flash** | Google / DeepMind | 1M | $0.50/M | $4/M |
-| **Gemini 2.5 Pro** | Google / DeepMind | 1M | $1.20/M | $8/M |
-| **Gemini 2.5 Flash** | Google / DeepMind | 1M | $0.40/M | $3/M |
+| **Gemini 3.1 Pro** | Google / DeepMind | 1M | $2/M | $12/M |
+| **Gemini 3.0 Flash** | Google / DeepMind | 1M | $0.50/M | $3/M |
+| **Gemini 2.5 Pro** | Google / DeepMind | 1M | $1.25/M | $10/M |
+| **Gemini 2.5 Flash** | Google / DeepMind | 1M | $0.30/M | $2.50/M |
 | **GPT-5.2** | OpenAI | 400K | $5/M | $25/M |
-| **GPT 4.1** | OpenAI | 128K | $3/M | $18/M |
-| **GPT 4o** | OpenAI | 128K | $2/M | $15/M |
 | **Claude Opus 4.6** | Anthropic | 1M (beta) | $5/M | $25/M |
-| **Claude 4.5 Sonnet** | Anthropic | 200K | $3/M | $15/M |
+| **Claude Sonnet 4.6** | Anthropic | 1M | $3/M | $15/M |
 | **Claude 4.0 Sonnet** | Anthropic | 400K | $4/M | $20/M |
 | **Grok 3** | xAI | 512K | $0.80/M | $0.30/M |
 | **Grok 3 mini** | xAI | 64K | $0.20/M | $1.50/M |
-| **Grok 4 Fast** | xAI | 2M | $0.50/M | $3/M |
+| **Grok 4 Fast** | xAI | 2M | $0.20/M | $0.50/M |
 
 ## Features
 
-- **Multi-model chat** — Switch between 13 models from 4 providers in a single conversation
+- **Multi-model chat** — Switch between 11 models from 4 providers in a single conversation
 - **Local key management** — API keys stored securely on-device via GetStorage
 - **Persistent chat history** — Conversations saved locally with Hive
 - **Markdown rendering** — Full markdown support with syntax highlighting in responses
