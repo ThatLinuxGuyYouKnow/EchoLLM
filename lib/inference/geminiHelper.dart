@@ -19,9 +19,12 @@ class Geminihelper {
   }) async {
     final response = await http.post(
       Uri.parse(
-        'https://generativelanguage.googleapis.com/v1beta/models/$modelSlug:generateContent?key=$apiKey',
+        'https://generativelanguage.googleapis.com/v1beta/models/$modelSlug:generateContent',
       ),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey,
+      },
       body: jsonEncode({
         'contents': [
           ...history.map((entry) => {
