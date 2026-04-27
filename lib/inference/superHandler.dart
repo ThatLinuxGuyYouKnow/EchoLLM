@@ -21,25 +21,18 @@ class InferenceSuperClass {
     required this.config,
   });
 
+  /// The legacy non-streaming inference method.
   Future<String?> runInference(String prompt) async {
     final MessengerService _messenger = MessengerService();
     try {
       final String modelSlug = config.modelSlug;
-      final apikey = ApiKeyHelper();
+      final apikeyHelper = ApiKeyHelper();
 
-      final List<Map<String, String>> formattedHistory = [];
-      for (var entry in conversationHistory) {
-        final key = entry.keys.first;
-        final role = key % 2 == 0 ? "user" : "model";
-        formattedHistory.add({
-          "role": role,
-          "content": entry[key]!,
-        });
-      }
+      final List<Map<String, String>> formattedHistory = _formatHistory();
 
       final modelType = ModelDataService().getModelType(modelSlug);
-      final apiKey = apikey.readKey(modelSlugNotName: modelSlug);
-      String modelResponse = '';
+      final apiKey = await apikeyHelper.readKey(modelSlugNotName: modelSlug);
+
       if (apiKey.isEmpty) {
         _messenger.showToast(
           "API key not found for ${config.model}",
@@ -50,68 +43,102 @@ class InferenceSuperClass {
 
       switch (modelType) {
         case 'gemini':
-          final gemini = Geminihelper(
-            modelSlug: modelSlug,
-            apiKey: apiKey,
-          );
-          modelResponse = await gemini.getResponse(
-                prompt: prompt,
-                history: formattedHistory,
-              ) ??
-              '';
-          if (modelResponse.isEmpty) {
-            messageState.deleteUserLastMessage();
-          }
-          return modelResponse;
-
+          final gemini = Geminihelper(modelSlug: modelSlug, apiKey: apiKey);
+          return await gemini.getResponse(
+              prompt: prompt, history: formattedHistory);
         case 'openai':
-          final openai = Openaihelper(
-            apikey: apiKey,
-            modelSlug: modelSlug,
-          );
-          modelResponse = await openai.getResponse(
-                  prompt: prompt, history: formattedHistory) ??
-              '';
-          if (modelResponse.isEmpty) {
-            messageState.deleteUserLastMessage();
-          }
-          return modelResponse;
+          final openai = Openaihelper(apikey: apiKey, modelSlug: modelSlug);
+          return await openai.getResponse(
+              prompt: prompt, history: formattedHistory);
         case 'x-ai':
-          final xai = XaiHelper(
-            apiKey: apiKey,
-            modelSlug: modelSlug,
-          );
-          modelResponse = await xai.getResponse(
-                prompt: prompt,
-                history: formattedHistory,
-              ) ??
-              '';
-          if (modelResponse.isEmpty) {
-            messageState.deleteUserLastMessage();
-          }
-          return modelResponse;
+          final xai = XaiHelper(apiKey: apiKey, modelSlug: modelSlug);
+          return await xai.getResponse(
+              prompt: prompt, history: formattedHistory);
         case 'claude':
-          final claude = Claudehelper(
-            modelSlug: modelSlug,
-            apiKey: apiKey,
-          );
-          modelResponse = await claude.getResponse(
-                prompt: prompt,
-                history: formattedHistory,
-              ) ??
-              '';
-          if (modelResponse.isEmpty) {
-            messageState.deleteUserLastMessage();
-          }
-          return modelResponse;
+          final claude = Claudehelper(modelSlug: modelSlug, apiKey: apiKey);
+          return await claude.getResponse(
+              prompt: prompt, history: formattedHistory);
         default:
           throw Exception('Unknown model type: $modelType');
       }
     } catch (e) {
       messageState.deleteUserLastMessage();
-      _messenger.showToast('Unexpected Error Ocurred, do you have internet ?',
+      _messenger.showToast('Unexpected Error Occurred',
           type: ToastMessageType.error);
       return null;
     }
+  }
+
+  /// New streaming inference method.
+  /// Updates [messageState] token-by-token and returns the full response string at the end.
+  Future<String?> runStreamInference(String prompt) async {
+    final MessengerService _messenger = MessengerService();
+    try {
+      final String modelSlug = config.modelSlug;
+      final apikeyHelper = ApiKeyHelper();
+
+      final List<Map<String, String>> formattedHistory = _formatHistory();
+      final modelType = ModelDataService().getModelType(modelSlug);
+      final apiKey = await apikeyHelper.readKey(modelSlugNotName: modelSlug);
+
+      if (apiKey.isEmpty) {
+        _messenger.showToast(
+          "API key not found for ${config.model}",
+          type: ToastMessageType.error,
+        );
+        return null;
+      }
+
+      final int streamMsgIndex = messageState.beginStreamingMessage();
+      Stream<String> tokenStream;
+
+      switch (modelType) {
+        case 'gemini':
+          tokenStream = Geminihelper(modelSlug: modelSlug, apiKey: apiKey)
+              .streamResponse(prompt: prompt, history: formattedHistory);
+          break;
+        case 'openai':
+          tokenStream = Openaihelper(apikey: apiKey, modelSlug: modelSlug)
+              .streamResponse(prompt: prompt, history: formattedHistory);
+          break;
+        case 'x-ai':
+          tokenStream = XaiHelper(apiKey: apiKey, modelSlug: modelSlug)
+              .streamResponse(prompt: prompt, history: formattedHistory);
+          break;
+        case 'claude':
+          tokenStream = Claudehelper(modelSlug: modelSlug, apiKey: apiKey)
+              .streamResponse(prompt: prompt, history: formattedHistory);
+          break;
+        default:
+          messageState.cancelStreamingMessage(streamMsgIndex);
+          throw Exception('Unknown model type: $modelType');
+      }
+
+      await for (final token in tokenStream) {
+        messageState.appendStreamToken(streamMsgIndex, token);
+      }
+
+      return messageState.finishStreamingMessage(streamMsgIndex);
+    } catch (e) {
+      // In case of error, we don't have a specific index to cancel unless we store it,
+      // but the super class knows the state.
+      messageState.setProcessing(false);
+      _messenger.showToast('Streaming Error Occurred',
+          type: ToastMessageType.error);
+      return null;
+    }
+  }
+
+  List<Map<String, String>> _formatHistory() {
+    final List<Map<String, String>> formattedHistory = [];
+    for (var entry in conversationHistory) {
+      final key = entry.keys.first;
+      final role = key % 2 == 0 ? "user" : "model";
+      formattedHistory.add({
+        "role": role,
+        "content": entry[key]!,
+      });
+    }
+    return formattedHistory;
   }
 }
