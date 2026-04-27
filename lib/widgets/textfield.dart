@@ -53,11 +53,12 @@ class _ChatTextFieldState extends State<ChatTextField> {
       if (isFirstMessage) {
         screenState.chatScreen();
       }
-      final response = await modelInference.runInference(userMessage);
+      final response = await modelInference.runStreamInference(userMessage);
 
       if (response != null && response.isNotEmpty) {
-        messageState.addMessage(message: response);
-
+        // No need to addMessage(response) here because runStreamInference 
+        // already added and updated the message in state.
+        
         final hiveReadyMessages =
             convertIndexedMessagesToHive(messageState.messages);
         final title = titleFromFirstMessage(messageState.messages);
@@ -70,8 +71,10 @@ class _ChatTextFieldState extends State<ChatTextField> {
           messageState.setCurrentChatID(chatId);
         }
       } else {
-        widget.chatController.text = userMessage;
-        screenState.welcomeScreen();
+        // If it failed and was the first message, might need to roll back
+        if (isFirstMessage && messageState.messages.length <= 1) {
+           screenState.welcomeScreen();
+        }
       }
 
       messageState.setProcessing(false);
