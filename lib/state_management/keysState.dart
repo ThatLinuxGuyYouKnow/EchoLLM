@@ -15,12 +15,16 @@ class KeysState extends ChangeNotifier {
   List<String> _availableModelNames = [];
   List<String> get availableModelNames => _availableModelNames;
 
+  bool _isLoaded = false;
+  bool get isLoaded => _isLoaded;
+
   KeysState() {
     _loadKeys();
   }
 
-  void _loadKeys() {
-    _modelKeys = _apiKeyHelper.getAvailableModelKeyMap();
+  Future<void> _loadKeys() async {
+    _modelKeys = await _apiKeyHelper.getAvailableModelKeyMap();
+    _isLoaded = true;
     _updateAvailableModelsList();
     notifyListeners();
   }
@@ -42,19 +46,21 @@ class KeysState extends ChangeNotifier {
 
   Future<void> addKey({required String modelSlug, required String key}) async {
     await _apiKeyHelper.storeKey(modelSlugNotName: modelSlug, apiKey: key);
-
     _modelKeys[modelSlug] = key;
     _updateAvailableModelsList();
     notifyListeners();
   }
 
   Future<void> deleteKey({required String modelSlug}) async {
-    deleteKeyForModel(
-        modelSlug:
-            modelSlug); // Uses the global function or we can move logic here
+    await deleteKeyForModel(modelSlug: modelSlug);
     _modelKeys.remove(modelSlug);
     _updateAvailableModelsList();
     notifyListeners();
+  }
+
+  /// Reads a key directly from secure storage (always up-to-date).
+  Future<String> getKeyForSlug(String modelSlug) async {
+    return _apiKeyHelper.readKey(modelSlugNotName: modelSlug);
   }
 
   bool isModelAvailable(String modelSlug) {
