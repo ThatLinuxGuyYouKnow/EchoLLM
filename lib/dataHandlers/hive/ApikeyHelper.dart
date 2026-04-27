@@ -1,27 +1,32 @@
 import 'package:echo_llm/mappings/modelDataService.dart';
-
-import 'package:get_storage/get_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiKeyHelper {
-  final box = GetStorage('api-keys');
-  storeKey({required String modelSlugNotName, required String apiKey}) async {
+  static const _storage = FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+  );
+
+  Future<void> storeKey(
+      {required String modelSlugNotName, required String apiKey}) async {
     try {
-      await box.write(modelSlugNotName, apiKey);
-    } catch (error) {}
+      await _storage.write(key: modelSlugNotName, value: apiKey);
+    } catch (_) {}
   }
 
-  String readKey({required String modelSlugNotName}) {
-    final String key = box.read(modelSlugNotName) ?? '';
-
-    return key;
+  Future<String> readKey({required String modelSlugNotName}) async {
+    try {
+      return await _storage.read(key: modelSlugNotName) ?? '';
+    } catch (_) {
+      return '';
+    }
   }
 
-  Map<String, String> getAvailableModelKeyMap() {
+  Future<Map<String, String>> getAvailableModelKeyMap() async {
     final result = <String, String>{};
     final uniqueSlugs = onlineModels.values.toSet();
 
     for (var modelSlug in uniqueSlugs) {
-      final key = readKey(modelSlugNotName: modelSlug);
+      final key = await readKey(modelSlugNotName: modelSlug);
       if (key.isNotEmpty) {
         result[modelSlug] = key;
       }
@@ -31,7 +36,9 @@ class ApiKeyHelper {
   }
 }
 
-deleteKeyForModel({required String modelSlug}) {
-  final box = GetStorage('api-keys');
-  box.remove(modelSlug);
+Future<void> deleteKeyForModel({required String modelSlug}) async {
+  const storage = FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+  );
+  await storage.delete(key: modelSlug);
 }
