@@ -17,10 +17,12 @@ class DarkAppBar extends StatelessWidget implements PreferredSizeWidget {
     final isOnMainScreen = screenState.isOnMainScreen;
     final isOnWelcomeScreen = screenState.isOnWelcomeScreen;
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return AppBar(
       toolbarHeight: 80,
       foregroundColor: Colors.transparent,
-      backgroundColor: Colors.black.withOpacity(0.4),
+      backgroundColor: (isDark ? Colors.black : Colors.white).withOpacity(0.4),
       titleSpacing: 0,
       title: Row(
         children: [

@@ -26,45 +26,40 @@ class _ModelselectorState extends State<Modelselector> {
   @override
   Widget build(BuildContext context) {
     final keysState = context.watch<KeysState>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     List<String> availableOptions = keysState.availableModelNames;
     
     if (availableOptions.isEmpty) {
-       // If no keys are set, the dropdown handles this via the hint text.
-       // We do not fallback to all models because we want to enforce key availability.
     }
 
-    // Ensure _selectedValue is valid
     if (availableOptions.isNotEmpty) {
       if (!availableOptions.contains(_selectedValue)) {
          _selectedValue = availableOptions.first;
-         // Update config to match reality
          WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) _config.setPreferredModel(modelName: _selectedValue);
          });
       }
     } else {
-        // If empty, maybe reset selectedValue or keep it?
-        // _selectedValue = '';
     }
 
     return Container(
       width: 300,
       height: 50,
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1C1E),
+        color: isDark ? const Color(0xFF1A1C1E) : Colors.white,
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(
-          color: Color(0xFF1E2733),
+          color: isDark ? const Color(0xFF1E2733) : Colors.grey[300]!,
           width: 2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.4),
+            color: (isDark ? Colors.black : Colors.grey[300]!).withOpacity(0.4),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),
           BoxShadow(
-            color: Colors.white.withOpacity(0.05),
+            color: (isDark ? Colors.white : Colors.black).withOpacity(0.05),
             blurRadius: 1,
             offset: const Offset(0, -0.5),
           )
@@ -84,18 +79,27 @@ class _ModelselectorState extends State<Modelselector> {
                 isExpanded: true,
                 icon: Icon(
                   Icons.arrow_drop_down,
-                  color: Color(0xFF1E2733),
+                  color: isDark
+                      ? const Color(0xFF1E2733)
+                      : Colors.grey[600]!,
                   size: 30,
                 ),
-                dropdownColor: const Color.fromARGB(255, 18, 29, 43),
+                dropdownColor: isDark
+                    ? const Color.fromARGB(255, 18, 29, 43)
+                    : Colors.white,
                 borderRadius: BorderRadius.circular(10.0),
                 elevation: 8,
                 style: GoogleFonts.ubuntu(
-                  color: Colors.white.withOpacity(0.9),
+                  color: (isDark ? Colors.white : Colors.black87)
+                      .withOpacity(0.9),
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                 ),
-                hint: availableOptions.isEmpty ? Text("No models available", style: GoogleFonts.ubuntu(color: Colors.white54)) : null,
+                hint: availableOptions.isEmpty
+                    ? Text("No models available",
+                        style: GoogleFonts.ubuntu(
+                            color: isDark ? Colors.white54 : Colors.black54))
+                    : null,
                 items: availableOptions.map((option) {
                   bool isSelected = option == _selectedValue;
                   return DropdownMenuItem<String>(
@@ -105,10 +109,11 @@ class _ModelselectorState extends State<Modelselector> {
                           vertical: 10.0, horizontal: 8.0),
                       child: Text(
                         option,
-                        style: GoogleFonts.ubuntu(
-                          color: isSelected
-                              ? const Color.fromARGB(255, 168, 174, 180)
-                              : Colors.white.withOpacity(0.85),
+                          style: GoogleFonts.ubuntu(
+                            color: isSelected
+                                ? const Color.fromARGB(255, 168, 174, 180)
+                                : (isDark ? Colors.white : Colors.black87)
+                                    .withOpacity(0.85),
                           fontWeight:
                               isSelected ? FontWeight.w600 : FontWeight.normal,
                           fontSize: 14,
@@ -130,7 +135,7 @@ class _ModelselectorState extends State<Modelselector> {
                       child: Text(
                         item,
                         style: GoogleFonts.ubuntu(
-                          color: Colors.white,
+                          color: isDark ? Colors.white : Colors.black87,
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),

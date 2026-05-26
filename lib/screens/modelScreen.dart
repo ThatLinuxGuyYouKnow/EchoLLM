@@ -13,7 +13,7 @@ class ModelScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Consumer<KeysState>(
         builder: (context, keysState, child) {
           return Padding(
@@ -68,6 +68,7 @@ class _ModelTileState extends State<ModelTile> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return MouseRegion(
       onHover: (event) {
         setState(() {
@@ -145,7 +146,9 @@ class _ModelTileState extends State<ModelTile> {
               width: 1.0,
             ),
             color:
-                isHovered ? const Color(0xFF1A1F25) : const Color(0xFF1C1C1D),
+                isHovered
+                    ? (isDark ? const Color(0xFF1A1F25) : const Color(0xFFF0F2F5))
+                    : (isDark ? const Color(0xFF1C1C1D) : Colors.white),
           ),
           child: Padding(
             padding: const EdgeInsets.all(15),
@@ -169,7 +172,7 @@ class _ModelTileState extends State<ModelTile> {
                             child: Text(
                               widget.tileTitle,
                               style: GoogleFonts.ubuntu(
-                                color: Colors.white,
+                                color: isDark ? Colors.white : Colors.black87,
                                 fontWeight: FontWeight.normal,
                               ),
                               maxLines: 2,

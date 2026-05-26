@@ -16,6 +16,7 @@ class WelcomeScreen extends StatelessWidget {
     final textfieldState = Provider.of<Textfieldstate>(context);
     final String welcomeText =
         isNewUser ? 'Welcome to EchoLLM' : 'Welcome Back';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Center(
       child: Column(
@@ -30,7 +31,7 @@ class WelcomeScreen extends StatelessWidget {
           Text(
             welcomeText,
             style: GoogleFonts.ubuntu(
-              color: Colors.white,
+              color: isDark ? Colors.white : Colors.black87,
               fontSize: 32,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.5,
@@ -40,7 +41,7 @@ class WelcomeScreen extends StatelessWidget {
           Text(
             'What would you like to know today?',
             style: GoogleFonts.ubuntu(
-              color: Colors.grey[400],
+              color: isDark ? Colors.grey[400] : Colors.grey[600],
               fontSize: 18,
               height: 1.4,
             ),
@@ -99,7 +100,7 @@ class WelcomeScreen extends StatelessWidget {
           Text(
             'Or select a chat from the sidebar to continue',
             style: GoogleFonts.ubuntu(
-              color: Colors.grey[500],
+              color: isDark ? Colors.grey[500] : Colors.grey[500],
               fontSize: 14,
               fontStyle: FontStyle.italic,
             ),
@@ -114,11 +115,13 @@ class WelcomeScreen extends StatelessWidget {
     required String title,
     required String description,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF1E2733).withOpacity(0.7),
+          color: (isDark ? const Color(0xFF1E2733) : const Color(0xFFF0F2F5))
+              .withOpacity(0.7),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: Colors.blue.withOpacity(0.2),
@@ -128,12 +131,12 @@ class WelcomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: Color(0xFF4A90E2), size: 28),
+            Icon(icon, color: const Color(0xFF4A90E2), size: 28),
             const SizedBox(height: 12),
             Text(
               title,
               style: GoogleFonts.ubuntu(
-                color: Colors.white,
+                color: isDark ? Colors.white : Colors.black87,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -142,7 +145,7 @@ class WelcomeScreen extends StatelessWidget {
             Text(
               description,
               style: GoogleFonts.ubuntu(
-                color: Colors.grey[400],
+                color: isDark ? Colors.grey[400] : Colors.grey[600],
                 fontSize: 14,
               ),
             ),

@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Widget apiKeyReminder({required BuildContext context}) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
   return Dialog(
-    backgroundColor: const Color(0xFF1E2733),
+    backgroundColor:
+        isDark ? const Color(0xFF1E2733) : Colors.white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(15.0),
       side: BorderSide(color: Colors.blue.withOpacity(0.3), width: 1),
@@ -19,7 +21,7 @@ Widget apiKeyReminder({required BuildContext context}) {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
+              const Icon(
                 Icons.notifications_active_outlined,
                 color: Color(0xFF4C83D1),
                 size: 28,
@@ -28,7 +30,7 @@ Widget apiKeyReminder({required BuildContext context}) {
               Text(
                 'Reminder',
                 style: GoogleFonts.ubuntu(
-                  color: Colors.white,
+                  color: isDark ? Colors.white : Colors.black87,
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
                 ),
@@ -40,7 +42,7 @@ Widget apiKeyReminder({required BuildContext context}) {
             'You can set an API key anytime from Settings',
             textAlign: TextAlign.center,
             style: GoogleFonts.ubuntu(
-              color: Colors.grey[300],
+              color: isDark ? Colors.grey[300] : Colors.grey[600],
               fontSize: 16,
               height: 1.5,
             ),
@@ -50,7 +52,7 @@ Widget apiKeyReminder({required BuildContext context}) {
             'Go to Settings → Manage API Keys',
             textAlign: TextAlign.center,
             style: GoogleFonts.ubuntu(
-              color: Colors.blueGrey[200],
+              color: isDark ? Colors.blueGrey[200] : Colors.blueGrey[700],
               fontSize: 14,
               fontStyle: FontStyle.italic,
             ),

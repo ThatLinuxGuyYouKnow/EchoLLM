@@ -13,12 +13,16 @@ class CONFIG extends ChangeNotifier {
   bool _shouldSendOnEnter = false;
   double get fontScale => _fontScale;
   double _fontScale = 1.0;
+  ThemeMode get themeMode => _themeMode;
+  ThemeMode _themeMode = ThemeMode.dark;
   loadPreferences() {
     String modelName = preferencesBox.read('preferredModel');
     _shouldSendOnEnter = preferencesBox.read('sendOnEnter');
     _model = modelName;
     _modelSlug = onlineModels[model] ?? '';
     _fontScale = preferencesBox.read('fontScale') ?? 1.0;
+    final themeIndex = preferencesBox.read('themeMode') ?? 1;
+    _themeMode = ThemeMode.values[themeIndex];
   }
 
   setToSendonEnter() {
@@ -42,6 +46,12 @@ class CONFIG extends ChangeNotifier {
   setFontScale(double scale) {
     _fontScale = scale;
     preferencesBox.write('fontScale', scale);
+    notifyListeners();
+  }
+
+  setThemeMode(ThemeMode mode) {
+    _themeMode = mode;
+    preferencesBox.write('themeMode', mode.index);
     notifyListeners();
   }
 
