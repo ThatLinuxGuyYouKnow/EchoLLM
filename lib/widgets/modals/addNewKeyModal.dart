@@ -29,8 +29,10 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Dialog(
-      backgroundColor: const Color(0xFF1E2733),
+      backgroundColor:
+          isDark ? const Color(0xFF1E2733) : Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
@@ -49,13 +51,14 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
                   Text(
                     'Add a new key',
                     style: GoogleFonts.ubuntu(
-                      color: Colors.white,
+                      color: isDark ? Colors.white : Colors.black87,
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.close, color: Colors.grey[500]),
+                    icon: Icon(Icons.close,
+                        color: isDark ? Colors.grey[500] : Colors.grey[600]),
                     onPressed: () {
                       Navigator.of(context).pop();
                       if (isNewUser) {
@@ -134,7 +137,7 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
                       }
                     },
                     buttonColor: Colors.transparent,
-                    textColor: Colors.grey[400]!,
+                    textColor: isDark ? Colors.grey[400]! : Colors.grey[600]!,
                   ),
                   const SizedBox(width: 20),
                   _consentButton(
@@ -197,6 +200,7 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final availableOptions = onlineModels.keys.toList();
 
     return SizedBox(
@@ -204,10 +208,11 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
       child: Container(
         height: 50,
         decoration: BoxDecoration(
-          color: const Color(0xFF2A3441),
+          color:
+              isDark ? const Color(0xFF2A3441) : const Color(0xFFF0F2F5),
           borderRadius: BorderRadius.circular(10.0),
           border: Border.all(
-            color: Color(0xFF3A4A5F),
+            color: isDark ? const Color(0xFF3A4A5F) : Colors.grey[300]!,
             width: 1.5,
           ),
         ),
@@ -223,11 +228,12 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
                 color: Color(0xFF4A90E2),
                 size: 28,
               ),
-              dropdownColor: const Color(0xFF1E2733),
+              dropdownColor:
+                  isDark ? const Color(0xFF1E2733) : Colors.white,
               borderRadius: BorderRadius.circular(10.0),
               elevation: 8,
               style: GoogleFonts.ubuntu(
-                color: Colors.white,
+                color: isDark ? Colors.white : Colors.black87,
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
               ),
@@ -244,7 +250,7 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
                         style: GoogleFonts.ubuntu(
                           color: isSelected
                               ? Colors.cyanAccent[100]
-                              : Colors.white,
+                              : (isDark ? Colors.white : Colors.black87),
                           fontWeight: FontWeight.normal,
                           fontSize: 14,
                         ),
@@ -271,7 +277,7 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
                       child: Text(
                         item,
                         style: GoogleFonts.ubuntu(
-                          color: Colors.white,
+                          color: isDark ? Colors.white : Colors.black87,
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
@@ -321,15 +327,19 @@ class _ModaltextFieldState extends State<_ModaltextField> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
       width: 450,
       child: Container(
         height: 50,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: const Color(0xFF2A3441),
+          color:
+              isDark ? const Color(0xFF2A3441) : const Color(0xFFF0F2F5),
           border: Border.all(
-            color: widget.errored ? Colors.red : Color(0xFF3A4A5F),
+            color: widget.errored
+                ? Colors.red
+                : (isDark ? const Color(0xFF3A4A5F) : Colors.grey[300]!),
             width: 1.5,
           ),
         ),
@@ -340,7 +350,9 @@ class _ModaltextFieldState extends State<_ModaltextField> {
             onChanged: (value) {
               widget.onChanged(value);
             },
-            style: const TextStyle(color: Colors.white, fontSize: 15),
+            style: TextStyle(
+                color: isDark ? Colors.white : Colors.black87,
+                fontSize: 15),
             obscureText: true,
             obscuringCharacter: '•',
             decoration: const InputDecoration(

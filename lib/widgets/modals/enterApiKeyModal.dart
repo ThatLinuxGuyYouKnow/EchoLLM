@@ -8,9 +8,11 @@ Widget EnterApiKeyModal(
     required String modelName,
     required BuildContext context}) {
   final TextEditingController _apiKeyController = TextEditingController();
+  final isDark = Theme.of(context).brightness == Brightness.dark;
 
   return Dialog(
-    backgroundColor: const Color(0xFF1E2733),
+    backgroundColor:
+        isDark ? const Color(0xFF1E2733) : Colors.white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
       side: BorderSide(color: Colors.blue.withOpacity(0.3), width: 1),
@@ -27,7 +29,7 @@ Widget EnterApiKeyModal(
             Text(
               'Enter your API key for ${modelName}',
               style: GoogleFonts.ubuntu(
-                color: Colors.white,
+                color: isDark ? Colors.white : Colors.black87,
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
@@ -37,10 +39,13 @@ Widget EnterApiKeyModal(
               controller: _apiKeyController,
               obscureText: true,
               obscuringCharacter: '•',
-              style: const TextStyle(color: Colors.white),
+              style: TextStyle(
+                  color: isDark ? Colors.white : Colors.black87),
               decoration: InputDecoration(
                 filled: true,
-                fillColor: const Color(0xFF2A3441),
+                fillColor: isDark
+                    ? const Color(0xFF2A3441)
+                    : const Color(0xFFF0F2F5),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
@@ -59,7 +64,7 @@ Widget EnterApiKeyModal(
                   child: Text(
                     'Cancel',
                     style: GoogleFonts.ubuntu(
-                      color: Colors.grey[400],
+                      color: isDark ? Colors.grey[400] : Colors.grey[600],
                       fontWeight: FontWeight.w500,
                     ),
                   ),

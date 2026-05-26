@@ -10,8 +10,9 @@ void showCustomToast(
   ToastMessageType type = ToastMessageType.passive,
   Duration duration = const Duration(seconds: 3),
 }) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
   Color backgroundColor;
-  Color textColor = Colors.white.withOpacity(0.95);
+  Color textColor = isDark ? Colors.white.withOpacity(0.95) : Colors.black87;
   IconData? leadingIconData;
   Color? iconColor;
 
@@ -27,9 +28,9 @@ void showCustomToast(
       iconColor = Colors.redAccent[100];
       break;
     case ToastMessageType.passive:
-      backgroundColor = const Color(0xFF2A3441);
+      backgroundColor = isDark ? const Color(0xFF2A3441) : Colors.grey[800]!;
       leadingIconData = Icons.info_outline_rounded;
-      iconColor = Colors.cyanAccent[100];
+      iconColor = isDark ? Colors.cyanAccent[100] : Colors.cyan[700];
       break;
   }
   ScaffoldMessenger.of(context).hideCurrentSnackBar();

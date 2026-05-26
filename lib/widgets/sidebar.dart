@@ -39,6 +39,7 @@ class _DrawerTileState extends State<DrawerTile> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: MouseRegion(
@@ -55,7 +56,7 @@ class _DrawerTileState extends State<DrawerTile> {
           child: Container(
             height: 50,
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(
+              color: (isDark ? Colors.black : const Color(0xFFE8EBF0)).withOpacity(
                 isHovered ? 0.7 : (widget.isActive ? 0.4 : 0.2),
               ),
               borderRadius: BorderRadius.circular(10),
@@ -69,11 +70,12 @@ class _DrawerTileState extends State<DrawerTile> {
                   Text(
                     widget.tileTitle,
                     style: GoogleFonts.ubuntu(
-                      color: Colors.white,
+                      color: isDark ? Colors.white : Colors.black87,
                       fontSize: 16,
                     ),
                   ),
-                  Icon(widget.tileIcon, color: Colors.white),
+                  Icon(widget.tileIcon,
+                      color: isDark ? Colors.white : Colors.black87),
                 ],
               ),
             ),
@@ -123,20 +125,19 @@ class _SpecialDrawerTileState extends State<SpecialDrawerTile> {
           child: Container(
             height: 50,
             decoration: BoxDecoration(
-              // Updated colors for better visual appeal
               gradient: isHovered
-                  ? LinearGradient(
+                  ? const LinearGradient(
                       colors: [Color(0xFF4A90E2), Color(0xFF357ABD)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     )
                   : null,
-              color: isHovered ? null : Color(0xFF4A90E2).withOpacity(0.8),
+              color: isHovered ? null : const Color(0xFF4A90E2).withOpacity(0.8),
               borderRadius: BorderRadius.circular(10),
               boxShadow: isHovered
                   ? [
                       BoxShadow(
-                        color: Color(0xFF4A90E2).withOpacity(0.3),
+                        color: const Color(0xFF4A90E2).withOpacity(0.3),
                         blurRadius: 8,
                         offset: Offset(0, 2),
                       )
@@ -196,20 +197,19 @@ class _NewChatTileState extends State<NewChatTile> {
           child: Container(
             height: 50,
             decoration: BoxDecoration(
-              // Updated colors for better visual appeal
               gradient: isHovered
-                  ? LinearGradient(
+                  ? const LinearGradient(
                       colors: [Color(0xFF4A90E2), Color(0xFF357ABD)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     )
                   : null,
-              color: isHovered ? null : Color(0xFF4A90E2).withOpacity(0.8),
+              color: isHovered ? null : const Color(0xFF4A90E2).withOpacity(0.8),
               borderRadius: BorderRadius.circular(10),
               boxShadow: isHovered
                   ? [
                       BoxShadow(
-                        color: Color(0xFF4A90E2).withOpacity(0.3),
+                        color: const Color(0xFF4A90E2).withOpacity(0.3),
                         blurRadius: 8,
                         offset: Offset(0, 2),
                       )
@@ -269,36 +269,40 @@ class _ChatTileState extends State<ChatTile> {
   @override
   Widget build(BuildContext context) {
     final bool isHighlighted = widget.isSelected || isHovered;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return MouseRegion(
       onEnter: (event) => setState(() => isHovered = true),
       onExit: (event) => setState(() => isHovered = false),
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 150),
-        margin: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+        duration: const Duration(milliseconds: 150),
+        margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
         decoration: BoxDecoration(
           color: widget.isSelected
-              ? Color(0xFF4A90E2).withOpacity(0.25)
+              ? const Color(0xFF4A90E2).withOpacity(0.25)
               : isHovered
-                  ? Color(0xFF4A90E2).withOpacity(0.15)
+                  ? const Color(0xFF4A90E2).withOpacity(0.15)
                   : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           border: isHighlighted
               ? Border.all(
                   color: widget.isSelected
-                      ? Color(0xFF4A90E2).withOpacity(0.6)
-                      : Color(0xFF4A90E2).withOpacity(0.3),
+                      ? const Color(0xFF4A90E2).withOpacity(0.6)
+                      : const Color(0xFF4A90E2).withOpacity(0.3),
                   width: widget.isSelected ? 2 : 1)
               : null,
         ),
         child: ListTile(
           dense: true,
-          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           title: Text(
             maxLines: 1,
             widget.chatEntry.value,
             style: GoogleFonts.ubuntu(
-              color: isHighlighted ? Color(0xFF4A90E2) : Colors.white,
+              color: isHighlighted
+                  ? const Color(0xFF4A90E2)
+                  : (isDark ? Colors.white : Colors.black87),
               fontWeight: widget.isSelected
                   ? FontWeight.w600
                   : isHovered
@@ -309,7 +313,9 @@ class _ChatTileState extends State<ChatTile> {
           ),
           leading: Icon(
             widget.isSelected ? Icons.chat_bubble : Icons.chat_bubble_outline,
-            color: isHighlighted ? Color(0xFF4A90E2) : Colors.white70,
+            color: isHighlighted
+                ? const Color(0xFF4A90E2)
+                : (isDark ? Colors.white70 : Colors.black54),
             size: 18,
           ),
           onTap: widget.onTap,
@@ -374,7 +380,7 @@ class _CustomSideBarState extends State<CustomSideBar> {
 
     return Material(
       child: AnimatedContainer(
-        color: const Color(0xFF1E2733),
+        color: Theme.of(context).colorScheme.surface,
         duration: const Duration(seconds: 10),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -424,7 +430,9 @@ class _CustomSideBarState extends State<CustomSideBar> {
                   child: Text(
                     'PREVIOUS CHATS',
                     style: GoogleFonts.ubuntu(
-                      color: Colors.grey[500],
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.grey[500]
+                          : Colors.grey[600],
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
                       letterSpacing: 1.2,
@@ -491,6 +499,7 @@ class _MinimalCollapseIconState extends State<MinimalCollapseIcon> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       alignment: Alignment.centerLeft,
@@ -507,13 +516,15 @@ class _MinimalCollapseIconState extends State<MinimalCollapseIcon> {
               padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: isHovered
-                    ? Color(0xFF4A90E2).withOpacity(0.15)
+                    ? const Color(0xFF4A90E2).withOpacity(0.15)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Icon(
                 Icons.view_sidebar_outlined,
-                color: isHovered ? Color(0xFF4A90E2) : Colors.white60,
+                color: isHovered
+                    ? const Color(0xFF4A90E2)
+                    : (isDark ? Colors.white60 : Colors.black54),
                 size: 22,
               ),
             ),

@@ -31,7 +31,6 @@ class KeyManagementScreen extends StatefulWidget {
 }
 
 class _KeyManagementScreenState extends State<KeyManagementScreen> {
-  final Color _cardBackgroundColor = const Color(0xFF1C1C1E);
   bool _isFabHovered = false;
 
   String _maskApiKey(String apiKey) {
@@ -41,6 +40,7 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Consumer<KeysState>(
       builder: (context, keysState, child) {
         final modelKeyMap = keysState.modelKeys;
@@ -52,7 +52,7 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
         }
 
         return Scaffold(
-          backgroundColor: Colors.black,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: modelKeyMap.isEmpty
               ? _buildEmptyState()
               : ListView.builder(
@@ -134,20 +134,27 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
   }
 
   Widget _buildEmptyState() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.vpn_key_off_outlined, size: 80, color: Colors.grey[700]),
+          Icon(Icons.vpn_key_off_outlined,
+              size: 80,
+              color: isDark ? Colors.grey[700] : Colors.grey[400]),
           const SizedBox(height: 20),
           Text(
             'No API Keys Found',
-            style: GoogleFonts.ubuntu(color: Colors.grey[500], fontSize: 20),
+            style: GoogleFonts.ubuntu(
+                color: isDark ? Colors.grey[500] : Colors.grey[600],
+                fontSize: 20),
           ),
           const SizedBox(height: 8),
           Text(
             'Add your first API key to get started.',
-            style: GoogleFonts.ubuntu(color: Colors.grey[600], fontSize: 16),
+            style: GoogleFonts.ubuntu(
+                color: isDark ? Colors.grey[600] : Colors.grey[500],
+                fontSize: 16),
           ),
         ],
       ),
@@ -155,10 +162,11 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
   }
 
   Widget _buildApiKeyCard({required ApiKey apikey}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ConstrainedBox(
       constraints: const BoxConstraints(maxHeight: 150),
       child: Card(
-        color: _cardBackgroundColor,
+        color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -167,8 +175,9 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
           padding: const EdgeInsets.only(bottom: 12.0, top: 8.0),
           child: ListTile(
             trailing: PopupMenuButton<String>(
-              icon: const Icon(Icons.more_vert, color: Colors.white),
-              color: const Color(0xFF2A2A2E),
+              icon: Icon(Icons.more_vert,
+                  color: isDark ? Colors.white : Colors.black87),
+              color: isDark ? const Color(0xFF2A2A2E) : Colors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               onSelected: (value) {
@@ -192,10 +201,13 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
                   value: 'copy',
                   child: Row(
                     children: [
-                      const Icon(Icons.copy, size: 18, color: Colors.white),
+                      Icon(Icons.copy,
+                          size: 18,
+                          color: isDark ? Colors.white : Colors.black87),
                       const SizedBox(width: 10),
                       Text('Copy',
-                          style: GoogleFonts.ubuntu(color: Colors.white)),
+                          style: GoogleFonts.ubuntu(
+                              color: isDark ? Colors.white : Colors.black87)),
                     ],
                   ),
                 ),
@@ -207,21 +219,25 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
                           size: 18, color: Colors.redAccent),
                       const SizedBox(width: 10),
                       Text('Delete',
-                          style: GoogleFonts.ubuntu(color: Colors.white)),
+                          style: GoogleFonts.ubuntu(
+                              color: isDark ? Colors.white : Colors.black87)),
                     ],
                   ),
                 ),
               ],
             ),
-            leading: const Icon(
+            leading: Icon(
               Icons.key_outlined,
-              color: Colors.white,
+              color: isDark ? Colors.white : Colors.black87,
             ),
             title: Text(apikey.serviceName,
-                style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 15)),
+                style: GoogleFonts.ubuntu(
+                    color: isDark ? Colors.white : Colors.black87,
+                    fontSize: 15)),
             subtitle: Text(
               _maskApiKey(apikey.keyValue),
-              style: GoogleFonts.ubuntu(color: Colors.grey),
+              style: GoogleFonts.ubuntu(
+                  color: isDark ? Colors.grey : Colors.grey[600]),
             ),
           ),
         ),
@@ -231,34 +247,40 @@ class _KeyManagementScreenState extends State<KeyManagementScreen> {
 
   Future<void> _showDeleteConfirmation(
       BuildContext context, ApiKey apiKey) async {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final modelName = apiKey.serviceName;
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // User must tap button
+      barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          backgroundColor: const Color(0xFF2A3441),
+          backgroundColor:
+              isDark ? const Color(0xFF2A3441) : Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius:
-                BorderRadius.circular(10), // Updated to 10 for consistency
+                BorderRadius.circular(10),
           ),
           title: Text('Delete API Key?',
-              style: GoogleFonts.ubuntu(color: Colors.white)),
+              style: GoogleFonts.ubuntu(
+                  color: isDark ? Colors.white : Colors.black87)),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text('Are you sure you want to delete the key for $modelName?',
-                    style: GoogleFonts.ubuntu(color: Colors.grey[300])),
+                    style: GoogleFonts.ubuntu(
+                        color: isDark ? Colors.grey[300] : Colors.grey[700])),
                 Text('This action cannot be undone.',
                     style: GoogleFonts.ubuntu(
-                        color: Colors.grey[400], fontStyle: FontStyle.italic)),
+                        color: isDark ? Colors.grey[400] : Colors.grey[500],
+                        fontStyle: FontStyle.italic)),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
               child: Text('Cancel',
-                  style: GoogleFonts.ubuntu(color: Colors.grey[400])),
+                  style: GoogleFonts.ubuntu(
+                      color: isDark ? Colors.grey[400] : Colors.grey[600])),
               onPressed: () {
                 Navigator.of(dialogContext).pop();
               },

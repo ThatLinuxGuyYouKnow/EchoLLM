@@ -29,10 +29,13 @@ class _MessageBubbleState extends State<MessageBubble> {
   Widget build(BuildContext context) {
     final config = Provider.of<CONFIG>(context);
     final fontScale = config.fontScale;
-    final modelBubbleColor = const Color(0xFF2A3441);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final modelBubbleColor =
+        isDark ? const Color(0xFF2A3441) : const Color(0xFFF0F0F0);
     final userBubbleColor = const Color(0xFF427BBF);
 
-    final textColor = Colors.white.withOpacity(0.95);
+    final textColor =
+        (isDark ? Colors.white : Colors.black87).withOpacity(0.95);
     final baseTextStyle = TextStyle(
       fontFamily: GoogleFonts.ubuntu().fontFamily,
       color: textColor,
@@ -71,19 +74,25 @@ class _MessageBubbleState extends State<MessageBubble> {
       listBullet: baseTextStyle.copyWith(color: textColor.withOpacity(0.8)),
       listIndent: 12.0,
       codeblockDecoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.35),
+        color: (isDark ? Colors.black : Colors.grey[200]!).withOpacity(0.35),
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: Colors.grey[700]!, width: 0.5),
+        border: Border.all(
+            color: isDark ? Colors.grey[700]! : Colors.grey[400]!,
+            width: 0.5),
       ),
       code: baseTextStyle.copyWith(
         fontFamily: GoogleFonts.sourceCodePro().fontFamily,
-        backgroundColor: Colors.black.withOpacity(0.25),
-        color: Colors.orangeAccent[100],
+        backgroundColor:
+            (isDark ? Colors.black : Colors.grey[200]!).withOpacity(0.25),
+        color: isDark ? Colors.orangeAccent[100] : Colors.deepOrange[700],
         fontSize: 14 * fontScale,
       ),
       blockquoteDecoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.1),
-        border: Border(left: BorderSide(color: Colors.grey[600]!, width: 4)),
+        color: (isDark ? Colors.black : Colors.grey[200]!).withOpacity(0.1),
+        border: Border(
+            left: BorderSide(
+                color: isDark ? Colors.grey[600]! : Colors.grey[400]!,
+                width: 4)),
       ),
       blockquotePadding: const EdgeInsets.all(10.0),
     );
@@ -269,7 +278,9 @@ class _BufferingMessageBubbleState extends State<BufferingMessageBubble> {
 
   @override
   Widget build(BuildContext context) {
-    final bubbleColor = const Color(0xFF2A3441);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bubbleColor =
+        isDark ? const Color(0xFF2A3441) : const Color(0xFFF0F0F0);
 
     return Align(
       alignment: Alignment.centerLeft,

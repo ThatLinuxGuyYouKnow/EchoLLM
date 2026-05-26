@@ -11,7 +11,7 @@ class Collapsedsidebar extends StatelessWidget {
     final sidebarstate = Provider.of<Sidebarstate>(context);
     final screenState = Provider.of<Screenstate>(context);
     return AnimatedContainer(
-      color: Color(0xFF1E2733),
+      color: Theme.of(context).colorScheme.surface,
       duration: Duration(seconds: 1),
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -91,6 +91,7 @@ class _SettingsCollapsedTileState extends State<SettingsCollapsedTile> {
   bool isHovered = false;
 
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final screenState = Provider.of<Screenstate>(context);
     return GestureDetector(
       onTap: () => screenState.settingsScreen(),
@@ -105,14 +106,14 @@ class _SettingsCollapsedTileState extends State<SettingsCollapsedTile> {
           height: 50,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.black.withOpacity(
+            color: (isDark ? Colors.black : const Color(0xFFE8EBF0)).withOpacity(
               isHovered ? 0.7 : 0.2,
             ),
           ),
           child: Center(
             child: Icon(
               Icons.precision_manufacturing,
-              color: Colors.white,
+              color: isDark ? Colors.white : Colors.black87,
             ),
           ),
         ),

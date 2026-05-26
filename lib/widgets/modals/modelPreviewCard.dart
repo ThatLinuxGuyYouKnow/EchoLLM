@@ -49,6 +49,7 @@ class ModelPreviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: Colors.transparent,
       child: Container(
         width: 550,
         decoration: BoxDecoration(
