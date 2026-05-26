@@ -29,6 +29,7 @@ class _DrawerTileState extends State<DrawerTile> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
       child: MouseRegion(
@@ -39,7 +40,8 @@ class _DrawerTileState extends State<DrawerTile> {
           child: Container(
             height: 52,
             decoration: BoxDecoration(
-              color: Color(0xFF1E2733).withOpacity(isHovered ? 1 : 0.7),
+              color: (isDark ? const Color(0xFF1E2733) : const Color(0xFFE8EBF0))
+                  .withOpacity(isHovered ? 1 : 0.7),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Padding(
@@ -52,7 +54,7 @@ class _DrawerTileState extends State<DrawerTile> {
                     child: Text(
                       widget.tileTitle,
                       style: GoogleFonts.ubuntu(
-                        color: Colors.white,
+                        color: isDark ? Colors.white : Colors.black87,
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
@@ -62,7 +64,8 @@ class _DrawerTileState extends State<DrawerTile> {
                   const SizedBox(width: 8),
                   Icon(
                     widget.tileIcon,
-                    color: Colors.white.withOpacity(0.9),
+                    color: (isDark ? Colors.white : Colors.black87)
+                        .withOpacity(0.9),
                     size: 20,
                   ),
                 ],
@@ -73,7 +76,7 @@ class _DrawerTileState extends State<DrawerTile> {
       ),
     );
   }
-}
+} // End of _DrawerTileState
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -84,27 +87,42 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _enableStreaming = false;
-  String _selectedTheme = 'Dark';
-
-  // Define consistent styling
-  final TextStyle _settingTitleStyle = GoogleFonts.ubuntu(
-    color: Colors.white,
-    fontSize: 16,
-  );
-  final TextStyle _settingSubtitleStyle = GoogleFonts.ubuntu(
-    color: Colors.grey[500],
-    fontSize: 13,
-  );
-  final Color _cardBackgroundColor = const Color(0xFF1C1C1E);
-  final Color _iconColor = Colors.grey[400]!;
 
   @override
   Widget build(BuildContext context) {
     final screenState = Provider.of<Screenstate>(context);
     final config = Provider.of<CONFIG>(context);
     final bool shouldSendOnEnter = config.shouldSendOnEnter;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    final _settingTitleStyle = GoogleFonts.ubuntu(
+      color: isDark ? Colors.white : Colors.black87,
+      fontSize: 16,
+    );
+    final _settingSubtitleStyle = GoogleFonts.ubuntu(
+      color: isDark ? Colors.grey[500] : Colors.grey[600],
+      fontSize: 13,
+    );
+    final _cardBackgroundColor =
+        isDark ? const Color(0xFF1C1C1E) : Colors.white;
+    final _iconColor = isDark ? Colors.grey[400]! : Colors.grey[600]!;
+
+    String _selectedTheme;
+    switch (config.themeMode) {
+      case ThemeMode.light:
+        _selectedTheme = 'Light';
+        break;
+      case ThemeMode.dark:
+        _selectedTheme = 'Dark';
+        break;
+      case ThemeMode.system:
+        _selectedTheme = 'System Default';
+        break;
+    }
+
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: <Widget>[
@@ -163,9 +181,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 items: ['Dark', 'Light', 'System Default'],
                 onChanged: (newValue) {
                   if (newValue != null) {
-                    setState(() {
-                      _selectedTheme = newValue;
-                    });
+                    ThemeMode mode;
+                    switch (newValue) {
+                      case 'Light':
+                        mode = ThemeMode.light;
+                        break;
+                      case 'Dark':
+                        mode = ThemeMode.dark;
+                        break;
+                      case 'System Default':
+                        mode = ThemeMode.system;
+                        break;
+                      default:
+                        mode = ThemeMode.dark;
+                    }
+                    config.setThemeMode(mode);
                   }
                 },
               ),
@@ -225,12 +255,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget _buildSectionTitle(String title) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0, top: 5.0),
       child: Text(
         title.toUpperCase(),
         style: GoogleFonts.ubuntu(
-          color: Colors.grey[600],
+          color: isDark ? Colors.grey[600] : Colors.grey[500],
           fontWeight: FontWeight.w600,
           fontSize: 13,
           letterSpacing: 0.8,
@@ -261,6 +292,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     required bool value,
     required ValueChanged<bool> onChanged,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ListTile(
       leading: Icon(icon, color: _iconColor),
       title: Text(title, style: _settingTitleStyle),
@@ -270,10 +302,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       trailing: Switch(
         value: value,
         onChanged: onChanged,
-        activeColor: Color.fromARGB(255, 58, 91, 134),
-        activeTrackColor: Color(0xFF1E2733),
-        inactiveThumbColor: Colors.grey[400],
-        inactiveTrackColor: Colors.grey[700],
+        activeColor: isDark
+            ? const Color.fromARGB(255, 58, 91, 134)
+            : const Color(0xFF4A90E2),
+        activeTrackColor:
+            isDark ? const Color(0xFF1E2733) : const Color(0xFF4A90E2).withOpacity(0.3),
+        inactiveThumbColor: isDark ? Colors.grey[400] : Colors.grey[500],
+        inactiveTrackColor: isDark ? Colors.grey[700] : Colors.grey[300],
       ),
       contentPadding:
           const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
@@ -288,15 +323,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
     Color? iconColor,
     Color? textColor,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ListTile(
       leading: Icon(icon, color: iconColor ?? _iconColor),
       title: Text(title,
-          style: _settingTitleStyle.copyWith(color: textColor ?? Colors.white)),
+          style: _settingTitleStyle.copyWith(
+              color: textColor ?? (isDark ? Colors.white : Colors.black87))),
       subtitle: subtitle != null
           ? Text(subtitle, style: _settingSubtitleStyle)
           : null,
       trailing:
-          Icon(Icons.arrow_forward_ios, color: Colors.grey[600], size: 16),
+          Icon(Icons.arrow_forward_ios, color: isDark ? Colors.grey[600] : Colors.grey[400], size: 16),
       onTap: onTap,
       contentPadding:
           const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -311,6 +348,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     required List<String> items,
     required ValueChanged<String?> onChanged,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ListTile(
       leading: Icon(icon, color: _iconColor),
       title: Text(title, style: _settingTitleStyle),
@@ -320,9 +358,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       trailing: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: currentValue,
-          dropdownColor: const Color(0xFF2A3441),
+          dropdownColor: isDark ? const Color(0xFF2A3441) : Colors.white,
           iconEnabledColor: Colors.cyan,
-          style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 15),
+          style: GoogleFonts.ubuntu(
+              color: isDark ? Colors.white : Colors.black87, fontSize: 15),
           items: items.map((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -347,6 +386,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     required String label,
     required ValueChanged<double> onChanged,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final accentBlue = isDark
+        ? const Color.fromARGB(255, 58, 91, 134)
+        : const Color(0xFF4A90E2);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
       child: Row(
@@ -360,14 +403,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Text(title, style: _settingTitleStyle),
                 SliderTheme(
                   data: SliderThemeData(
-                    activeTrackColor: const Color.fromARGB(255, 58, 91, 134),
-                    inactiveTrackColor: Colors.grey[700],
-                    thumbColor: Colors.white,
-                    overlayColor:
-                        const Color.fromARGB(255, 58, 91, 134).withOpacity(0.2),
-                    valueIndicatorColor: const Color(0xFF2A3441),
-                    valueIndicatorTextStyle:
-                        GoogleFonts.ubuntu(color: Colors.white),
+                    activeTrackColor: accentBlue,
+                    inactiveTrackColor:
+                        isDark ? Colors.grey[700] : Colors.grey[300],
+                    thumbColor: isDark ? Colors.white : accentBlue,
+                    overlayColor: accentBlue.withOpacity(0.2),
+                    valueIndicatorColor:
+                        isDark ? const Color(0xFF2A3441) : Colors.white,
+                    valueIndicatorTextStyle: GoogleFonts.ubuntu(
+                        color: isDark ? Colors.white : Colors.black87),
                   ),
                   child: Slider(
                     value: value,
@@ -389,43 +433,50 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget _buildDivider() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Divider(
       height: 0.5,
       thickness: 0.5,
-      color: Colors.grey[800],
+      color: isDark ? Colors.grey[800] : Colors.grey[300],
       indent: 56,
     );
   }
 
   _buildDeleteConfirmationDialog() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // User must tap button
+      barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         final messageState = Provider.of<Messagestreamstate>(context);
         return AlertDialog(
-          backgroundColor: const Color(0xFF2A3441),
+          backgroundColor:
+              isDark ? const Color(0xFF2A3441) : Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius:
-                BorderRadius.circular(10), // Updated to 10 for consistency
+                BorderRadius.circular(10),
           ),
           title: Text('Delete Chat History?',
-              style: GoogleFonts.ubuntu(color: Colors.white)),
+              style: GoogleFonts.ubuntu(
+                  color: isDark ? Colors.white : Colors.black87)),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text('Are you sure you want to delete your chat history?',
-                    style: GoogleFonts.ubuntu(color: Colors.grey[300])),
+                    style: GoogleFonts.ubuntu(
+                        color: isDark ? Colors.grey[300] : Colors.grey[700])),
                 Text('This action cannot be undone.',
                     style: GoogleFonts.ubuntu(
-                        color: Colors.grey[400], fontStyle: FontStyle.italic)),
+                        color: isDark ? Colors.grey[400] : Colors.grey[500],
+                        fontStyle: FontStyle.italic)),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
               child: Text('Cancel',
-                  style: GoogleFonts.ubuntu(color: Colors.grey[400])),
+                  style: GoogleFonts.ubuntu(
+                      color: isDark ? Colors.grey[400] : Colors.grey[600])),
               onPressed: () async {
                 Navigator.of(dialogContext).pop();
               },

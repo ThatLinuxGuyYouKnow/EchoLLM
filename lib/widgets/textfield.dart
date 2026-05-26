@@ -29,6 +29,9 @@ class _ChatTextFieldState extends State<ChatTextField> {
     bool isExpanded = textfieldState.isExpanded;
     final config = Provider.of<CONFIG>(context);
     final fontScale = config.fontScale;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final fieldBgColor =
+        isDark ? const Color(0xFF1E2733) : const Color(0xFFF0F2F5);
     final modelInference = InferenceSuperClass(
         conversationHistory: messageState.messages,
         messageState: messageState,
@@ -104,7 +107,7 @@ class _ChatTextFieldState extends State<ChatTextField> {
                               color: isExpanded
                                   ? const Color(0xFF4C83D1)
                                   : Colors.transparent),
-                          color: const Color(0xFF1E2733),
+                          color: fieldBgColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Stack(
@@ -135,12 +138,16 @@ class _ChatTextFieldState extends State<ChatTextField> {
                                   controller: widget.chatController,
                                   style: TextStyle(
                                       fontWeight: FontWeight.w700,
-                                      color: Colors.white,
+                                      color: isDark ? Colors.white : Colors.black87,
                                       fontSize: 15 * fontScale),
-                                  decoration: const InputDecoration(
+                                  decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: 'Type a message',
-                                    contentPadding: EdgeInsets.only(
+                                    hintStyle: TextStyle(
+                                        color: isDark
+                                            ? Colors.grey[500]
+                                            : Colors.grey[400]),
+                                    contentPadding: const EdgeInsets.only(
                                         left: 12.0,
                                         right: 60,
                                         bottom: 10,
@@ -162,7 +169,7 @@ class _ChatTextFieldState extends State<ChatTextField> {
                               right: 4,
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF1E2733),
+                                  color: fieldBgColor,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: ChatButton(
