@@ -46,17 +46,44 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  static const _accentColor = Color(0xFF4A90E2);
+
   @override
   Widget build(BuildContext context) {
-    final config = Provider.of<CONFIG>(context, listen: false);
+    final config = Provider.of<CONFIG>(context, listen: true);
     config.loadPreferences();
 
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
+      themeMode: config.themeMode,
       theme: ThemeData(
         platform: TargetPlatform.linux,
         useMaterial3: true,
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: Colors.white,
+        colorScheme: ColorScheme.light(
+          primary: _accentColor,
+          surface: const Color(0xFFF5F5F5),
+          onSurface: Colors.black87,
+          onPrimary: Colors.white,
+        ),
+        cardColor: Colors.white,
+        dividerColor: Colors.grey[300],
+      ),
+      darkTheme: ThemeData(
+        platform: TargetPlatform.linux,
+        useMaterial3: true,
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: Colors.black,
+        colorScheme: ColorScheme.dark(
+          primary: _accentColor,
+          surface: const Color(0xFF1E2733),
+          onSurface: Colors.white,
+          onPrimary: Colors.white,
+        ),
+        cardColor: const Color(0xFF1C1C1E),
+        dividerColor: Colors.grey[800],
       ),
       home: MainScreen(),
     );

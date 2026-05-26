@@ -70,7 +70,7 @@ class _MainScreenState extends State<MainScreen> {
         Expanded(
           child: Scaffold(
             appBar: DarkAppBar(),
-            backgroundColor: Colors.black,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             body: SafeArea(child: currentScreen),
           ),
         ),

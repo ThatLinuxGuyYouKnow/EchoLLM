@@ -5,8 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 Widget buildFirstTimeUserPrompt(
     {required Function() onPositiveButtonPressed,
     required BuildContext context}) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
   return Dialog(
-    backgroundColor: const Color(0xFF1E2733),
+    backgroundColor:
+        isDark ? const Color(0xFF1E2733) : Colors.white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
       side: BorderSide(color: Colors.blue.withOpacity(0.3), width: 1),
@@ -23,7 +25,7 @@ Widget buildFirstTimeUserPrompt(
             Text(
               'First Time?',
               style: GoogleFonts.ubuntu(
-                color: Colors.white,
+                color: isDark ? Colors.white : Colors.black87,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
@@ -32,7 +34,7 @@ Widget buildFirstTimeUserPrompt(
             Text(
               "You'll need to enter at least one API key to get started with EchoLLM",
               style: GoogleFonts.ubuntu(
-                color: Colors.grey[400],
+                color: isDark ? Colors.grey[400] : Colors.grey[600],
                 fontSize: 15,
               ),
             ),
@@ -52,7 +54,7 @@ Widget buildFirstTimeUserPrompt(
                   child: Text(
                     "I'll do it later",
                     style: GoogleFonts.ubuntu(
-                      color: Colors.grey[400],
+                      color: isDark ? Colors.grey[400] : Colors.grey[600],
                       fontWeight: FontWeight.w500,
                     ),
                   ),
