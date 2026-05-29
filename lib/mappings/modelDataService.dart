@@ -1,5 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:http/http.dart' as http;
+import 'package:get_storage/get_storage.dart';
+
+const String _remoteUrl =
+    'https://raw.githubusercontent.com/ThatLinuxGuyYouKnow/EchoLLM/main/lib/mappings/modelData.json';
+const String _cacheKey = 'cached_model_data';
 
 /// Represents a model's data from modelData.json
 class ModelInfo {
@@ -61,7 +67,6 @@ class ModelInfo {
     );
   }
 
-  // Added: serialize ModelInfo back to Map
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -84,8 +89,6 @@ class ModelInfo {
   }
 }
 
-/// Singleton service to load and provide model data from modelData.json.
-/// This replaces the old onlineModels Map<String, String>.
 class ModelDataService {
   static final ModelDataService _instance = ModelDataService._internal();
   factory ModelDataService() => _instance;
@@ -94,13 +97,10 @@ class ModelDataService {
   List<ModelInfo> _models = [];
   bool _isLoaded = false;
 
-  /// The list of all ModelInfo objects
   List<ModelInfo> get models => _models;
 
-  /// Whether the data has been loaded
   bool get isLoaded => _isLoaded;
 
-  /// Map of model name -> slug (backwards compatible with onlineModels)
   Map<String, String> get onlineModels {
     try {
       return {for (var m in _models) m.name: m.slug};
@@ -109,33 +109,60 @@ class ModelDataService {
     }
   }
 
-  /// Map of slug -> model name (reverse lookup)
   Map<String, String> get slugToName {
     return {for (var m in _models) m.slug: m.name};
   }
 
-  /// Get all model names
   List<String> get modelNames => _models.map((m) => m.name).toList();
 
-  /// Get all model slugs
   List<String> get modelSlugs => _models.map((m) => m.slug).toList();
 
-  /// Load the model data from JSON asset
+  List<ModelInfo> _parseModels(String jsonString) {
+    final Map<String, dynamic> jsonData = json.decode(jsonString);
+    final List<dynamic> modelsJson = jsonData['models'] ?? [];
+    return modelsJson.map((m) => ModelInfo.fromJson(m)).toList();
+  }
+
   Future<void> loadModels() async {
     if (_isLoaded) return;
+
+    final box = GetStorage('model-cache');
+
+    try {
+      final response = await http
+          .get(Uri.parse(_remoteUrl))
+          .timeout(const Duration(seconds: 5));
+      if (response.statusCode == 200) {
+        _models = _parseModels(response.body);
+        box.write(_cacheKey, response.body);
+        _isLoaded = true;
+        return;
+      }
+    } catch (_) {}
+
+    try {
+      final cached = box.read<String>(_cacheKey);
+      if (cached != null && cached.isNotEmpty) {
+        _models = _parseModels(cached);
+        _isLoaded = true;
+        return;
+      }
+    } catch (_) {}
 
     try {
       final String jsonString =
           await rootBundle.loadString('lib/mappings/modelData.json');
-      final Map<String, dynamic> jsonData = json.decode(jsonString);
-      final List<dynamic> modelsJson = jsonData['models'] ?? [];
-
-      _models = modelsJson.map((m) => ModelInfo.fromJson(m)).toList();
+      _models = _parseModels(jsonString);
       _isLoaded = true;
     } catch (e) {
       _models = [];
       _isLoaded = false;
     }
+  }
+
+  Future<void> refreshModels() async {
+    _isLoaded = false;
+    await loadModels();
   }
 
   /// Get ModelInfo by name
