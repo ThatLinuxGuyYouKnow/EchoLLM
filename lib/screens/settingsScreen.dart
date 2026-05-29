@@ -1,4 +1,5 @@
 import 'package:echo_llm/dataHandlers/hive/hiveManager.dart';
+import 'package:echo_llm/mappings/modelDataService.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/screenState.dart';
 import 'package:echo_llm/userConfig.dart';
@@ -87,6 +88,39 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _enableStreaming = false;
+  bool _isRefreshing = false;
+
+  bool get _isDark => Theme.of(context).brightness == Brightness.dark;
+  Color get _cardBackgroundColor => _isDark ? const Color(0xFF1C1C1E) : Colors.white;
+  Color get _iconColor => _isDark ? Colors.grey[400]! : Colors.grey[600]!;
+  TextStyle get _settingTitleStyle => GoogleFonts.ubuntu(
+    color: _isDark ? Colors.white : Colors.black87,
+    fontSize: 16,
+  );
+  TextStyle get _settingSubtitleStyle => GoogleFonts.ubuntu(
+    color: _isDark ? Colors.grey[500] : Colors.grey[600],
+    fontSize: 13,
+  );
+
+  Future<void> _refreshModels() async {
+    setState(() => _isRefreshing = true);
+    try {
+      await ModelDataService().refreshModels();
+      if (mounted) {
+        showCustomToast(context,
+            message: 'Models updated successfully',
+            type: ToastMessageType.success);
+      }
+    } catch (_) {
+      if (mounted) {
+        showCustomToast(context,
+            message: 'Failed to refresh models',
+            type: ToastMessageType.error);
+      }
+    } finally {
+      if (mounted) setState(() => _isRefreshing = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,19 +128,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final config = Provider.of<CONFIG>(context);
     final bool shouldSendOnEnter = config.shouldSendOnEnter;
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    final _settingTitleStyle = GoogleFonts.ubuntu(
-      color: isDark ? Colors.white : Colors.black87,
-      fontSize: 16,
-    );
-    final _settingSubtitleStyle = GoogleFonts.ubuntu(
-      color: isDark ? Colors.grey[500] : Colors.grey[600],
-      fontSize: 13,
-    );
-    final _cardBackgroundColor =
-        isDark ? const Color(0xFF1C1C1E) : Colors.white;
-    final _iconColor = isDark ? Colors.grey[400]! : Colors.grey[600]!;
 
     String _selectedTheme;
     switch (config.themeMode) {
@@ -126,20 +147,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: <Widget>[
-          Row(
+          _buildSectionTitle('Models'),
+          _buildSettingsCard(
             children: [
-              Expanded(
-                child: DrawerTile(
-                  tileTitle: 'Models',
-                  tileIcon: Icons.smart_toy,
-                  onTilePressed: () {
-                    screenState.modelScreen();
-                  },
-                ),
+              _buildNavigationListTile(
+                title: 'Browse Models',
+                subtitle: 'View all available models',
+                icon: Icons.smart_toy,
+                onTap: () {
+                  screenState.modelScreen();
+                },
+              ),
+              _buildDivider(),
+              _buildNavigationListTile(
+                title: _isRefreshing ? 'Updating…' : 'Refresh Models',
+                subtitle: 'Fetch the latest model list from the server',
+                icon: _isRefreshing ? Icons.hourglass_top : Icons.refresh,
+                onTap: _isRefreshing ? () {} : _refreshModels,
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
           _buildSectionTitle('Chat Interface'),
           _buildSettingsCard(
             children: [
