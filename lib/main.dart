@@ -23,6 +23,7 @@ Future<void> main() async {
 
   await GetStorage.init('api-keys');
   await GetStorage.init('preferences');
+  await GetStorage.init('model-cache');
 
   await Hive.initFlutter();
   await HiveManager.init();
