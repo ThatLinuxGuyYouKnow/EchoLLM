@@ -4,24 +4,26 @@ import 'package:echo_llm/mappings/modelDataService.dart';
 final keyHandler = ApiKeyHelper();
 
 Map<String, bool> onlineModelAvailability = {
+  "gemini-3.5-flash":
+      keyHandler.readKey(modelSlugNotName: 'gemini-3.5-flash').length > 1,
+  "gemini-3.1-pro-preview":
+      keyHandler.readKey(modelSlugNotName: 'gemini-3.1-pro-preview').length > 1,
   "gemini-2.5-pro":
       keyHandler.readKey(modelSlugNotName: 'gemini-2.5-pro').length > 1,
   "gemini-2.5-flash":
       keyHandler.readKey(modelSlugNotName: 'gemini-2.5-flash').length > 1,
-  "gpt-4.1": keyHandler.readKey(modelSlugNotName: 'gpt-4.1').length > 1,
-  "gpt-4o":
-      keyHandler.readKey(modelSlugNotName: 'chatgpt-4o-latest').length > 1,
-  'grok-3-beta': keyHandler.readKey(modelSlugNotName: 'grok-3-beta').length > 1,
-  'grok-3-mini-beta':
-      keyHandler.readKey(modelSlugNotName: 'grok-3-mini-beta').length > 1,
-  "claude-3-7-sonnet":
-      keyHandler.readKey(modelSlugNotName: 'claude-3-7-sonnet').length > 1,
-  "claude-3-5-sonnet":
-      keyHandler.readKey(modelSlugNotName: 'claude-3-5-sonnet').length > 1,
-  "claude-3-7-Opus":
-      keyHandler.readKey(modelSlugNotName: 'claude-3-7-Opus').length > 1,
-  "clause 3-5 Opus":
-      keyHandler.readKey(modelSlugNotName: 'clause 3-5 Opus').length > 1
+  "gpt-5-5": keyHandler.readKey(modelSlugNotName: 'gpt-5-5').length > 1,
+  "gpt-5-4": keyHandler.readKey(modelSlugNotName: 'gpt-5-4').length > 1,
+  "gpt-5-4-mini":
+      keyHandler.readKey(modelSlugNotName: 'gpt-5-4-mini').length > 1,
+  "grok-4-3": keyHandler.readKey(modelSlugNotName: 'grok-4-3').length > 1,
+  "grok-4-20": keyHandler.readKey(modelSlugNotName: 'grok-4-20').length > 1,
+  "claude-sonnet-4-6":
+      keyHandler.readKey(modelSlugNotName: 'claude-sonnet-4-6').length > 1,
+  "claude-opus-4-8":
+      keyHandler.readKey(modelSlugNotName: 'claude-opus-4-8').length > 1,
+  "claude-haiku-4-5":
+      keyHandler.readKey(modelSlugNotName: 'claude-haiku-4-5').length > 1,
 };
 bool isAtleastOneModelAvailable() {
   List models = onlineModelAvailability.keys.toList();
