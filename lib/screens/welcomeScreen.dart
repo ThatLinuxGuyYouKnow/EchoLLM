@@ -61,12 +61,14 @@ class WelcomeScreen extends StatelessWidget {
                         title: 'Creative Ideas',
                         description:
                             'Brainstorm concepts and explore possibilities',
+                        isDark: isDark,
                       ),
                       const SizedBox(width: 20),
                       _buildFeatureCard(
                         icon: Icons.code,
                         title: 'Code Assistance',
                         description: 'Get help with programming problems',
+                        isDark: isDark,
                       ),
                     ],
                   ),
@@ -78,12 +80,14 @@ class WelcomeScreen extends StatelessWidget {
                         icon: Icons.article_outlined,
                         title: 'Content Creation',
                         description: 'Draft emails, articles, and documents',
+                        isDark: isDark,
                       ),
                       const SizedBox(width: 20),
                       _buildFeatureCard(
                         icon: Icons.search,
                         title: 'Research Help',
                         description: 'Explore topics and find information',
+                        isDark: isDark,
                       ),
                     ],
                   ),
@@ -114,8 +118,8 @@ class WelcomeScreen extends StatelessWidget {
     required IconData icon,
     required String title,
     required String description,
+    required bool isDark,
   }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(16),
