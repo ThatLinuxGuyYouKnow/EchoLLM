@@ -1,5 +1,5 @@
 name: echollm
-version: '1.0.0'
+version: '1.0.3'
 summary: A privacy-focused AI chat application
 description: |
   EchoLLM is a desktop client for interacting with various AI models
