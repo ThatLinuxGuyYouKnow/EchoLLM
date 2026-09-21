@@ -1,9 +1,11 @@
 import 'package:echo_llm/dataHandlers/hive/ApikeyHelper.dart';
 import 'package:echo_llm/inference/claudeHelper.dart';
 import 'package:echo_llm/inference/geminiHelper.dart';
+import 'package:echo_llm/inference/opencodeHelper.dart';
 import 'package:echo_llm/inference/openaiHelper.dart';
 import 'package:echo_llm/inference/x-ai_helper.dart';
 import 'package:echo_llm/mappings/modelDataService.dart';
+import 'package:echo_llm/mappings/providerConfig.dart';
 import 'package:echo_llm/services/messenger_service.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 
@@ -30,8 +32,11 @@ class InferenceSuperClass {
 
       final List<Map<String, String>> formattedHistory = _formatHistory();
 
-      final modelType = ModelDataService().getModelType(modelSlug);
-      final apiKey = await apikeyHelper.readKey(modelSlugNotName: modelSlug);
+      final modelService = ModelDataService();
+      final providerId = modelService.getProviderId(modelSlug);
+      final apiModelId = modelService.getApiId(modelSlug);
+      final apiKey =
+          await apikeyHelper.readProviderKey(providerId: providerId);
 
       if (apiKey.isEmpty) {
         _messenger.showToast(
@@ -41,25 +46,33 @@ class InferenceSuperClass {
         return null;
       }
 
-      switch (modelType) {
-        case 'gemini':
-          final gemini = Geminihelper(modelSlug: modelSlug, apiKey: apiKey);
+      switch (providerId) {
+        case ProviderIds.google:
+          final gemini = Geminihelper(modelSlug: apiModelId, apiKey: apiKey);
           return await gemini.getResponse(
               prompt: prompt, history: formattedHistory);
-        case 'openai':
-          final openai = Openaihelper(apikey: apiKey, modelSlug: modelSlug);
+        case ProviderIds.openai:
+          final openai = Openaihelper(apikey: apiKey, modelSlug: apiModelId);
           return await openai.getResponse(
               prompt: prompt, history: formattedHistory);
-        case 'x-ai':
-          final xai = XaiHelper(apiKey: apiKey, modelSlug: modelSlug);
+        case ProviderIds.xai:
+          final xai = XaiHelper(apiKey: apiKey, modelSlug: apiModelId);
           return await xai.getResponse(
               prompt: prompt, history: formattedHistory);
-        case 'claude':
-          final claude = Claudehelper(modelSlug: modelSlug, apiKey: apiKey);
+        case ProviderIds.anthropic:
+          final claude = Claudehelper(modelSlug: apiModelId, apiKey: apiKey);
           return await claude.getResponse(
               prompt: prompt, history: formattedHistory);
+        case ProviderIds.opencodeGo:
+          final opencode = OpencodeHelper(
+            modelId: apiModelId,
+            apiKey: apiKey,
+            sessionId: messageState.chatID,
+          );
+          return await opencode.getResponse(
+              prompt: prompt, history: formattedHistory);
         default:
-          throw Exception('Unknown model type: $modelType');
+          throw Exception('Unknown provider: $providerId');
       }
     } catch (e) {
       messageState.deleteUserLastMessage();
@@ -78,8 +91,11 @@ class InferenceSuperClass {
       final apikeyHelper = ApiKeyHelper();
 
       final List<Map<String, String>> formattedHistory = _formatHistory();
-      final modelType = ModelDataService().getModelType(modelSlug);
-      final apiKey = await apikeyHelper.readKey(modelSlugNotName: modelSlug);
+      final modelService = ModelDataService();
+      final providerId = modelService.getProviderId(modelSlug);
+      final apiModelId = modelService.getApiId(modelSlug);
+      final apiKey =
+          await apikeyHelper.readProviderKey(providerId: providerId);
 
       if (apiKey.isEmpty) {
         _messenger.showToast(
@@ -92,26 +108,33 @@ class InferenceSuperClass {
       final int streamMsgIndex = messageState.beginStreamingMessage();
       Stream<String> tokenStream;
 
-      switch (modelType) {
-        case 'gemini':
-          tokenStream = Geminihelper(modelSlug: modelSlug, apiKey: apiKey)
+      switch (providerId) {
+        case ProviderIds.google:
+          tokenStream = Geminihelper(modelSlug: apiModelId, apiKey: apiKey)
               .streamResponse(prompt: prompt, history: formattedHistory);
           break;
-        case 'openai':
-          tokenStream = Openaihelper(apikey: apiKey, modelSlug: modelSlug)
+        case ProviderIds.openai:
+          tokenStream = Openaihelper(apikey: apiKey, modelSlug: apiModelId)
               .streamResponse(prompt: prompt, history: formattedHistory);
           break;
-        case 'x-ai':
-          tokenStream = XaiHelper(apiKey: apiKey, modelSlug: modelSlug)
+        case ProviderIds.xai:
+          tokenStream = XaiHelper(apiKey: apiKey, modelSlug: apiModelId)
               .streamResponse(prompt: prompt, history: formattedHistory);
           break;
-        case 'claude':
-          tokenStream = Claudehelper(modelSlug: modelSlug, apiKey: apiKey)
+        case ProviderIds.anthropic:
+          tokenStream = Claudehelper(modelSlug: apiModelId, apiKey: apiKey)
               .streamResponse(prompt: prompt, history: formattedHistory);
+          break;
+        case ProviderIds.opencodeGo:
+          tokenStream = OpencodeHelper(
+            modelId: apiModelId,
+            apiKey: apiKey,
+            sessionId: messageState.chatID,
+          ).streamResponse(prompt: prompt, history: formattedHistory);
           break;
         default:
           messageState.cancelStreamingMessage(streamMsgIndex);
-          throw Exception('Unknown model type: $modelType');
+          throw Exception('Unknown provider: $providerId');
       }
 
       await for (final token in tokenStream) {

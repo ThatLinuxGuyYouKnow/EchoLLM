@@ -1,7 +1,8 @@
 import 'package:echo_llm/dataHandlers/firstTimeUser.dart';
-import 'package:echo_llm/mappings/modelDataService.dart';
+import 'package:echo_llm/mappings/providerConfig.dart';
 
 import 'package:echo_llm/widgets/modals/apiKeyReminder.dart';
+import 'package:echo_llm/widgets/modals/sttFirstTimePrompt.dart';
 import 'package:echo_llm/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,14 +18,14 @@ class AddNewKeyModal extends StatefulWidget {
 
 class _AddNewKeyModalState extends State<AddNewKeyModal> {
   String apiKeyText = '';
-  String modelName = '';
+  String providerId = '';
   bool submitOnEmptyField = false;
   bool isNewUser = false;
   @override
   void initState() {
     super.initState();
     isNewUser = isFirstTimeUser();
-    modelName = onlineModels.keys.first;
+    providerId = kProviders.first.id;
   }
 
   @override
@@ -81,7 +82,7 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Select Model',
+                      'Select Provider',
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 14,
@@ -89,11 +90,11 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    PlainModelSelector(
-                      initialValue: modelName,
+                    PlainProviderSelector(
+                      initialValue: providerId,
                       onChanged: (value) {
                         setState(() {
-                          modelName = value;
+                          providerId = value;
                         });
                       },
                     ),
@@ -143,18 +144,23 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
                   _consentButton(
                     buttonText: 'Save Key',
                     onPressed: () {
-                      if (apiKeyText.isNotEmpty && modelName.isNotEmpty) {
+                      if (apiKeyText.isNotEmpty && providerId.isNotEmpty) {
                         try {
-                          // Use Provider to add key
-                          Provider.of<KeysState>(context, listen: false).addKey(
-                            modelSlug: onlineModels[modelName]!,
+                          // Use Provider to add key (one key per provider)
+                          final displayName =
+                              providerById(providerId)?.displayName ??
+                                  providerId;
+                          Provider.of<KeysState>(context, listen: false)
+                              .addProviderKey(
+                            providerId: providerId,
                             key: apiKeyText,
                           );
                           Navigator.of(context).pop();
                           showCustomToast(context,
-                              message: 'Saved Key for ${modelName}',
+                              message: 'Saved Key for $displayName',
                               type: ToastMessageType.success);
                           storeUserFirstTimeEntry();
+                          maybeShowSttOffer(context);
                         } catch (error) {}
                       } else {
                         setState(() {
@@ -175,21 +181,21 @@ class _AddNewKeyModalState extends State<AddNewKeyModal> {
   }
 }
 
-class PlainModelSelector extends StatefulWidget {
+class PlainProviderSelector extends StatefulWidget {
   final String initialValue;
   final Function(String) onChanged;
 
-  const PlainModelSelector({
+  const PlainProviderSelector({
     super.key,
     required this.initialValue,
     required this.onChanged,
   });
 
   @override
-  State<PlainModelSelector> createState() => _PlainModelSelectorState();
+  State<PlainProviderSelector> createState() => _PlainProviderSelectorState();
 }
 
-class _PlainModelSelectorState extends State<PlainModelSelector> {
+class _PlainProviderSelectorState extends State<PlainProviderSelector> {
   late String _selectedValue;
 
   @override
@@ -201,7 +207,6 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final availableOptions = onlineModels.keys.toList();
 
     return SizedBox(
       width: 450,
@@ -237,16 +242,16 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
               ),
-              items: availableOptions.map((String option) {
-                final isSelected = option == _selectedValue;
+              items: kProviders.map((provider) {
+                final isSelected = provider.id == _selectedValue;
                 return DropdownMenuItem<String>(
-                  value: option,
+                  value: provider.id,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: ListTile(
-                      leading: Image.asset(getModelIcon(modelName: option)),
+                      leading: Image.asset(provider.iconAsset, width: 28),
                       title: Text(
-                        option,
+                        provider.displayName,
                         style: GoogleFonts.ubuntu(
                           color: isSelected
                               ? Colors.cyanAccent[100]
@@ -269,13 +274,13 @@ class _PlainModelSelectorState extends State<PlainModelSelector> {
                 widget.onChanged(value);
               },
               selectedItemBuilder: (BuildContext context) {
-                return availableOptions.map<Widget>((String item) {
+                return kProviders.map<Widget>((provider) {
                   return Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 12.0),
                       child: Text(
-                        item,
+                        provider.displayName,
                         style: GoogleFonts.ubuntu(
                           color: isDark ? Colors.white : Colors.black87,
                           fontSize: 15,
@@ -394,19 +399,4 @@ Widget _consentButton({
       ),
     ),
   );
-}
-
-String getModelIcon({required String modelName}) {
-  String model_family = ModelDataService().getModelType(
-    onlineModels[modelName]!,
-  );
-  if (model_family == 'gemini') {
-    return 'assets/model_icons/gemini-icon.png';
-  } else if (model_family == 'openai') {
-    return 'assets/model_icons/openai-icon.png';
-  } else if (model_family == 'claude') {
-    return 'assets/model_icons/claude-icon.png';
-  } else {
-    return 'assets/model_icons/xai-icon.png';
-  }
 }

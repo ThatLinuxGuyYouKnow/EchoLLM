@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:echo_llm/mappings/providerConfig.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
@@ -25,6 +26,8 @@ class ModelInfo {
   final String knowledgeCutoff;
   final String speed;
   final String params;
+  final String providerId;
+  final String apiId;
 
   ModelInfo({
     required this.name,
@@ -43,12 +46,39 @@ class ModelInfo {
     required this.knowledgeCutoff,
     required this.speed,
     required this.params,
+    required this.providerId,
+    required this.apiId,
   });
 
+  /// Infer a canonical provider id from a legacy `Provider` display string.
+  /// Used as a fallback for catalog payloads that predate `provider_id`.
+  static String inferProviderId(String providerDisplay) {
+    final provider = providerDisplay.toLowerCase();
+    if (provider.contains('google') || provider.contains('gemini')) {
+      return ProviderIds.google;
+    }
+    if (provider.contains('openai') || provider.contains('gpt')) {
+      return ProviderIds.openai;
+    }
+    if (provider.contains('anthropic') || provider.contains('claude')) {
+      return ProviderIds.anthropic;
+    }
+    if (provider.contains('xai')) {
+      return ProviderIds.xai;
+    }
+    if (provider.contains('opencode')) {
+      return ProviderIds.opencodeGo;
+    }
+    return provider;
+  }
+
   factory ModelInfo.fromJson(Map<String, dynamic> json) {
+    final slug = (json['slug'] ?? '').toString();
+    final rawProviderId = (json['provider_id'] ?? '').toString();
+    final rawApiId = (json['api_id'] ?? '').toString();
     return ModelInfo(
       name: (json['name'] ?? '').toString(),
-      slug: (json['slug'] ?? '').toString(),
+      slug: slug,
       provider: (json['Provider'] ?? '').toString(),
       costInput: (json['Cost_input'] ?? '').toString(),
       costInputInt: double.tryParse((json['Cost_int'] ?? 0).toString()) ?? 0.0,
@@ -64,6 +94,10 @@ class ModelInfo {
       knowledgeCutoff: (json['knowledge_cutoff'] ?? '').toString(),
       speed: (json['speed'] ?? '').toString(),
       params: (json['params'] ?? '').toString(),
+      providerId: rawProviderId.isNotEmpty
+          ? rawProviderId
+          : inferProviderId((json['Provider'] ?? '').toString()),
+      apiId: rawApiId.isNotEmpty ? rawApiId : slug,
     );
   }
 
@@ -85,7 +119,33 @@ class ModelInfo {
       'knowledge_cutoff': knowledgeCutoff,
       'speed': speed,
       'params': params,
+      'provider_id': providerId,
+      'api_id': apiId,
     };
+  }
+
+  /// Placeholder used when a slug is not in the catalog.
+  factory ModelInfo.empty() {
+    return ModelInfo(
+      name: '',
+      slug: '',
+      provider: '',
+      costInput: '',
+      costInputInt: 0.0,
+      costOutput: '',
+      costOutputInt: 0.0,
+      brandingImage: '',
+      contextWindow: '',
+      company: '',
+      type: '',
+      subtitle: '',
+      description: '',
+      knowledgeCutoff: '',
+      speed: '',
+      params: '',
+      providerId: '',
+      apiId: '',
+    );
   }
 }
 
@@ -197,24 +257,7 @@ class ModelDataService {
   ModelInfo modelDataFromSlug({required String slug}) {
     return _models.firstWhere(
       (m) => m.slug == slug,
-      orElse: () => ModelInfo(
-        name: '',
-        slug: '',
-        provider: '',
-        costInput: '',
-        costInputInt: 0.0,
-        costOutput: '',
-        costOutputInt: 0.0,
-        brandingImage: '',
-        contextWindow: '',
-        company: '',
-        type: '',
-        subtitle: '',
-        description: '',
-        knowledgeCutoff: '',
-        speed: '',
-        params: '',
-      ),
+      orElse: ModelInfo.empty,
     );
   }
 
@@ -243,23 +286,7 @@ class ModelDataService {
   String getModelProvider(String slug) {
     final provider = _models
         .firstWhere((m) => m.slug == slug,
-            orElse: () => ModelInfo(
-                name: '',
-                slug: '',
-                provider: '',
-                costInput: '',
-                costInputInt: 0.0,
-                costOutput: '',
-                costOutputInt: 0.0,
-                brandingImage: '',
-                contextWindow: '',
-                company: '',
-                type: '',
-                subtitle: '',
-                description: '',
-                knowledgeCutoff: '',
-                speed: '',
-                params: ''))
+            orElse: ModelInfo.empty)
         .provider
         .toLowerCase();
 
@@ -267,66 +294,58 @@ class ModelDataService {
   }
 
   String getModelType(String slug) {
-    final provider = _models
-        .firstWhere((m) => m.slug == slug,
-            orElse: () => ModelInfo(
-                name: '',
-                slug: '',
-                provider: '',
-                costInput: '',
-                costInputInt: 0.0,
-                costOutput: '',
-                costOutputInt: 0.0,
-                brandingImage: '',
-                contextWindow: '',
-                company: '',
-                type: '',
-                subtitle: '',
-                description: '',
-                knowledgeCutoff: '',
-                speed: '',
-                params: ''))
-        .provider
-        .toLowerCase();
+    // Canonical family tokens used across the UI, derived from providerId.
+    switch (getProviderId(slug)) {
+      case ProviderIds.google:
+        return 'gemini';
+      case ProviderIds.openai:
+        return 'openai';
+      case ProviderIds.anthropic:
+        return 'claude';
+      case ProviderIds.xai:
+        return 'x-ai';
+      case ProviderIds.opencodeGo:
+        return 'opencode';
+      default:
+        return getModelProvider(slug);
+    }
+  }
 
-    // Normalize provider strings to canonical family tokens used across the UI
-    if (provider.contains('google') || provider.contains('gemini')) {
-      return 'gemini';
-    }
-    if (provider.contains('openai') || provider.contains('gpt')) {
-      return 'openai';
-    }
-    if (provider.contains('anthropic') || provider.contains('claude')) {
-      return 'claude';
-    }
-    if (provider.contains('xai')) {
-      return 'x-ai';
-    }
+  /// Canonical provider id for a model slug (e.g. `opencode-go`).
+  /// Empty string when the slug is unknown.
+  String getProviderId(String slug) {
+    return getModelBySlug(slug)?.providerId ?? '';
+  }
 
-    // Fallback to the lowercase provider string if no mapping matched
-    return provider;
+  /// Upstream model id to send to the provider's API (differs from the local
+  /// slug only for entries that needed a locally-unique suffix).
+  String getApiId(String slug) {
+    final model = getModelBySlug(slug);
+    if (model == null) return slug;
+    return model.apiId.isNotEmpty ? model.apiId : slug;
+  }
+
+  /// Display name of the provider for a model slug (e.g. `OpenCode Go`).
+  String getProviderDisplayName(String slug) {
+    return providerById(getProviderId(slug))?.displayName ?? '';
+  }
+
+  /// Models grouped by provider, in [kProviders] display order.
+  /// Providers with no models in the catalog are omitted.
+  Map<ProviderInfo, List<ModelInfo>> modelsByProvider() {
+    final result = <ProviderInfo, List<ModelInfo>>{};
+    for (final provider in kProviders) {
+      final models =
+          _models.where((m) => m.providerId == provider.id).toList();
+      if (models.isNotEmpty) result[provider] = models;
+    }
+    return result;
   }
 
   String getModelBrandingBySlug(String slug) {
     return _models
         .firstWhere((m) => m.slug == slug,
-            orElse: () => ModelInfo(
-                name: '',
-                slug: '',
-                provider: '',
-                costInput: '',
-                costInputInt: 0.0,
-                costOutput: '',
-                costOutputInt: 0.0,
-                brandingImage: '',
-                contextWindow: '',
-                company: '',
-                type: '',
-                subtitle: '',
-                description: '',
-                knowledgeCutoff: '',
-                speed: '',
-                params: ''))
+            orElse: ModelInfo.empty)
         .brandingImage;
   }
 }
