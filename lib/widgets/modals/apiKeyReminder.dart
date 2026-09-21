@@ -1,4 +1,5 @@
 import 'package:echo_llm/dataHandlers/firstTimeUser.dart';
+import 'package:echo_llm/widgets/modals/sttFirstTimePrompt.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -62,6 +63,7 @@ Widget apiKeyReminder({required BuildContext context}) {
             onPressed: () {
               storeUserFirstTimeEntry();
               Navigator.pop(context);
+              maybeShowSttOffer(context);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF4C83D1),
