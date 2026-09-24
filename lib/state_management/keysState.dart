@@ -1,13 +1,14 @@
 import 'package:echo_llm/mappings/modelDataService.dart';
+import 'package:echo_llm/mappings/providerConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:echo_llm/dataHandlers/hive/ApikeyHelper.dart';
 
 class KeysState extends ChangeNotifier {
   final ApiKeyHelper _apiKeyHelper = ApiKeyHelper();
 
-  // Map of modelSlug -> apiKey
-  Map<String, String> _modelKeys = {};
-  Map<String, String> get modelKeys => _modelKeys;
+  // Map of providerId -> apiKey (one key per provider).
+  Map<String, String> _providerKeys = {};
+  Map<String, String> get providerKeys => _providerKeys;
 
   List<String> _availableModelSlugs = [];
   List<String> get availableModelSlugs => _availableModelSlugs;
@@ -23,48 +24,64 @@ class KeysState extends ChangeNotifier {
   }
 
   Future<void> _loadKeys() async {
-    _modelKeys = await _apiKeyHelper.getAvailableModelKeyMap();
+    // One-time upgrade: fold legacy per-model keys into provider keys.
+    try {
+      await _apiKeyHelper.migrateLegacyKeys();
+    } catch (_) {}
+    _providerKeys = await _apiKeyHelper.getAvailableProviderKeyMap();
     _isLoaded = true;
     _updateAvailableModelsList();
     notifyListeners();
   }
 
   void _updateAvailableModelsList() {
-    _availableModelSlugs = _modelKeys.keys.toList();
-
-    _availableModelNames.clear();
-    for (var slug in _availableModelSlugs) {
-      final name = onlineModels.entries
-          .firstWhere((entry) => entry.value == slug,
-              orElse: () => const MapEntry('', ''))
-          .key;
-      if (name.isNotEmpty) {
-        _availableModelNames.add(name);
-      }
-    }
+    final service = ModelDataService();
+    _availableModelSlugs = [
+      for (final slug in service.modelSlugs)
+        if (_providerKeys.containsKey(service.getProviderId(slug))) slug,
+    ];
+    _availableModelNames = [
+      for (final slug in _availableModelSlugs)
+        service.getNameBySlug(slug) ?? slug,
+    ];
   }
 
-  Future<void> addKey({required String modelSlug, required String key}) async {
-    await _apiKeyHelper.storeKey(modelSlugNotName: modelSlug, apiKey: key);
-    _modelKeys[modelSlug] = key;
+  Future<void> addProviderKey({
+    required String providerId,
+    required String key,
+  }) async {
+    await _apiKeyHelper.storeProviderKey(providerId: providerId, apiKey: key);
+    _providerKeys[providerId] = key;
     _updateAvailableModelsList();
     notifyListeners();
   }
 
-  Future<void> deleteKey({required String modelSlug}) async {
-    await deleteKeyForModel(modelSlug: modelSlug);
-    _modelKeys.remove(modelSlug);
+  Future<void> deleteProviderKey({required String providerId}) async {
+    await _apiKeyHelper.deleteProviderKey(providerId: providerId);
+    _providerKeys.remove(providerId);
     _updateAvailableModelsList();
     notifyListeners();
   }
 
-  /// Reads a key directly from secure storage (always up-to-date).
-  Future<String> getKeyForSlug(String modelSlug) async {
-    return _apiKeyHelper.readKey(modelSlugNotName: modelSlug);
+  /// Reads a provider key directly from secure storage (always up-to-date).
+  Future<String> getKeyForProvider(String providerId) async {
+    return _apiKeyHelper.readProviderKey(providerId: providerId);
+  }
+
+  bool isProviderAvailable(String providerId) {
+    return _providerKeys.containsKey(providerId) &&
+        _providerKeys[providerId]!.isNotEmpty;
   }
 
   bool isModelAvailable(String modelSlug) {
-    return _modelKeys.containsKey(modelSlug) &&
-        _modelKeys[modelSlug]!.isNotEmpty;
+    final providerId = ModelDataService().getProviderId(modelSlug);
+    if (providerId.isEmpty) return false;
+    return isProviderAvailable(providerId);
   }
+
+  /// Display names of providers that currently have a key.
+  List<String> get availableProviderNames => [
+        for (final p in kProviders)
+          if (isProviderAvailable(p.id)) p.displayName,
+      ];
 }

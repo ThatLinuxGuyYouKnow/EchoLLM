@@ -1,4 +1,5 @@
 import 'package:echo_llm/mappings/modelDataService.dart';
+import 'package:echo_llm/mappings/providerConfig.dart';
 import 'package:echo_llm/widgets/modals/enterApiKeyModal.dart';
 import 'package:echo_llm/widgets/modals/modelPreviewCard.dart';
 import 'package:flutter/material.dart';
@@ -12,35 +13,223 @@ class ModelScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Consumer<KeysState>(
         builder: (context, keysState, child) {
-          return Padding(
+          final groups = ModelDataService().modelsByProvider();
+          return ListView(
             padding: const EdgeInsets.all(16),
-            child: GridView.builder(
-              itemCount: onlineModels.length,
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 200,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 1.2,
-              ),
-              itemBuilder: (context, index) {
-                final modelName = onlineModels.keys.elementAt(index);
-                final slug = onlineModels[modelName] ?? '';
-                final isAvailable = keysState.isModelAvailable(slug);
-                String modelIcon = getModelIcon(modelSlug: slug);
-                return ModelTile(
-                  modelFamilyIconPath: modelIcon,
-                  modelSlug: slug,
-                  tileTitle: modelName,
-                  isAvailable: isAvailable,
-                );
-              },
-            ),
+            children: [
+              for (final entry in groups.entries)
+                _ProviderSection(
+                  provider: entry.key,
+                  models: entry.value,
+                  hasKey: keysState.isProviderAvailable(entry.key.id),
+                ),
+              const SizedBox(height: 8),
+              _ComingSoonSection(isDark: isDark),
+            ],
           );
         },
+      ),
+    );
+  }
+}
+
+class _ProviderSection extends StatelessWidget {
+  final ProviderInfo provider;
+  final List<ModelInfo> models;
+  final bool hasKey;
+
+  const _ProviderSection({
+    required this.provider,
+    required this.models,
+    required this.hasKey,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            children: [
+              Image.asset(provider.iconAsset, width: 22),
+              const SizedBox(width: 8),
+              Text(
+                provider.displayName,
+                style: GoogleFonts.ubuntu(
+                  color: isDark ? Colors.white : Colors.black87,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '${models.length} model${models.length == 1 ? '' : 's'}',
+                style: GoogleFonts.ubuntu(
+                  color: isDark ? Colors.grey[500] : Colors.grey[500],
+                  fontSize: 12,
+                ),
+              ),
+              const Spacer(),
+              if (hasKey)
+                Icon(Icons.check_circle,
+                    size: 18, color: const Color(0xFF4C83D1))
+              else
+                TextButton.icon(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) => EnterApiKeyModal(
+                          providerId: provider.id, context: context),
+                    );
+                  },
+                  icon: const Icon(Icons.key_outlined, size: 16),
+                  label: Text('Add key',
+                      style: GoogleFonts.ubuntu(fontSize: 13)),
+                ),
+            ],
+          ),
+        ),
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: models.length,
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 1.2,
+          ),
+          itemBuilder: (context, index) {
+            final model = models[index];
+            return Consumer<KeysState>(
+              builder: (context, keysState, child) => ModelTile(
+                modelFamilyIconPath: getModelIcon(modelSlug: model.slug),
+                modelSlug: model.slug,
+                tileTitle: model.name,
+                isAvailable: keysState.isModelAvailable(model.slug),
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 12),
+      ],
+    );
+  }
+}
+
+class _ComingSoonSection extends StatelessWidget {
+  final bool isDark;
+  const _ComingSoonSection({required this.isDark});
+
+  @override
+  Widget build(BuildContext context) {
+    const titles = ['Local LLM', 'Whisper STT', 'More to come'];
+    const icons = [Icons.computer, Icons.hearing, Icons.pending];
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: 3,
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        childAspectRatio: 1.2,
+      ),
+      itemBuilder: (context, index) => _ComingSoonTile(
+        title: titles[index],
+        icon: icons[index],
+        isDark: isDark,
+      ),
+    );
+  }
+}
+
+class _ComingSoonTile extends StatefulWidget {
+  final String title;
+  final IconData icon;
+  final bool isDark;
+  const _ComingSoonTile({
+    required this.title,
+    required this.icon,
+    required this.isDark,
+  });
+
+  @override
+  State<_ComingSoonTile> createState() => _ComingSoonTileState();
+}
+
+class _ComingSoonTileState extends State<_ComingSoonTile> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: _isHovered
+                ? const Color(0xFF4A90E2).withOpacity(0.3)
+                : (widget.isDark ? Colors.grey[800]! : Colors.grey[300]!),
+            width: 1,
+          ),
+          color: _isHovered
+              ? (widget.isDark
+                  ? const Color(0xFF1A1F25)
+                  : const Color(0xFFF0F2F5))
+              : (widget.isDark
+                  ? const Color(0xFF1C1C1D)
+                  : Colors.white),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                widget.icon,
+                size: 32,
+                color: widget.isDark ? Colors.grey[600] : Colors.grey[400],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                widget.title,
+                style: GoogleFonts.ubuntu(
+                  color: widget.isDark ? Colors.grey[500] : Colors.grey[500],
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF4A90E2).withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  'Coming Soon',
+                  style: GoogleFonts.ubuntu(
+                    color: const Color(0xFF4A90E2),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -89,7 +278,8 @@ class _ModelTileState extends State<ModelTile> {
               builder: (modalContext) => ModelPreviewCard(
                     brandingImagePath: ModelDataService()
                         .getModelBrandingBySlug(widget.modelSlug),
-                    provider: ModelDataService().getModelType(widget.modelSlug),
+                    provider: ModelDataService()
+                        .getProviderDisplayName(widget.modelSlug),
                     isAvailable: widget.isAvailable,
                     modelName: widget.tileTitle,
                     modelType: (modelData['type'] ?? '').toString(),
@@ -113,8 +303,9 @@ class _ModelTileState extends State<ModelTile> {
                         showDialog(
                           context: context,
                           builder: (_) => EnterApiKeyModal(
+                              providerId: ModelDataService()
+                                  .getProviderId(widget.modelSlug),
                               modelName: widget.tileTitle,
-                              modelSlug: widget.modelSlug,
                               context: context),
                         );
                       }
@@ -187,10 +378,11 @@ class _ModelTileState extends State<ModelTile> {
                         if (!widget.isAvailable) {
                           showDialog(
                             context: context,
-                            builder: (_) => EnterApiKeyModal(
-                                modelName: widget.tileTitle,
-                                modelSlug: widget.modelSlug,
-                                context: context),
+                          builder: (_) => EnterApiKeyModal(
+                              providerId: ModelDataService()
+                                  .getProviderId(widget.modelSlug),
+                              modelName: widget.tileTitle,
+                              context: context),
                           );
                         }
                       },
@@ -224,6 +416,8 @@ String getModelIcon({required String modelSlug}) {
     return 'assets/model_icons/openai-icon.png';
   } else if (model_family == 'claude') {
     return 'assets/model_icons/claude-icon.png';
+  } else if (model_family == 'opencode') {
+    return 'assets/model_icons/opencode-icon.png';
   } else {
     return 'assets/model_icons/xai-icon.png';
   }

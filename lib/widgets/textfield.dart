@@ -3,9 +3,11 @@ import 'package:echo_llm/inference/superHandler.dart';
 import 'package:echo_llm/logic/convertMessageState.dart';
 import 'package:echo_llm/state_management/messageStreamState.dart';
 import 'package:echo_llm/state_management/screenState.dart';
+import 'package:echo_llm/state_management/sttState.dart';
 import 'package:echo_llm/state_management/textfieldState.dart';
 import 'package:echo_llm/userConfig.dart';
 import 'package:echo_llm/widgets/buttons.dart';
+import 'package:echo_llm/widgets/modals/sttDownloadModal.dart';
 
 import 'package:flutter/material.dart';
 
@@ -20,6 +22,41 @@ class ChatTextField extends StatefulWidget {
 }
 
 class _ChatTextFieldState extends State<ChatTextField> {
+  bool _isListening = false;
+
+  Future<void> _handleMicPress() async {
+    final sttState = Provider.of<SttState>(context, listen: false);
+
+    if (_isListening) return;
+
+    if (!await sttState.sttService.isModelDownloaded()) {
+      showDialog(
+        context: context,
+        builder: (ctx) => ListenableBuilder(
+          listenable: sttState,
+          builder: (ctx, _) => buildSttDownloadDialog(
+            context: ctx,
+            onDownloadComplete: () {},
+          ),
+        ),
+      );
+      return;
+    }
+
+    setState(() => _isListening = true);
+
+    final result = await sttState.transcribe();
+
+    if (result.isNotEmpty && mounted) {
+      final currentText = widget.chatController.text;
+      widget.chatController.text = currentText.isEmpty
+          ? result
+          : '$currentText $result';
+    }
+
+    if (mounted) setState(() => _isListening = false);
+  }
+
   @override
   Widget build(BuildContext context) {
     final messageState = Provider.of<Messagestreamstate>(context, listen: true);
@@ -172,8 +209,35 @@ class _ChatTextFieldState extends State<ChatTextField> {
                                   color: fieldBgColor,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: ChatButton(
-                                  whenPressed: sendMessage,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: _handleMicPress,
+                                      child: Container(
+                                        width: 36,
+                                        height: 36,
+                                        decoration: BoxDecoration(
+                                          color: _isListening
+                                              ? Colors.red.withOpacity(0.2)
+                                              : Colors.transparent,
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Icon(
+                                          _isListening ? Icons.mic : Icons.mic_none_outlined,
+                                          color: _isListening
+                                              ? Colors.red
+                                              : isDark
+                                                  ? Colors.grey[400]
+                                                  : Colors.grey[600],
+                                          size: 18,
+                                        ),
+                                      ),
+                                    ),
+                                    ChatButton(
+                                      whenPressed: sendMessage,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
