@@ -5,15 +5,14 @@ description: |
   EchoLLM is a desktop client for interacting with various AI models
   with local API key management and chat history storage.
 
- 
-license: Apache-2.0   
+license: Apache-2.0
 
-base: core22
-confinement: strict  
-grade: stable        
+base: core24
+confinement: strict
+grade: stable
 
-architectures:
-  - build-on: amd64
+platforms:
+  amd64:
 
 apps:
   echollm:
@@ -22,10 +21,10 @@ apps:
     extensions: [gnome]
     plugs:
       - network
-      - network-bind
       - home
       - opengl
-      - pulseaudio
+      - audio-playback
+      - audio-record
       - gsettings
       - removable-media
 

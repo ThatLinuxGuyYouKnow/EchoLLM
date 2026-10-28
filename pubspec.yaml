@@ -46,7 +46,7 @@ dependencies:
   permission_handler: ^10.2.0
   flutter_secure_storage: ^10.0.0
   vosk_flutter: ^0.3.48
-  record: ^5.2.0
+  record: ^6.2.1
 
 dependency_overrides:
   http: ^1.4.0
